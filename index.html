@@ -420,11 +420,10 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 <!-- ═══════════════ TOAST ═══════════════ -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+<!-- Firebase SDK (compat version - works on all mobile browsers) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
 // ── State ──────────────────────────────────────────────
 let db = null;
 let currentWho = null;
@@ -433,26 +432,27 @@ let config = null;
 let pinEntry = '';
 let whoForPin = null;
 
-// ── Lockout state (in-memory, resets on reload — intentional) ──
+// ── Lockout state ──
 let lockFailCount = parseInt(sessionStorage.getItem('og_fails') || '0');
 let lockUntil = parseInt(sessionStorage.getItem('og_lockuntil') || '0');
 
 // ── Helpers ────────────────────────────────────────────
-window.showToast = (msg, dur=2000) => {
-  const t = document.getElementById('toast');
+window.showToast = function(msg, dur) {
+  dur = dur || 2000;
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), dur);
+  setTimeout(function(){ t.classList.remove('show'); }, dur);
 };
 
-window.showScreen = (id) => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+window.showScreen = function(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById('screen-'+id).classList.add('active');
 };
 
 function loadConfig() {
   try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
-  catch { return null; }
+  catch(e) { return null; }
 }
 
 function saveConfig(cfg) {
@@ -460,25 +460,24 @@ function saveConfig(cfg) {
 }
 
 // ── Passphrase / App Lock ──────────────────────────────
-window.toggleLockVis = () => {
-  const inp = document.getElementById('lock-input');
+window.toggleLockVis = function() {
+  var inp = document.getElementById('lock-input');
   inp.type = inp.type === 'password' ? 'text' : 'password';
 };
 
 function getRemainingLock() {
-  const rem = lockUntil - Date.now();
+  var rem = lockUntil - Date.now();
   return rem > 0 ? Math.ceil(rem/1000) : 0;
 }
 
-window.checkPassphrase = () => {
-  const rem = getRemainingLock();
+window.checkPassphrase = function() {
+  var rem = getRemainingLock();
   if (rem > 0) {
-    document.getElementById('lock-error').textContent = `Too many attempts. Wait ${rem}s`;
+    document.getElementById('lock-error').textContent = 'Too many attempts. Wait ' + rem + 's';
     return;
   }
   if (!config) { showScreen('setup'); return; }
-
-  const entered = document.getElementById('lock-input').value;
+  var entered = document.getElementById('lock-input').value;
   if (entered === config.passphrase) {
     lockFailCount = 0;
     sessionStorage.setItem('og_fails','0');
@@ -490,53 +489,55 @@ window.checkPassphrase = () => {
   } else {
     lockFailCount++;
     sessionStorage.setItem('og_fails', lockFailCount);
-    const maxAttempts = 5;
-    const left = maxAttempts - lockFailCount;
+    var maxAttempts = 5;
+    var left = maxAttempts - lockFailCount;
     if (lockFailCount >= maxAttempts) {
-      const lockSecs = 30 * Math.pow(2, Math.floor(lockFailCount/maxAttempts) - 1); // 30s, 60s, 120s…
+      var lockSecs = 30 * Math.pow(2, Math.floor(lockFailCount/maxAttempts) - 1);
       lockUntil = Date.now() + lockSecs * 1000;
       sessionStorage.setItem('og_lockuntil', lockUntil);
-      document.getElementById('lock-error').textContent = `Too many attempts — locked for ${lockSecs}s`;
+      document.getElementById('lock-error').textContent = 'Too many attempts — locked for ' + lockSecs + 's';
       startLockCountdown();
     } else {
-      document.getElementById('lock-error').textContent = `Wrong passphrase — ${left} attempt${left===1?'':'s'} left`;
+      document.getElementById('lock-error').textContent = 'Wrong passphrase — ' + left + ' attempt' + (left===1?'':'s') + ' left';
     }
-    const card = document.querySelector('.lock-card');
+    var card = document.querySelector('.lock-card');
     card.classList.add('shake');
-    setTimeout(() => card.classList.remove('shake'), 400);
+    setTimeout(function(){ card.classList.remove('shake'); }, 400);
   }
 };
 
 function startLockCountdown() {
-  const el = document.getElementById('lock-attempts');
-  const tick = () => {
-    const rem = getRemainingLock();
+  var el = document.getElementById('lock-attempts');
+  function tick() {
+    var rem = getRemainingLock();
     if (rem <= 0) { el.textContent = ''; document.getElementById('lock-error').textContent=''; return; }
-    el.textContent = `Unlocks in ${rem}s`;
+    el.textContent = 'Unlocks in ' + rem + 's';
     setTimeout(tick, 1000);
-  };
+  }
   tick();
 }
 
 // ── Firebase init ──────────────────────────────────────
 function initFirebase(cfg) {
-  const app = initializeApp({
-    apiKey: cfg.apiKey,
-    authDomain: `${cfg.projectId}.firebaseapp.com`,
-    projectId: cfg.projectId,
-    appId: cfg.appId
-  });
-  db = getFirestore(app);
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: cfg.apiKey,
+      authDomain: cfg.projectId + '.firebaseapp.com',
+      projectId: cfg.projectId,
+      appId: cfg.appId
+    });
+  }
+  db = firebase.firestore();
   listenGoals();
 }
 
 function listenGoals() {
-  onSnapshot(collection(db, 'goals'), snap => {
+  db.collection('goals').onSnapshot(function(snap) {
     goalsData = {};
-    snap.forEach(d => { goalsData[d.id] = { id: d.id, ...d.data() }; });
+    snap.forEach(function(d){ goalsData[d.id] = Object.assign({id: d.id}, d.data()); });
     renderGoals();
     updateSyncStatus(true);
-  }, () => updateSyncStatus(false));
+  }, function(){ updateSyncStatus(false); });
 }
 
 function updateSyncStatus(ok) {
@@ -545,21 +546,21 @@ function updateSyncStatus(ok) {
 }
 
 // ── Setup ──────────────────────────────────────────────
-window.saveSetup = () => {
-  const apiKey      = document.getElementById('fb-apiKey').value.trim();
-  const projectId   = document.getElementById('fb-projectId').value.trim();
-  const appId       = document.getElementById('fb-appId').value.trim();
-  const passphrase  = document.getElementById('fb-passphrase').value.trim();
-  const name1       = document.getElementById('fb-name1').value.trim() || 'Partner 1';
-  const name2       = document.getElementById('fb-name2').value.trim() || 'Partner 2';
-  const pin1        = document.getElementById('fb-pin1').value.trim();
-  const pin2        = document.getElementById('fb-pin2').value.trim();
+window.saveSetup = function() {
+  var apiKey     = document.getElementById('fb-apiKey').value.trim();
+  var projectId  = document.getElementById('fb-projectId').value.trim();
+  var appId      = document.getElementById('fb-appId').value.trim();
+  var passphrase = document.getElementById('fb-passphrase').value.trim();
+  var name1      = document.getElementById('fb-name1').value.trim() || 'Partner 1';
+  var name2      = document.getElementById('fb-name2').value.trim() || 'Partner 2';
+  var pin1       = document.getElementById('fb-pin1').value.trim();
+  var pin2       = document.getElementById('fb-pin2').value.trim();
 
   if (!apiKey || !projectId || !appId) { showToast('Fill all Firebase fields'); return; }
   if (!passphrase || passphrase.length < 4) { showToast('Passphrase must be at least 4 characters'); return; }
   if (pin1.length !== 4 || pin2.length !== 4) { showToast('Both PINs must be 4 digits'); return; }
 
-  config = { apiKey, projectId, appId, passphrase, name1, name2, pin1, pin2 };
+  config = { apiKey:apiKey, projectId:projectId, appId:appId, passphrase:passphrase, name1:name1, name2:name2, pin1:pin1, pin2:pin2 };
   saveConfig(config);
   initFirebase(config);
   updatePartnerNames();
@@ -568,22 +569,21 @@ window.saveSetup = () => {
   showToast('Setup saved! Log in to continue');
 };
 
-window.showPin = () => showScreen(config ? 'lock' : 'setup');
+window.showPin = function() { showScreen(config ? 'lock' : 'setup'); };
 
 // ── PIN logic ──────────────────────────────────────────
-window.selectWho = (who) => {
+window.selectWho = function(who) {
   whoForPin = who;
   pinEntry = '';
   renderPinDots();
   document.getElementById('who-p1').className = 'pin-who-btn' + (who==='p1' ? ' active' : '');
   document.getElementById('who-p2').className = 'pin-who-btn' + (who==='p2' ? ' active' : '');
-
   if (!config) { showScreen('setup'); return; }
-  document.getElementById('pin-sub').textContent = `Enter PIN for ${who==='p1' ? config.name1 : config.name2}`;
+  document.getElementById('pin-sub').textContent = 'Enter PIN for ' + (who==='p1' ? config.name1 : config.name2);
   document.getElementById('pin-error').textContent = '';
 };
 
-window.pinKey = (k) => {
+window.pinKey = function(k) {
   if (!whoForPin) { showToast('Select a partner first'); return; }
   if (pinEntry.length >= 4) return;
   pinEntry += k;
@@ -591,33 +591,34 @@ window.pinKey = (k) => {
   if (pinEntry.length === 4) setTimeout(checkPin, 150);
 };
 
-window.pinDel = () => {
+window.pinDel = function() {
   pinEntry = pinEntry.slice(0, -1);
   renderPinDots();
 };
 
-function renderPinDots(state='') {
-  for (let i=0; i<4; i++) {
-    const d = document.getElementById('d'+i);
+function renderPinDots(state) {
+  state = state || '';
+  for (var i=0; i<4; i++) {
+    var d = document.getElementById('d'+i);
     d.className = 'pin-dot' + (i < pinEntry.length ? (' '+(state || 'filled')) : '');
   }
 }
 
 function checkPin() {
   if (!config) return;
-  const correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
+  var correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
   if (pinEntry === correct) {
     currentWho = whoForPin;
     updateWhoUI();
     showScreen('app');
-    showToast(`Welcome, ${whoForPin==='p1' ? config.name1 : config.name2}!`);
+    showToast('Welcome, ' + (whoForPin==='p1' ? config.name1 : config.name2) + '!');
   } else {
     renderPinDots('error');
-    const card = document.querySelector('.pin-card');
+    var card = document.querySelector('.pin-card');
     card.classList.add('shake');
-    setTimeout(() => card.classList.remove('shake'), 400);
+    setTimeout(function(){ card.classList.remove('shake'); }, 400);
     document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
-    setTimeout(() => { pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
+    setTimeout(function(){ pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
   }
 }
 
@@ -637,13 +638,13 @@ function updateWhoUI() {
   document.getElementById('tab-p2').className = 'who-tab' + (currentWho==='p2' ? ' active' : '');
 }
 
-window.switchWho = (who) => {
+window.switchWho = function(who) {
   currentWho = who;
   updateWhoUI();
   renderGoals();
 };
 
-window.logout = () => {
+window.logout = function() {
   currentWho = null;
   whoForPin = null;
   pinEntry = '';
@@ -659,125 +660,123 @@ window.logout = () => {
 
 // ── Goals rendering ────────────────────────────────────
 function renderGoals() {
-  const goals = Object.values(goalsData);
-  const list = document.getElementById('goals-list');
-  const strip = document.getElementById('summary-strip');
+  var goals = Object.values(goalsData);
+  var list = document.getElementById('goals-list');
+  var strip = document.getElementById('summary-strip');
 
-  const total = goals.length;
-  const completed = goals.filter(g => (g.p1||0)+(g.p2||0) >= g.target).length;
-  const avgPct = total ? Math.round(goals.reduce((a,g) => a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100), 0)/total) : 0;
+  var total = goals.length;
+  var completed = goals.filter(function(g){ return (g.p1||0)+(g.p2||0) >= g.target; }).length;
+  var avgPct = total ? Math.round(goals.reduce(function(a,g){ return a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100); }, 0)/total) : 0;
 
-  strip.innerHTML = `
-    <div class="summary-card"><div class="summary-val">${total}</div><div class="summary-lbl">Goals</div></div>
-    <div class="summary-card"><div class="summary-val">${completed}</div><div class="summary-lbl">Done</div></div>
-    <div class="summary-card"><div class="summary-val">${avgPct}%</div><div class="summary-lbl">Avg progress</div></div>
-  `;
+  strip.innerHTML =
+    '<div class="summary-card"><div class="summary-val">'+total+'</div><div class="summary-lbl">Goals</div></div>' +
+    '<div class="summary-card"><div class="summary-val">'+completed+'</div><div class="summary-lbl">Done</div></div>' +
+    '<div class="summary-card"><div class="summary-val">'+avgPct+'%</div><div class="summary-lbl">Avg progress</div></div>';
 
   if (!goals.length) {
-    list.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>`;
+    list.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>';
     return;
   }
 
-  const n1 = config ? config.name1 : 'Partner 1';
-  const n2 = config ? config.name2 : 'Partner 2';
+  var n1 = config ? config.name1 : 'Partner 1';
+  var n2 = config ? config.name2 : 'Partner 2';
 
-  list.innerHTML = goals.map(g => {
-    const v1 = g.p1||0, v2 = g.p2||0;
-    const total = v1+v2;
-    const pct1 = Math.min(100, Math.round(v1/g.target*100));
-    const pct2 = Math.min(100, Math.round(v2/g.target*100));
-    const pctCombined = Math.min(100, Math.round(total/g.target*100));
-    const isMe1 = currentWho==='p1', isMe2 = currentWho==='p2';
-    return `
-    <div class="goal-card" id="gc-${g.id}">
-      <div class="goal-header">
-        <div class="goal-icon">${g.icon||'🎯'}</div>
-        <div class="goal-meta">
-          <div class="goal-name">${g.name}</div>
-          <div class="goal-target">Target: ${g.target.toLocaleString()} ${g.unit} · ${pctCombined}% combined</div>
-        </div>
-        <button class="goal-menu" onclick="deleteGoal('${g.id}')">×</button>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-p1" style="width:${pct1}%"></div>
-        <div class="prog-p2" style="width:${pct2}%"></div>
-      </div>
-      <div class="prog-labels"><span style="color:var(--p1)">${n1}: ${pct1}%</span><span style="color:var(--p2)">${n2}: ${pct2}%</span></div>
-      <div class="partner-rows">
-        <div class="partner-row">
-          <div class="p-avatar p1">${n1.slice(0,2).toUpperCase()}</div>
-          <div class="p-name">${n1}${isMe1?' <span class="p-you-badge">you</span>':''}</div>
-          <div class="p-val">${v1.toLocaleString()} ${g.unit}</div>
-          <div class="p-pct">&nbsp;${pct1}%</div>
-        </div>
-        <div class="partner-row">
-          <div class="p-avatar p2">${n2.slice(0,2).toUpperCase()}</div>
-          <div class="p-name">${n2}${isMe2?' <span class="p-you-badge">you</span>':''}</div>
-          <div class="p-val">${v2.toLocaleString()} ${g.unit}</div>
-          <div class="p-pct">&nbsp;${pct2}%</div>
-        </div>
-      </div>
-      <div class="update-row">
-        <input class="update-input" id="inp-${g.id}" type="number" placeholder="My new total (${g.unit})"/>
-        <button class="update-btn" onclick="updateGoal('${g.id}')">Update</button>
-      </div>
-    </div>`;
+  list.innerHTML = goals.map(function(g) {
+    var v1 = g.p1||0, v2 = g.p2||0;
+    var tot = v1+v2;
+    var pct1 = Math.min(100, Math.round(v1/g.target*100));
+    var pct2 = Math.min(100, Math.round(v2/g.target*100));
+    var pctC = Math.min(100, Math.round(tot/g.target*100));
+    var isMe1 = currentWho==='p1', isMe2 = currentWho==='p2';
+    return '<div class="goal-card" id="gc-'+g.id+'">' +
+      '<div class="goal-header">' +
+        '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
+        '<div class="goal-meta">' +
+          '<div class="goal-name">'+g.name+'</div>' +
+          '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>' +
+        '</div>' +
+        '<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>' +
+      '</div>' +
+      '<div class="prog-wrap"><div class="prog-p1" style="width:'+pct1+'%"></div><div class="prog-p2" style="width:'+pct2+'%"></div></div>' +
+      '<div class="prog-labels"><span style="color:var(--p1)">'+n1+': '+pct1+'%</span><span style="color:var(--p2)">'+n2+': '+pct2+'%</span></div>' +
+      '<div class="partner-rows">' +
+        '<div class="partner-row">' +
+          '<div class="p-avatar p1">'+n1.slice(0,2).toUpperCase()+'</div>' +
+          '<div class="p-name">'+n1+(isMe1?' <span class="p-you-badge">you</span>':'')+'</div>' +
+          '<div class="p-val">'+v1.toLocaleString()+' '+g.unit+'</div>' +
+          '<div class="p-pct">&nbsp;'+pct1+'%</div>' +
+        '</div>' +
+        '<div class="partner-row">' +
+          '<div class="p-avatar p2">'+n2.slice(0,2).toUpperCase()+'</div>' +
+          '<div class="p-name">'+n2+(isMe2?' <span class="p-you-badge">you</span>':'')+'</div>' +
+          '<div class="p-val">'+v2.toLocaleString()+' '+g.unit+'</div>' +
+          '<div class="p-pct">&nbsp;'+pct2+'%</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="update-row">' +
+        '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
+        '<button class="update-btn" onclick="updateGoal(\''+g.id+'\')">Update</button>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
 
-window.updateGoal = async (id) => {
-  const inp = document.getElementById('inp-'+id);
-  const val = parseFloat(inp.value);
+window.updateGoal = function(id) {
+  var inp = document.getElementById('inp-'+id);
+  var val = parseFloat(inp.value);
   if (isNaN(val) || val < 0) { inp.style.borderColor='#E74C3C'; return; }
   inp.style.borderColor = '';
-  const g = goalsData[id];
+  var g = goalsData[id];
   if (!g) return;
-  const update = { ...g };
+  var update = Object.assign({}, g);
   update[currentWho] = val;
-  await setDoc(doc(db,'goals',id), update);
-  inp.value = '';
-  showToast('Progress updated!');
+  db.collection('goals').doc(id).set(update).then(function(){
+    inp.value = '';
+    showToast('Progress updated!');
+  });
 };
 
-window.deleteGoal = async (id) => {
+window.deleteGoal = function(id) {
   if (!confirm('Delete this goal?')) return;
-  await deleteDoc(doc(db,'goals',id));
-  showToast('Goal deleted');
+  db.collection('goals').doc(id).delete().then(function(){
+    showToast('Goal deleted');
+  });
 };
 
 // ── Add Goal Modal ─────────────────────────────────────
-window.openAddGoal = () => document.getElementById('add-modal').classList.add('open');
-window.closeAddGoal = (e) => {
+window.openAddGoal = function() { document.getElementById('add-modal').classList.add('open'); };
+window.closeAddGoal = function(e) {
   if (!e || e.target===document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
 };
 
-let selectedIcon = '📚';
-window.selectIcon = (el) => {
-  document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
+var selectedIcon = '📚';
+window.selectIcon = function(el) {
+  document.querySelectorAll('.icon-opt').forEach(function(e){ e.classList.remove('selected'); });
   el.classList.add('selected');
   selectedIcon = el.getAttribute('data-icon');
 };
 
-window.saveGoal = async () => {
-  const name   = document.getElementById('m-name').value.trim();
-  const target = parseFloat(document.getElementById('m-target').value);
-  const unit   = document.getElementById('m-unit').value.trim() || 'units';
+window.saveGoal = function() {
+  var name   = document.getElementById('m-name').value.trim();
+  var target = parseFloat(document.getElementById('m-target').value);
+  var unit   = document.getElementById('m-unit').value.trim() || 'units';
   if (!name || isNaN(target) || target<=0) { showToast('Fill all fields'); return; }
-  const id = 'g_'+Date.now();
-  await setDoc(doc(db,'goals',id), { name, target, unit, icon: selectedIcon, p1:0, p2:0 });
-  document.getElementById('m-name').value = '';
-  document.getElementById('m-target').value = '';
-  document.getElementById('m-unit').value = '';
-  closeAddGoal();
-  showToast('Goal added!');
+  var id = 'g_'+Date.now();
+  db.collection('goals').doc(id).set({ name:name, target:target, unit:unit, icon:selectedIcon, p1:0, p2:0 }).then(function(){
+    document.getElementById('m-name').value = '';
+    document.getElementById('m-target').value = '';
+    document.getElementById('m-unit').value = '';
+    closeAddGoal();
+    showToast('Goal added!');
+  });
 };
 
 // ── Settings ───────────────────────────────────────────
-window.openSettings  = () => document.getElementById('settings-panel').classList.add('open');
-window.closeSettings = () => document.getElementById('settings-panel').classList.remove('open');
+window.openSettings  = function() { document.getElementById('settings-panel').classList.add('open'); };
+window.closeSettings = function() { document.getElementById('settings-panel').classList.remove('open'); };
 
-window.savePassphrase = () => {
-  const p = document.getElementById('s-passphrase').value.trim();
+window.savePassphrase = function() {
+  var p = document.getElementById('s-passphrase').value.trim();
   if (!p || p.length < 4) { showToast('Passphrase must be 4+ characters'); return; }
   config.passphrase = p;
   saveConfig(config);
@@ -785,9 +784,9 @@ window.savePassphrase = () => {
   showToast('Passphrase updated — share the new one with your wife');
 };
 
-window.savePins = () => {
-  const p1 = document.getElementById('s-pin1').value.trim();
-  const p2 = document.getElementById('s-pin2').value.trim();
+window.savePins = function() {
+  var p1 = document.getElementById('s-pin1').value.trim();
+  var p2 = document.getElementById('s-pin2').value.trim();
   if ((p1 && p1.length!==4)||(p2 && p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
   if (p1) config.pin1 = p1;
   if (p2) config.pin2 = p2;
@@ -797,7 +796,7 @@ window.savePins = () => {
   showToast('PINs updated');
 };
 
-window.resetApp = () => {
+window.resetApp = function() {
   if (!confirm('This will delete all local config. Are you sure?')) return;
   localStorage.removeItem('og_config');
   sessionStorage.clear();
@@ -811,334 +810,12 @@ if (!config) {
 } else {
   initFirebase(config);
   updatePartnerNames();
-  // If already unlocked this session, skip lock screen
   if (sessionStorage.getItem('og_unlocked') === '1') {
     showScreen('pin');
   } else {
     showScreen('lock');
   }
-  // Resume lockout countdown if active
   if (getRemainingLock() > 0) startLockCountdown();
-}
-</script>
-
-// ── State ──────────────────────────────────────────────
-let db = null;
-let currentWho = null; // 'p1' | 'p2'
-let goalsData = {};    // id → goal object
-let config = null;
-let pinEntry = '';
-let whoForPin = null;
-let isSettingUpPin = false;
-
-// ── Helpers ────────────────────────────────────────────
-window.showToast = (msg, dur=2000) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), dur);
-};
-
-window.showScreen = (id) => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-};
-
-function loadConfig() {
-  try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
-  catch { return null; }
-}
-
-function saveConfig(cfg) {
-  localStorage.setItem('og_config', JSON.stringify(cfg));
-}
-
-// ── Firebase init ──────────────────────────────────────
-function initFirebase(cfg) {
-  const app = initializeApp({
-    apiKey: cfg.apiKey,
-    authDomain: `${cfg.projectId}.firebaseapp.com`,
-    projectId: cfg.projectId,
-    appId: cfg.appId
-  });
-  db = getFirestore(app);
-  listenGoals();
-}
-
-function listenGoals() {
-  onSnapshot(collection(db, 'goals'), snap => {
-    goalsData = {};
-    snap.forEach(d => { goalsData[d.id] = { id: d.id, ...d.data() }; });
-    renderGoals();
-    updateSyncStatus(true);
-  }, () => updateSyncStatus(false));
-}
-
-function updateSyncStatus(ok) {
-  document.getElementById('sync-dot').className = 'sync-dot' + (ok ? '' : ' offline');
-  document.getElementById('sync-label').textContent = ok ? 'Live' : 'Offline';
-}
-
-// ── Setup ──────────────────────────────────────────────
-window.saveSetup = () => {
-  const apiKey    = document.getElementById('fb-apiKey').value.trim();
-  const projectId = document.getElementById('fb-projectId').value.trim();
-  const appId     = document.getElementById('fb-appId').value.trim();
-  const name1     = document.getElementById('fb-name1').value.trim() || 'Partner 1';
-  const name2     = document.getElementById('fb-name2').value.trim() || 'Partner 2';
-  const pin1      = document.getElementById('fb-pin1').value.trim();
-  const pin2      = document.getElementById('fb-pin2').value.trim();
-
-  if (!apiKey || !projectId || !appId) { showToast('Fill all Firebase fields'); return; }
-  if (pin1.length !== 4 || pin2.length !== 4) { showToast('Both PINs must be 4 digits'); return; }
-
-  config = { apiKey, projectId, appId, name1, name2, pin1, pin2 };
-  saveConfig(config);
-  initFirebase(config);
-  updatePartnerNames();
-  showScreen('pin');
-  showToast('Setup saved! Log in to continue');
-};
-
-window.showPin = () => showScreen('pin');
-
-// ── PIN logic ──────────────────────────────────────────
-window.selectWho = (who) => {
-  whoForPin = who;
-  pinEntry = '';
-  renderPinDots();
-  document.getElementById('who-p1').className = 'pin-who-btn' + (who==='p1' ? ' active' : '');
-  document.getElementById('who-p2').className = 'pin-who-btn' + (who==='p2' ? ' active' : '');
-
-  if (!config) {
-    document.getElementById('pin-sub').textContent = 'No setup found — configure first';
-    document.getElementById('pin-setup-hint').textContent = '';
-    setTimeout(() => showScreen('setup'), 700);
-    return;
-  }
-  document.getElementById('pin-sub').textContent = `Enter PIN for ${who==='p1' ? config.name1 : config.name2}`;
-  document.getElementById('pin-error').textContent = '';
-};
-
-window.pinKey = (k) => {
-  if (!whoForPin) { showToast('Select a partner first'); return; }
-  if (pinEntry.length >= 4) return;
-  pinEntry += k;
-  renderPinDots();
-  if (pinEntry.length === 4) setTimeout(checkPin, 150);
-};
-
-window.pinDel = () => {
-  pinEntry = pinEntry.slice(0, -1);
-  renderPinDots();
-};
-
-function renderPinDots(state='') {
-  for (let i=0; i<4; i++) {
-    const d = document.getElementById('d'+i);
-    d.className = 'pin-dot' + (i < pinEntry.length ? (' '+( state || 'filled')) : '');
-  }
-}
-
-function checkPin() {
-  if (!config) return;
-  const correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
-  if (pinEntry === correct) {
-    currentWho = whoForPin;
-    updateWhoUI();
-    showScreen('app');
-    showToast(`Welcome, ${whoForPin==='p1' ? config.name1 : config.name2}!`);
-  } else {
-    renderPinDots('error');
-    const card = document.querySelector('.pin-card');
-    card.classList.add('shake');
-    setTimeout(() => card.classList.remove('shake'), 400);
-    document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
-    setTimeout(() => { pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
-  }
-}
-
-// ── App UI ─────────────────────────────────────────────
-function updatePartnerNames() {
-  if (!config) return;
-  document.getElementById('tab-p1').textContent = config.name1;
-  document.getElementById('tab-p2').textContent = config.name2;
-  document.getElementById('s-name1').textContent = config.name1;
-  document.getElementById('s-name2').textContent = config.name2;
-}
-
-function updateWhoUI() {
-  if (!config) return;
-  updatePartnerNames();
-  document.getElementById('tab-p1').className = 'who-tab' + (currentWho==='p1' ? ' active' : '');
-  document.getElementById('tab-p2').className = 'who-tab' + (currentWho==='p2' ? ' active' : '');
-  document.querySelector('#tab-p1').setAttribute('data-who','p1');
-  document.querySelector('#tab-p2').setAttribute('data-who','p2');
-}
-
-window.switchWho = (who) => {
-  currentWho = who;
-  updateWhoUI();
-  renderGoals();
-};
-
-window.logout = () => {
-  currentWho = null;
-  whoForPin = null;
-  pinEntry = '';
-  renderPinDots();
-  document.getElementById('pin-sub').textContent = 'Select who you are';
-  document.getElementById('who-p1').className = 'pin-who-btn';
-  document.getElementById('who-p2').className = 'pin-who-btn';
-  showScreen('pin');
-};
-
-// ── Goals rendering ────────────────────────────────────
-function renderGoals() {
-  const goals = Object.values(goalsData);
-  const list = document.getElementById('goals-list');
-  const strip = document.getElementById('summary-strip');
-
-  const total = goals.length;
-  const completed = goals.filter(g => (g.p1||0)+(g.p2||0) >= g.target).length;
-  const avgPct = total ? Math.round(goals.reduce((a,g) => a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100), 0)/total) : 0;
-
-  strip.innerHTML = `
-    <div class="summary-card"><div class="summary-val">${total}</div><div class="summary-lbl">Goals</div></div>
-    <div class="summary-card"><div class="summary-val">${completed}</div><div class="summary-lbl">Done</div></div>
-    <div class="summary-card"><div class="summary-val">${avgPct}%</div><div class="summary-lbl">Avg progress</div></div>
-  `;
-
-  if (!goals.length) {
-    list.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>`;
-    return;
-  }
-
-  const n1 = config ? config.name1 : 'Partner 1';
-  const n2 = config ? config.name2 : 'Partner 2';
-
-  list.innerHTML = goals.map(g => {
-    const v1 = g.p1 || 0, v2 = g.p2 || 0;
-    const total = v1 + v2;
-    const pct1 = Math.min(100, Math.round(v1/g.target*100));
-    const pct2 = Math.min(100, Math.round(v2/g.target*100));
-    const pctCombined = Math.min(100, Math.round(total/g.target*100));
-    const isMe1 = currentWho === 'p1', isMe2 = currentWho === 'p2';
-    return `
-    <div class="goal-card" id="gc-${g.id}">
-      <div class="goal-header">
-        <div class="goal-icon">${g.icon||'🎯'}</div>
-        <div class="goal-meta">
-          <div class="goal-name">${g.name}</div>
-          <div class="goal-target">Target: ${g.target.toLocaleString()} ${g.unit} · ${pctCombined}% combined</div>
-        </div>
-        <button class="goal-menu" onclick="deleteGoal('${g.id}')">×</button>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-p1" style="width:${pct1}%"></div>
-        <div class="prog-p2" style="width:${pct2}%"></div>
-      </div>
-      <div class="prog-labels"><span style="color:var(--p1)">${n1}: ${pct1}%</span><span style="color:var(--p2)">${n2}: ${pct2}%</span></div>
-      <div class="partner-rows">
-        <div class="partner-row">
-          <div class="p-avatar p1">${n1.slice(0,2).toUpperCase()}</div>
-          <div class="p-name">${n1}${isMe1?' <span class="p-you-badge">you</span>':''}</div>
-          <div class="p-val">${v1.toLocaleString()} ${g.unit}</div>
-          <div class="p-pct">&nbsp;${pct1}%</div>
-        </div>
-        <div class="partner-row">
-          <div class="p-avatar p2">${n2.slice(0,2).toUpperCase()}</div>
-          <div class="p-name">${n2}${isMe2?' <span class="p-you-badge">you</span>':''}</div>
-          <div class="p-val">${v2.toLocaleString()} ${g.unit}</div>
-          <div class="p-pct">&nbsp;${pct2}%</div>
-        </div>
-      </div>
-      <div class="update-row">
-        <input class="update-input" id="inp-${g.id}" type="number" placeholder="My new total (${g.unit})"/>
-        <button class="update-btn" onclick="updateGoal('${g.id}')">Update</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-window.updateGoal = async (id) => {
-  const inp = document.getElementById('inp-'+id);
-  const val = parseFloat(inp.value);
-  if (isNaN(val) || val < 0) { inp.style.borderColor = '#E74C3C'; return; }
-  inp.style.borderColor = '';
-  const g = goalsData[id];
-  if (!g) return;
-  const update = { ...g };
-  update[currentWho] = val;
-  await setDoc(doc(db,'goals',id), update);
-  inp.value = '';
-  showToast('Progress updated!');
-};
-
-window.deleteGoal = async (id) => {
-  if (!confirm('Delete this goal?')) return;
-  await deleteDoc(doc(db,'goals',id));
-  showToast('Goal deleted');
-};
-
-// ── Add Goal Modal ─────────────────────────────────────
-window.openAddGoal = () => document.getElementById('add-modal').classList.add('open');
-window.closeAddGoal = (e) => {
-  if (!e || e.target === document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
-};
-
-let selectedIcon = '📚';
-window.selectIcon = (el) => {
-  document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedIcon = el.getAttribute('data-icon');
-};
-
-window.saveGoal = async () => {
-  const name   = document.getElementById('m-name').value.trim();
-  const target = parseFloat(document.getElementById('m-target').value);
-  const unit   = document.getElementById('m-unit').value.trim() || 'units';
-  if (!name || isNaN(target) || target <= 0) { showToast('Fill all fields'); return; }
-  const id = 'g_' + Date.now();
-  await setDoc(doc(db,'goals',id), { name, target, unit, icon: selectedIcon, p1:0, p2:0 });
-  document.getElementById('m-name').value = '';
-  document.getElementById('m-target').value = '';
-  document.getElementById('m-unit').value = '';
-  closeAddGoal();
-  showToast('Goal added!');
-};
-
-// ── Settings ───────────────────────────────────────────
-window.openSettings  = () => document.getElementById('settings-panel').classList.add('open');
-window.closeSettings = () => document.getElementById('settings-panel').classList.remove('open');
-
-window.savePins = () => {
-  const p1 = document.getElementById('s-pin1').value.trim();
-  const p2 = document.getElementById('s-pin2').value.trim();
-  if ((p1 && p1.length!==4) || (p2 && p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
-  if (p1) config.pin1 = p1;
-  if (p2) config.pin2 = p2;
-  saveConfig(config);
-  document.getElementById('s-pin1').value = '';
-  document.getElementById('s-pin2').value = '';
-  showToast('PINs updated');
-};
-
-window.resetApp = () => {
-  if (!confirm('This will delete all goals and config. Are you sure?')) return;
-  localStorage.removeItem('og_config');
-  location.reload();
-};
-
-// ── Boot ───────────────────────────────────────────────
-config = loadConfig();
-if (config) {
-  initFirebase(config);
-  updatePartnerNames();
-} else {
-  // Show setup on first open
-  document.getElementById('pin-setup-hint').textContent = 'First time? → Setup Firebase above';
-  // We can stay on pin screen — selectWho will redirect to setup
 }
 </script>
 </body>
