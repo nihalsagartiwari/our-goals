@@ -1141,7 +1141,7 @@ function buildIncButtons(goalId, currentVal, unit){
   var steps=[1,5,10];
   var html='<span style="font-size:11px;color:var(--text3);align-self:center">Quick add:</span>';
   steps.forEach(function(s){
-    html+='<button class="inc-btn" onclick="quickAdd(''+goalId+'','+s+')">+'+s+' '+unit+'</button>';
+    html+='<button class="inc-btn" data-gid="'+goalId+'" data-step="'+s+'" onclick="quickAdd(this.dataset.gid,parseInt(this.dataset.step))">+'+s+' '+unit+'</button>';
   });
   return html;
 }
