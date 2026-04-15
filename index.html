@@ -195,6 +195,51 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.8}
+/* ── Category tags ── */
+.cat-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;margin-right:4px;margin-bottom:4px;cursor:pointer;border:none}
+.cat-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.cat-filter-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .12s}
+.cat-filter-btn.active{border-color:var(--accent);background:var(--accent2);color:var(--accent)}
+
+/* ── End date / deadline ── */
+.deadline-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;margin-top:3px}
+.deadline-ok{background:var(--greenbg);color:var(--green)}
+.deadline-warn{background:#FFF8E8;color:#7A5500}
+.deadline-late{background:#FDECEA;color:#A93226}
+
+/* ── Comments / chat ── */
+.comments-toggle{display:flex;align-items:center;gap:6px;padding-top:10px;border-top:1px solid var(--border2);font-size:12px;color:var(--text2);cursor:pointer;background:none;border-left:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.comments-area{margin-top:10px;display:none}
+.comments-area.open{display:block}
+.comment-bubble{padding:8px 10px;border-radius:10px;margin-bottom:6px;max-width:90%}
+.comment-bubble.me{background:var(--accent2);margin-left:auto;border-radius:10px 10px 2px 10px}
+.comment-bubble.other{background:var(--surface2);border-radius:10px 10px 10px 2px}
+.comment-author{font-size:10px;font-weight:500;margin-bottom:2px}
+.comment-text{font-size:13px;color:var(--text);line-height:1.4}
+.comment-time{font-size:9px;color:var(--text3);margin-top:2px}
+.comment-input-row{display:flex;gap:8px;margin-top:8px}
+.comment-inp{flex:1;padding:7px 12px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
+.comment-inp:focus{outline:none;border-color:var(--accent)}
+.comment-send{padding:7px 14px;border:none;border-radius:20px;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.no-comments{font-size:12px;color:var(--text3);text-align:center;padding:.75rem 0}
+
+/* ── Monthly report card ── */
+.report-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
+.report-month-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.report-month-title{font-family:'DM Serif Display',serif;font-size:18px}
+.report-grade{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;flex-shrink:0}
+.report-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border2);font-size:13px}
+.report-row:last-child{border:none}
+.report-goal-name{color:var(--text2);flex:1}
+.report-vals{display:flex;gap:12px;font-size:12px}
+.report-change{font-size:11px;padding:1px 6px;border-radius:8px;font-weight:500}
+.report-up{background:var(--greenbg);color:var(--green)}
+.report-down{background:#FDECEA;color:#A93226}
+.report-same{background:var(--surface2);color:var(--text3)}
+.report-tab-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem}
+.report-month-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;color:var(--text2);white-space:nowrap;transition:all .12s;flex-shrink:0}
+.report-month-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 /* Edit goal modal */
 .edit-btn{background:transparent;border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;color:var(--text3);font-size:11px;padding:3px 8px;font-family:'DM Sans',sans-serif}
 .edit-btn:hover{background:var(--surface2)}
@@ -295,6 +340,7 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
       <button class="main-tab active" id="mtab-goals" onclick="switchTab('goals')">Goals</button>
       <button class="main-tab" id="mtab-history" onclick="switchTab('history')">History</button>
+      <button class="main-tab" id="mtab-report" onclick="switchTab('report')">Report</button>
     </div>
   </div>
 
@@ -318,6 +364,19 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
     <!-- DASHBOARD TAB -->
     <div class="tab-pane" id="pane-dashboard">
       <div id="dash-content"></div>
+    </div>
+
+
+    <!-- CATEGORY FILTER BAR -->
+    <div id="cat-filter-bar" style="display:none;margin-bottom:.75rem;padding:0 0 .5rem;border-bottom:1px solid var(--border2)">
+      <div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Filter by category</div>
+      <div id="cat-filter-btns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+
+
+    <!-- REPORT TAB -->
+    <div class="tab-pane" id="pane-report">
+      <div id="report-content"></div>
     </div>
 
     <!-- GOALS TAB -->
@@ -380,6 +439,23 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
     </div>
     <div class="mf"><label>Goal name</label><input id="m-name" placeholder="e.g. Books read this year"/></div>
     <div class="mf-row">
+      <div class="mf"><label>Category</label>
+        <select id="m-cat">
+          <option value="">None</option>
+          <option value="health">💪 Health</option>
+          <option value="finance">💰 Finance</option>
+          <option value="learning">📚 Learning</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="fitness">🏋️ Fitness</option>
+          <option value="mindfulness">🧘 Mindfulness</option>
+          <option value="relationships">❤️ Relationships</option>
+          <option value="career">🎯 Career</option>
+          <option value="other">⭐ Other</option>
+        </select>
+      </div>
+      <div class="mf"><label>End date (optional)</label><input id="m-enddate" type="date"/></div>
+    </div>
+    <div class="mf-row">
       <div class="mf"><label>Target</label><input id="m-target" type="number" placeholder="24"/></div>
       <div class="mf"><label>Unit</label><input id="m-unit" placeholder="books"/></div>
     </div>
@@ -398,6 +474,23 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
     <h3>Edit goal</h3>
     <input type="hidden" id="edit-goal-id"/>
     <div class="mf"><label>Goal name</label><input id="edit-name" placeholder="Goal name"/></div>
+    <div class="mf-row">
+      <div class="mf"><label>Category</label>
+        <select id="edit-cat">
+          <option value="">None</option>
+          <option value="health">💪 Health</option>
+          <option value="finance">💰 Finance</option>
+          <option value="learning">📚 Learning</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="fitness">🏋️ Fitness</option>
+          <option value="mindfulness">🧘 Mindfulness</option>
+          <option value="relationships">❤️ Relationships</option>
+          <option value="career">🎯 Career</option>
+          <option value="other">⭐ Other</option>
+        </select>
+      </div>
+      <div class="mf"><label>End date (optional)</label><input id="edit-enddate" type="date"/></div>
+    </div>
     <div class="mf-row">
       <div class="mf"><label>Target</label><input id="edit-target" type="number" placeholder="24"/></div>
       <div class="mf"><label>Unit</label><input id="edit-unit" placeholder="books"/></div>
@@ -565,7 +658,9 @@ function initFB(cfg){
     historyData={};
     snap.forEach(function(d){historyData[d.id]=Object.assign({id:d.id},d.data());});
     if(currentTab==='history') renderHistory();
+    if(currentTab==='report') renderReport();
   });
+  listenComments();
 }
 function setSyncStatus(ok){
   document.getElementById('sync-pip').className='sync-pip'+(ok?'':' off');
@@ -669,16 +764,17 @@ window.logout=function(){
 // ── Tab switching ──────────────────────────────────────────────────────
 window.switchTab=function(tab){
   currentTab=tab;
-  ['dashboard','goals','history'].forEach(function(t){
+  ['dashboard','goals','history','report'].forEach(function(t){
     document.getElementById('pane-'+t).className='tab-pane'+(t===tab?' active':'');
     document.getElementById('mtab-'+t).className='main-tab'+(t===tab?' active':'');
   });
   if(tab==='history') renderHistory();
   if(tab==='dashboard') renderDashboard();
+  if(tab==='report') renderReport();
 };
 
 // ── Render ─────────────────────────────────────────────────────────────
-function renderAll(){renderSummary();renderShared();renderIndividual();if(currentTab==='dashboard')renderDashboard();}
+function renderAll(){renderSummary();renderShared();renderIndividual();renderCatFilter();if(currentTab==='dashboard')renderDashboard();if(currentTab==='report')renderReport();}
 
 function renderSummary(){
   var shared=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
@@ -692,7 +788,7 @@ function renderSummary(){
 }
 
 function renderShared(){
-  var goals=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
+  var goals=applyFilter(Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;}));
   var el=document.getElementById('list-shared');
   if(!goals.length){el.innerHTML='<div class="empty-state">No shared goals yet<br>Tap + to add one — both of you contribute to these</div>';return;}
   el.innerHTML=goals.map(sharedCard).join('');
@@ -713,7 +809,7 @@ function sharedCard(g){
       '<div class="gc-meta">'+
         '<div class="gc-name">'+g.name+'</div>'+
         '<div class="gc-sub">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>'+
-        statusTag+
+        (g.category?getCatTag(g.category):'')+getDeadlineChip(g.endDate)+statusTag+
       '</div>'+
       '<button class="gc-del" onclick="delGoal(\''+g.id+'\')">×</button>'+
     '</div>'+
@@ -750,7 +846,7 @@ function sharedCard(g){
 }
 
 function renderIndividual(){
-  var all=Object.values(goalsData).filter(function(g){return g.type==='individual';});
+  var all=applyFilter(Object.values(goalsData).filter(function(g){return g.type==='individual';}));
   var el=document.getElementById('list-ind');
   if(!all.length){el.innerHTML='<div class="empty-state">No individual goals yet<br>Tap + → choose "Individual" to track something just for you</div>';return;}
   var n1=config.name1, n2=config.name2;
@@ -776,6 +872,7 @@ function indCard(g, n1, n2){
         '<div class="gc-name">'+g.name+'</div>'+
         '<div class="gc-sub">'+ownerName+"'s goal · Target: "+g.target.toLocaleString()+' '+g.unit+'</div>'+
         '<span style="display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;background:'+ownerBg+';color:'+ownerColor+';margin-top:3px">'+ownerName+'</span>'+
+        (g.category?getCatTag(g.category):'')+getDeadlineChip(g.endDate)+
       '</div>'+
       (canEdit?'<button class="gc-del" onclick="delGoal(\''+g.id+'\')">×</button>':'')+
     '</div>'+
@@ -1016,14 +1113,20 @@ window.saveGoal=function(){
   var name=document.getElementById('m-name').value.trim();
   var target=parseFloat(document.getElementById('m-target').value);
   var unit=document.getElementById('m-unit').value.trim()||'units';
+  var cat=document.getElementById('m-cat').value;
+  var enddate=document.getElementById('m-enddate').value;
   if(!name||isNaN(target)||target<=0){toast('Fill all fields');return;}
   var id='g_'+Date.now();
   var doc={name:name,target:target,unit:unit,icon:selIco,type:newGoalType,p1:0,p2:0};
+  if(cat) doc.category=cat;
+  if(enddate) doc.endDate=enddate;
   if(newGoalType==='individual') doc.owner=currentWho;
   db.collection('goals').doc(id).set(doc).then(function(){
     document.getElementById('m-name').value='';
     document.getElementById('m-target').value='';
     document.getElementById('m-unit').value='';
+    document.getElementById('m-cat').value='';
+    document.getElementById('m-enddate').value='';
     closeModal();
     toast('Goal added!');
   });
@@ -1038,6 +1141,8 @@ window.openEditModal=function(id){
   document.getElementById('edit-name').value=g.name;
   document.getElementById('edit-target').value=g.target;
   document.getElementById('edit-unit').value=g.unit;
+  document.getElementById('edit-cat').value=g.category||'';
+  document.getElementById('edit-enddate').value=g.endDate||'';
   document.getElementById('edit-modal').classList.add('open');
 };
 window.closeEditModal=function(e){
@@ -1049,10 +1154,12 @@ window.saveEdit=function(){
   var name=document.getElementById('edit-name').value.trim();
   var target=parseFloat(document.getElementById('edit-target').value);
   var unit=document.getElementById('edit-unit').value.trim();
+  var cat=document.getElementById('edit-cat').value;
+  var enddate=document.getElementById('edit-enddate').value;
   if(!name||isNaN(target)||target<=0||!unit){toast('Fill all fields');return;}
   var g=goalsData[id];
   if(!g) return;
-  var update=Object.assign({},g,{name:name,target:target,unit:unit});
+  var update=Object.assign({},g,{name:name,target:target,unit:unit,category:cat||null,endDate:enddate||null});
   db.collection('goals').doc(id).set(update).then(function(){
     closeEditModal();
     toast('Goal updated!');
@@ -1318,6 +1425,280 @@ function renderDashboard(){
   el.innerHTML=html;
 }
 
+
+// ── Category helpers ─────────────────────────────────────────────────────
+var CAT_CONFIG = {
+  health:       {label:'💪 Health',       bg:'#E8F7EF', color:'#1A6B3C'},
+  finance:      {label:'💰 Finance',      bg:'#FFF8E8', color:'#7A5500'},
+  learning:     {label:'📚 Learning',     bg:'#E8F0F9', color:'#1A4A8A'},
+  travel:       {label:'✈️ Travel',       bg:'#F0EBF8', color:'#5B3F8A'},
+  fitness:      {label:'🏋️ Fitness',      bg:'#FDECEA', color:'#8B2020'},
+  mindfulness:  {label:'🧘 Mindfulness',  bg:'#E1F5EE', color:'#0F6E56'},
+  relationships:{label:'❤️ Relationships',bg:'#FBEAF0', color:'#8B1A4A'},
+  career:       {label:'🎯 Career',       bg:'#F0EDE8', color:'#5A4A3A'},
+  other:        {label:'⭐ Other',        bg:'#F1EFE8', color:'#5F5E5A'}
+};
+
+function getCatTag(cat) {
+  if(!cat||!CAT_CONFIG[cat]) return '';
+  var c=CAT_CONFIG[cat];
+  return '<span class="cat-tag" style="background:'+c.bg+';color:'+c.color+'">'+c.label+'</span>';
+}
+
+window.applyFilterByCat=function(idx){ var cat=(window._catFilterList||[])[idx]; if(cat) filterByCat(cat); };
+window.clearCatFilter=function(){ sessionStorage.removeItem('og_cat_filter'); renderCatFilter(); renderShared(); renderIndividual(); };
+window.filterByCat=function(cat) {
+  var activeCat = sessionStorage.getItem('og_cat_filter');
+  if(activeCat===cat) {
+    sessionStorage.removeItem('og_cat_filter');
+  } else {
+    sessionStorage.setItem('og_cat_filter', cat);
+  }
+  renderCatFilter();
+  renderShared();
+  renderIndividual();
+};
+
+function renderCatFilter() {
+  var bar=document.getElementById('cat-filter-bar');
+  var btns=document.getElementById('cat-filter-btns');
+  if(!bar||!btns) return;
+  var goals=Object.values(goalsData);
+  var usedCats=[];
+  goals.forEach(function(g){ if(g.category&&usedCats.indexOf(g.category)<0) usedCats.push(g.category); });
+  if(!usedCats.length){bar.style.display='none';return;}
+  bar.style.display='block';
+  var active=sessionStorage.getItem('og_cat_filter');
+  var html='<button class="cat-filter-btn'+(active?'':' active')+'" onclick="clearCatFilter()">All</button>';
+  usedCats.forEach(function(cat,idx){
+    var c=CAT_CONFIG[cat];
+    if(!c) return;
+    var isActive=active===cat;
+    var st=isActive?'background:'+c.bg+';color:'+c.color+';border-color:'+c.color:'';
+    html+='<button class="cat-filter-btn'+(isActive?' active':'')+'" style="'+st+'" onclick="applyFilterByCat('+idx+')">'+c.label+'</button>';
+  });
+  btns.innerHTML=html;
+  window._catFilterList=usedCats;
+}
+function applyFilter(goals) {
+  var active=sessionStorage.getItem('og_cat_filter');
+  if(!active) return goals;
+  return goals.filter(function(g){return g.category===active;});
+}
+
+// ── Deadline chip ─────────────────────────────────────────────────────────
+function getDeadlineChip(endDate) {
+  if(!endDate) return '';
+  var end=new Date(endDate);
+  var now=new Date();
+  var diffMs=end-now;
+  var diffDays=Math.ceil(diffMs/(1000*60*60*24));
+  var cls,label;
+  if(diffDays<0){
+    cls='deadline-late'; label='⚠ Overdue by '+Math.abs(diffDays)+'d';
+  } else if(diffDays<=30){
+    cls='deadline-warn'; label='⏰ '+diffDays+'d left';
+  } else {
+    cls='deadline-ok'; label='📅 '+diffDays+'d left';
+  }
+  return '<span class="deadline-chip '+cls+'">'+label+'</span>';
+}
+
+// ── Comments / chat ───────────────────────────────────────────────────────
+var commentsData={};
+
+function listenComments(){
+  db.collection('comments').onSnapshot(function(snap){
+    commentsData={};
+    snap.forEach(function(d){
+      var c=Object.assign({id:d.id},d.data());
+      if(!commentsData[c.goalId]) commentsData[c.goalId]=[];
+      commentsData[c.goalId].push(c);
+    });
+    // Re-render open comment areas
+    document.querySelectorAll('.comments-area.open').forEach(function(el){
+      var goalId=el.getAttribute('data-goal');
+      var safeId=el.id.replace('ca-','');
+      if(goalId) renderCommentsList(safeId,goalId);
+    });
+  });
+}
+
+function buildCommentsSection(goalId) {
+  var count=commentsData[goalId]?commentsData[goalId].length:0;
+  var safeId=goalId.replace(/[^a-zA-Z0-9_]/g,'_');
+  return '<button class="comments-toggle" id="ctog-'+safeId+'" onclick="toggleComments(\''+safeId+'\')">'+
+    '<span style="font-size:16px">💬</span> Comments'+(count?' ('+count+')':'')+
+    '<span style="margin-left:auto;font-size:11px;color:var(--text3)">tap to open</span>'+
+  '</button>'+
+  '<div class="comments-area" id="ca-'+safeId+'" data-goal="'+goalId+'">'+
+    '<div id="cl-'+safeId+'" style="max-height:200px;overflow-y:auto;margin-bottom:8px"></div>'+
+    '<div class="comment-input-row">'+
+      '<input class="comment-inp" id="ci-'+safeId+'" data-safe="'+safeId+'" data-goal="'+goalId+'" placeholder="Write a comment..."/>'+
+      '<button class="comment-send" onclick="sendComment(\''+safeId+'\',\''+goalId+'\')">Send</button>'+
+    '</div>'+
+  '</div>';
+}
+window.toggleComments=function(safeId){
+  var area=document.getElementById('ca-'+safeId);
+  if(!area) return;
+  var isOpen=area.classList.contains('open');
+  area.classList.toggle('open');
+  var goalId=area.getAttribute('data-goal');
+  if(!isOpen) renderCommentsList(safeId,goalId);
+};
+
+function renderCommentsList(safeId,goalId){
+  goalId=goalId||safeId;
+  var el=document.getElementById('cl-'+safeId);
+  if(!el) return;
+  var comments=(commentsData[goalId]||[]).slice().sort(function(a,b){return (a.ts||0)-(b.ts||0);});
+  if(!comments.length){el.innerHTML='<div class="no-comments">No comments yet — be the first!</div>';return;}
+  var n1=config.name1, n2=config.name2;
+  el.innerHTML=comments.map(function(c){
+    var isMe=c.who===currentWho;
+    var name=c.who==='p1'?n1:n2;
+    var color=c.who==='p1'?'var(--p1)':'var(--p2)';
+    var d=c.ts?new Date(c.ts):new Date();
+    var timeStr=d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';margin-bottom:8px">'+
+      '<div class="comment-bubble '+(isMe?'me':'other')+'">'+
+        '<div class="comment-author" style="color:'+color+'">'+name+'</div>'+
+        '<div class="comment-text">'+escHtml(c.text)+'</div>'+
+        '<div class="comment-time">'+timeStr+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.classList.contains('comment-inp')){
+    var safeId=e.target.getAttribute('data-safe');
+    var goalId=e.target.getAttribute('data-goal');
+    if(safeId&&goalId) sendComment(safeId,goalId);
+  }
+});
+window.sendComment=function(safeId,goalId){
+  goalId=goalId||safeId;
+  var inp=document.getElementById('ci-'+safeId);
+  if(!inp) return;
+  var text=inp.value.trim();
+  if(!text) return;
+  var id='c_'+Date.now();
+  db.collection('comments').doc(id).set({
+    goalId:goalId, who:currentWho, text:text, ts:Date.now()
+  });
+  inp.value='';
+};
+
+// ── Monthly Report ────────────────────────────────────────────────────────
+var reportMonth=null;
+
+function renderReport(){
+  var el=document.getElementById('report-content');
+  var goals=Object.values(goalsData);
+  var n1=config.name1, n2=config.name2;
+
+  if(!goals.length){el.innerHTML='<div class="empty-state">No goals yet.</div>';return;}
+
+  // Get all months that have data
+  var monthsWithData=[...new Set(Object.values(historyData).map(function(h){return h.month;}))].sort();
+  if(!monthsWithData.length){el.innerHTML='<div class="empty-state">No history data yet.<br>Update some goals first, then check back here.</div>';return;}
+
+  if(!reportMonth||monthsWithData.indexOf(reportMonth)<0) reportMonth=monthsWithData[monthsWithData.length-1];
+
+  // Month selector tabs
+  var visibleMonths=monthsWithData.slice(-12);
+  window._reportMonths=visibleMonths;
+  var html='<div class="report-tab-bar">';
+  visibleMonths.forEach(function(mk,i){
+    var parts=mk.split('-');
+    var d=new Date(parts[0],parseInt(parts[1])-1,1);
+    var label=MONTHS[d.getMonth()]+' '+d.getFullYear();
+    html+='<button class="report-month-btn'+(mk===reportMonth?' active':'')+'" onclick="pickReportMonth('+i+')">'+label+'</button>';
+  });
+  html+='</div>';
+
+  // Get current and previous month data
+  var curIdx=monthsWithData.indexOf(reportMonth);
+  var prevMonth=curIdx>0?monthsWithData[curIdx-1]:null;
+  var parts=reportMonth.split('-');
+  var rDate=new Date(parts[0],parseInt(parts[1])-1,1);
+
+  // Compute scores for grade
+  var totalGoals=goals.length, updated=0, improved=0;
+  goals.forEach(function(g){
+    var cur=historyData[g.id+'_'+reportMonth];
+    if(cur) updated++;
+    if(prevMonth){
+      var prev=historyData[g.id+'_'+prevMonth];
+      if(cur&&prev){
+        var isShared=g.type==='shared'||!g.type;
+        var curVal=isShared?(cur.p1||0)+(cur.p2||0):(cur[g.owner||'p1']||0);
+        var prevVal=isShared?(prev.p1||0)+(prev.p2||0):(prev[g.owner||'p1']||0);
+        if(curVal>prevVal) improved++;
+      }
+    }
+  });
+  var score=Math.round((updated/totalGoals)*60+(prevMonth&&improved>0?(improved/(totalGoals||1))*40:40));
+  var grade=score>=90?'🏆':score>=75?'⭐':score>=60?'👍':score>=40?'📈':'💪';
+  var gradeColor=score>=75?'var(--green)':score>=50?'#7A5500':'var(--accent)';
+
+  html+='<div class="report-card">'+
+    '<div class="report-month-hdr">'+
+      '<div>'+
+        '<div class="report-month-title">'+MONTHS[rDate.getMonth()]+' '+rDate.getFullYear()+'</div>'+
+        '<div style="font-size:12px;color:var(--text3)">'+updated+' of '+totalGoals+' goals updated'+(prevMonth?' · '+improved+' improved':'')+'</div>'+
+      '</div>'+
+      '<div class="report-grade" style="background:var(--surface2);color:'+gradeColor+'">'+grade+'</div>'+
+    '</div>';
+
+  // Per-goal rows
+  goals.forEach(function(g){
+    var isShared=g.type==='shared'||!g.type;
+    var cur=historyData[g.id+'_'+reportMonth];
+    var prev=prevMonth?historyData[g.id+'_'+prevMonth]:null;
+    var curV1=cur&&cur.p1!=null?cur.p1:'-';
+    var curV2=cur&&cur.p2!=null?cur.p2:'-';
+    var curCombo=cur?((cur.p1||0)+(cur.p2||0)):null;
+    var prevCombo=prev?((prev.p1||0)+(prev.p2||0)):null;
+
+    var changeHtml='';
+    if(curCombo!==null&&prevCombo!==null){
+      var diff=curCombo-prevCombo;
+      if(diff>0) changeHtml='<span class="report-change report-up">▲ '+diff.toLocaleString()+'</span>';
+      else if(diff<0) changeHtml='<span class="report-change report-down">▼ '+Math.abs(diff).toLocaleString()+'</span>';
+      else changeHtml='<span class="report-change report-same">= same</span>';
+    } else if(!cur) {
+      changeHtml='<span class="report-change report-same">not updated</span>';
+    }
+
+    html+='<div class="report-row">'+
+      '<span style="font-size:16px;margin-right:6px">'+(g.icon||'🎯')+'</span>'+
+      '<span class="report-goal-name">'+g.name+'</span>'+
+      '<div class="report-vals">'+
+        (isShared&&cur?
+          '<span style="color:var(--p1)">'+n1+': '+(curV1!=='-'?curV1.toLocaleString():'-')+'</span>'+
+          '<span style="color:var(--p2)">'+n2+': '+(curV2!=='-'?curV2.toLocaleString():'-')+'</span>'
+        :(cur?'<span style="color:var(--text2)">'+(isShared?curCombo:(cur[g.owner||'p1']||0)).toLocaleString()+' '+g.unit+'</span>':''))+
+        changeHtml+
+      '</div>'+
+    '</div>';
+  });
+
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+window.pickReportMonth=function(i){ var mk=(window._reportMonths||[])[i]; if(mk) setReportMonth(mk); };
+window.setReportMonth=function(mk){
+  reportMonth=mk;
+  renderReport();
+};
+
 // ── Settings ───────────────────────────────────────────────────────────
 window.openSettings=function(){document.getElementById('settings-panel').classList.add('open');};
 window.closeSettings=function(){document.getElementById('settings-panel').classList.remove('open');};
@@ -1361,6 +1742,7 @@ if(!config){
 function postLoginInit(){
   checkReminderBanner();
   checkHsBanner();
+  renderCatFilter();
   switchTab('dashboard');
 }
 </script>
