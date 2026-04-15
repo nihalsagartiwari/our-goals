@@ -195,6 +195,25 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.8}
+/* ── Bulk fill modal ── */
+.bulk-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.bulk-table th{text-align:left;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;border-bottom:1px solid var(--border)}
+.bulk-table td{padding:5px 4px;border-bottom:1px solid var(--border2);vertical-align:middle}
+.bulk-table tr:last-child td{border-bottom:none}
+.bulk-month-lbl{font-size:12px;color:var(--text2);white-space:nowrap;padding-right:6px}
+.bulk-inp{width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text);min-width:0}
+.bulk-inp:focus{outline:none;border-color:var(--accent)}
+.bulk-inp.filled{background:var(--greenbg);border-color:var(--green)}
+.bulk-note-inp{width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:11px;background:var(--bg);color:var(--text);resize:none}
+.bulk-note-inp:focus{outline:none;border-color:var(--accent)}
+.bulk-progress{font-size:11px;color:var(--text3);text-align:center;padding:8px 0}
+.bulk-save-btn{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:12px}
+.bulk-save-btn:disabled{opacity:.5;cursor:not-allowed}
+.partner-toggle{display:flex;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:12px}
+.pt-btn{flex:1;padding:8px 6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s;text-align:center}
+.pt-btn.active[data-who="p1"]{background:var(--p1bg);color:var(--p1)}
+.pt-btn.active[data-who="p2"]{background:var(--p2bg);color:var(--p2)}
+
 /* ── Motivational quote ── */
 .quote-card{background:var(--surface);border-radius:var(--r);padding:1.25rem 1.5rem;border:1px solid var(--border2);margin-bottom:1rem;position:relative;overflow:hidden}
 .quote-card::before{content:'';position:absolute;top:-20px;left:-10px;font-size:80px;opacity:.06;line-height:1}
@@ -391,7 +410,6 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <div class="app-logo">Our<span>Goals</span></div>
       <div class="bar-actions">
         <span><span class="sync-pip" id="sync-pip"></span><span class="sync-txt" id="sync-txt">Live</span></span>
-        <button class="iBtn" onclick="openShareModal()" title="Share progress">📤</button>
         <button class="iBtn" onclick="openSettings()">⚙</button>
         <button class="iBtn" onclick="logout()">👤</button>
       </div>
@@ -590,6 +608,52 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
     <button class="share-btn" onclick="downloadShareCard()">⬇ Save as image</button>
     <div style="height:.5rem"></div>
     <button class="btn-cancel" style="width:100%;margin-top:6px" onclick="closeShareModal()">Close</button>
+  </div>
+</div>
+
+
+<!-- BULK FILL MODAL -->
+<div class="overlay" id="bulk-modal" onclick="closeBulkModal(event)">
+  <div class="sheet" style="max-height:92vh">
+    <div class="drag-bar"></div>
+    <h3>Bulk month fill</h3>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.5">Fill in multiple months at once. Leave blank to skip a month.</div>
+
+    <!-- Goal name display -->
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border-radius:var(--rs);margin-bottom:12px">
+      <span id="bulk-goal-icon" style="font-size:20px">🎯</span>
+      <div>
+        <div id="bulk-goal-name" style="font-size:14px;font-weight:500;color:var(--text)">Goal name</div>
+        <div id="bulk-goal-meta" style="font-size:11px;color:var(--text3)">target</div>
+      </div>
+    </div>
+
+    <!-- Partner selector (for shared goals) -->
+    <div id="bulk-partner-wrap" style="display:none">
+      <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Filling data for</div>
+      <div class="partner-toggle" id="bulk-partner-toggle">
+        <button class="pt-btn active" data-who="p1" id="bpt-p1" onclick="setBulkPartner('p1')">Partner 1</button>
+        <button class="pt-btn" data-who="p2" id="bpt-p2" onclick="setBulkPartner('p2')">Partner 2</button>
+      </div>
+    </div>
+
+    <!-- Month table -->
+    <div style="overflow-y:auto;max-height:340px">
+      <table class="bulk-table">
+        <thead>
+          <tr>
+            <th style="width:90px">Month</th>
+            <th>Value</th>
+            <th style="width:44px">Current</th>
+            <th style="display:none" id="bulk-note-th">Note</th>
+          </tr>
+        </thead>
+        <tbody id="bulk-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="bulk-progress" id="bulk-progress-msg"></div>
+    <button class="bulk-save-btn" id="bulk-save-btn" onclick="saveBulkFill()">Save all filled months →</button>
   </div>
 </div>
 
@@ -1927,29 +1991,94 @@ function renderNotesFeed(){
     var monthLabel=MONTHS[d.getMonth()]+' '+d.getFullYear();
     var gName=(goalsData[h.goalId]||{}).name||h.goalName||'Unknown goal';
     var gIcon=(goalsData[h.goalId]||{}).icon||h.goalIcon||'🎯';
-    if(h.notes.p1) allNotes.push({who:'p1',name:n1,text:h.notes.p1,month:h.month,monthLabel:monthLabel,goalName:gName,goalIcon:gIcon,color:'var(--p1)'});
-    if(h.notes.p2) allNotes.push({who:'p2',name:n2,text:h.notes.p2,month:h.month,monthLabel:monthLabel,goalName:gName,goalIcon:gIcon,color:'var(--p2)'});
+    if(h.notes.p1) allNotes.push({who:'p1',name:n1,text:h.notes.p1,month:h.month,monthLabel:monthLabel,goalId:h.id,goalName:gName,goalIcon:gIcon,color:'var(--p1)'});
+    if(h.notes.p2) allNotes.push({who:'p2',name:n2,text:h.notes.p2,month:h.month,monthLabel:monthLabel,goalId:h.id,goalName:gName,goalIcon:gIcon,color:'var(--p2)'});
   });
   allNotes.sort(function(a,b){return b.month.localeCompare(a.month);});
   if(!allNotes.length){el.innerHTML='<div class="empty-state">No notes yet.<br>Add a note when saving progress on any goal.</div>';return;}
-  var html='<div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">All notes &amp; comments</div>';
+
+  // Store in registry for edit/delete
+  window._allNotes=allNotes;
+
+  var html='<div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">All notes</div>';
+  html+='<div id="notes-edit-area" style="display:none;background:var(--surface);border-radius:var(--rs);padding:1rem;border:1px solid var(--border);margin-bottom:1rem">'+
+    '<div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">Edit note</div>'+
+    '<textarea id="note-edit-inp" class="note-inp" rows="3" style="width:100%"></textarea>'+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+      '<button class="upd-btn" onclick="saveNoteEdit()">Save</button>'+
+      '<button class="btn-cancel" style="padding:8px 14px" onclick="cancelNoteEdit()">Cancel</button>'+
+    '</div>'+
+  '</div>';
   html+='<div class="notes-feed">';
-  allNotes.forEach(function(n){
-    html+='<div class="note-entry">'+
+  allNotes.forEach(function(n,i){
+    var isMe=(n.who===currentWho);
+    html+='<div class="note-entry" id="ne-'+i+'">'+
       '<div class="note-dot" style="background:'+n.color+'"></div>'+
       '<div class="note-body">'+
         '<div class="note-meta">'+
           '<span style="color:'+n.color+';font-weight:500">'+n.name+'</span>'+
           '<span>'+n.goalIcon+' '+n.goalName+'</span>'+
           '<span>'+n.monthLabel+'</span>'+
-        '</div>'+
-        '<div class="note-content">'+escHtml(n.text)+'</div>'+
+          (isMe?'<span style="margin-left:auto;display:flex;gap:6px">'+
+            '<button class="edit-btn" onclick="editNote('+i+')">edit</button>'+
+            '<button class="edit-btn" style="color:#C0392B;border-color:#C0392B" onclick="deleteNote('+i+')">delete</button>'+
+          '</span>':'')+'</div>'+
+        '<div class="note-content" id="nc-'+i+'">'+escHtml(n.text)+'</div>'+
       '</div>'+
     '</div>';
   });
   html+='</div>';
   el.innerHTML=html;
 }
+
+var _editingNoteIdx=null;
+window.editNote=function(i){
+  var n=(window._allNotes||[])[i];
+  if(!n) return;
+  _editingNoteIdx=i;
+  var area=document.getElementById('notes-edit-area');
+  var inp=document.getElementById('note-edit-inp');
+  if(area) area.style.display='block';
+  if(inp) inp.value=n.text;
+  // scroll to top
+  var el=document.getElementById('notes-feed-content');
+  if(el) el.scrollTop=0;
+};
+window.cancelNoteEdit=function(){
+  _editingNoteIdx=null;
+  var area=document.getElementById('notes-edit-area');
+  if(area) area.style.display='none';
+};
+window.saveNoteEdit=function(){
+  if(_editingNoteIdx===null) return;
+  var n=(window._allNotes||[])[_editingNoteIdx];
+  if(!n) return;
+  var inp=document.getElementById('note-edit-inp');
+  var newText=inp?inp.value.trim():'';
+  if(!newText){toast('Note cannot be empty');return;}
+  // histId is stored as n.goalId (which is the history doc id)
+  var h=historyData[n.goalId];
+  if(!h){toast('Could not find original record');return;}
+  if(!h.notes) h.notes={};
+  h.notes[n.who]=newText;
+  db.collection('history').doc(n.goalId).set(h).then(function(){
+    cancelNoteEdit();
+    toast('Note updated!');
+    renderNotesFeed();
+  });
+};
+window.deleteNote=function(i){
+  var n=(window._allNotes||[])[i];
+  if(!n||!confirm('Delete this note?')) return;
+  var h=historyData[n.goalId];
+  if(!h||!h.notes) return;
+  delete h.notes[n.who];
+  db.collection('history').doc(n.goalId).set(h).then(function(){
+    toast('Note deleted');
+    renderNotesFeed();
+  });
+};
+
 
 // ── Year heatmap ──────────────────────────────────────────────────────────
 function renderHeatmap(){
@@ -2180,17 +2309,214 @@ function renderDashboard(){
     html+='</div>';
   }
 
-  var p1Total=0,p2Total=0,p1Goals=0,p2Goals=0;
-  shared.forEach(function(g){p1Total+=(g.p1||0);p2Total+=(g.p2||0);});
-  ind.forEach(function(g){if(g.owner==='p1')p1Goals++;else p2Goals++;});
-  var completedShared=shared.filter(function(g){return (g.p1||0)+(g.p2||0)>=g.target;}).length;
-  html+='<div class="dash-section-hdr">Leaderboard</div>';
-  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n1+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p1)">'+p1Total.toLocaleString()+'</span></div>';
-  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n2+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p2)">'+p2Total.toLocaleString()+'</span></div>';
-  html+='<div class="dash-stat-row"><span class="dash-stat-label">Shared goals completed</span><span class="dash-stat-val" style="color:var(--green)">'+completedShared+' / '+shared.length+'</span></div>';
+  // Per-goal progress table
+  if(shared.length){
+    html+='<div class="dash-section-hdr">Goal-by-goal progress</div>';
+    shared.forEach(function(g){
+      var v1=g.p1||0, v2=g.p2||0, combo=v1+v2;
+      var pct1=Math.min(100,Math.round(v1/g.target*100));
+      var pct2=Math.min(100,Math.round(v2/g.target*100));
+      var pctC=Math.min(100,Math.round(combo/g.target*100));
+      var done=(combo>=g.target);
+      html+='<div class="dash-stat-row" style="flex-direction:column;align-items:flex-start;gap:6px">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;width:100%">'+
+          '<span style="font-size:13px;font-weight:500;color:var(--text)">'+(g.icon||'🎯')+' '+g.name+'</span>'+
+          '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+(done?'var(--greenbg)':'var(--surface2)')+';color:'+(done?'var(--green)':'var(--text3)')+'">'+pctC+'%'+(done?' ✓':'')+'</span>'+
+        '</div>'+
+        '<div style="display:flex;gap:12px;width:100%">'+
+          '<div style="flex:1;background:var(--surface2);border-radius:4px;overflow:hidden;height:6px;display:flex">'+
+            '<div style="width:'+pct1+'%;background:var(--p1)"></div>'+
+            '<div style="width:'+pct2+'%;background:var(--p2)"></div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:16px;font-size:11px">'+
+          '<span style="color:var(--p1)">'+n1+': '+v1.toLocaleString()+' '+g.unit+'</span>'+
+          '<span style="color:var(--p2)">'+n2+': '+v2.toLocaleString()+' '+g.unit+'</span>'+
+          '<span style="color:var(--text3)">Target: '+g.target.toLocaleString()+'</span>'+
+        '</div>'+
+      '</div>';
+    });
+  }
   el.innerHTML=html;
   setTimeout(renderDashboardQuote,50);
 }
+
+
+// ── Bulk month fill ───────────────────────────────────────────────────────
+var _bulkGoalId=null, _bulkPartner=null;
+
+window.openBulkModal=function(goalId){
+  var g=goalsData[goalId];
+  if(!g) return;
+  _bulkGoalId=goalId;
+  var isShared=g.type==='shared'||!g.type;
+  _bulkPartner=isShared?currentWho:(g.owner||currentWho);
+
+  // Set header info
+  document.getElementById('bulk-goal-icon').textContent=g.icon||'🎯';
+  document.getElementById('bulk-goal-name').textContent=g.name;
+  document.getElementById('bulk-goal-meta').textContent='Target: '+g.target.toLocaleString()+' '+g.unit;
+
+  // Show/hide partner toggle for shared goals
+  var pw=document.getElementById('bulk-partner-wrap');
+  if(isShared){
+    pw.style.display='block';
+    setBulkPartner(currentWho);
+  } else {
+    pw.style.display='none';
+  }
+
+  buildBulkTable(goalId, _bulkPartner);
+  document.getElementById('bulk-modal').classList.add('open');
+  document.getElementById('bulk-progress-msg').textContent='';
+};
+
+window.closeBulkModal=function(e){
+  if(!e||e.target===document.getElementById('bulk-modal'))
+    document.getElementById('bulk-modal').classList.remove('open');
+};
+
+window.setBulkPartner=function(who){
+  _bulkPartner=who;
+  document.getElementById('bpt-p1').className='pt-btn'+(who==='p1'?' active':'');
+  document.getElementById('bpt-p2').className='pt-btn'+(who==='p2'?' active':'');
+  document.getElementById('bpt-p1').setAttribute('data-who','p1');
+  document.getElementById('bpt-p2').setAttribute('data-who','p2');
+  if(config){
+    document.getElementById('bpt-p1').textContent=config.name1;
+    document.getElementById('bpt-p2').textContent=config.name2;
+  }
+  if(_bulkGoalId) buildBulkTable(_bulkGoalId, who);
+};
+
+function buildBulkTable(goalId, who){
+  var tbody=document.getElementById('bulk-tbody');
+  if(!tbody) return;
+
+  // Build all months Apr 2025 – Mar 2027
+  var rows=[];
+  var mStart=new Date(2025,3,1), mEnd=new Date(2027,2,1), mCur=new Date(mStart);
+  while(mCur<=mEnd){
+    var mk=mCur.getFullYear()+'-'+(mCur.getMonth()+1);
+    var rec=historyData[goalId+'_'+mk];
+    var existing=rec&&rec[who]!=null?rec[who]:'';
+    var existingNote=rec&&rec.notes&&rec.notes[who]?rec.notes[who]:'';
+    var now=new Date();
+    var isFuture=mCur>new Date(now.getFullYear(),now.getMonth(),1);
+    var label=MONTHS[mCur.getMonth()]+' '+mCur.getFullYear();
+    rows.push({mk:mk,label:label,existing:existing,existingNote:existingNote,isFuture:isFuture});
+    mCur=new Date(mCur.getFullYear(),mCur.getMonth()+1,1);
+  }
+
+  // Scroll to current month
+  var html='';
+  rows.forEach(function(r,i){
+    var now2=new Date();
+    var isCurrent=(r.mk===now2.getFullYear()+'-'+(now2.getMonth()+1));
+    html+='<tr id="brow-'+i+'" style="'+(isCurrent?'background:var(--accent2)':'')+'">'+
+      '<td class="bulk-month-lbl">'+r.label+(isCurrent?' <span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 4px;border-radius:3px">now</span>':'')+'</td>'+
+      '<td><input class="bulk-inp'+(r.existing!==''?' filled':'')+'" id="bv-'+i+'" type="number" value="'+(r.existing!==''?r.existing:'')+'" placeholder="—" data-mk="'+r.mk+'"/></td>'+
+      '<td style="text-align:center;font-size:11px;color:var(--text3)">'+(r.existing!==''?r.existing:'—')+'</td>'+
+      '<td style="display:none"><input class="bulk-note-inp" id="bn-'+i+'" placeholder="note..." value="'+r.existingNote+'"/></td>'+
+    '</tr>';
+  });
+  tbody.innerHTML=html;
+
+  // Colour inputs green when they have a value
+  tbody.querySelectorAll('.bulk-inp').forEach(function(inp){
+    inp.addEventListener('input',function(){
+      inp.classList.toggle('filled', inp.value.trim()!=='');
+      updateBulkProgress();
+    });
+  });
+
+  // Store row count
+  window._bulkRowCount=rows.length;
+  updateBulkProgress();
+
+  // Scroll to current month row
+  var now3=new Date();
+  var curMk=now3.getFullYear()+'-'+(now3.getMonth()+1);
+  rows.forEach(function(r,i){
+    if(r.mk===curMk){
+      setTimeout(function(){
+        var row=document.getElementById('brow-'+i);
+        if(row) row.scrollIntoView({block:'center',behavior:'smooth'});
+      },200);
+    }
+  });
+}
+
+function updateBulkProgress(){
+  var total=window._bulkRowCount||0;
+  var filled=0;
+  for(var i=0;i<total;i++){
+    var inp=document.getElementById('bv-'+i);
+    if(inp&&inp.value.trim()!=='') filled++;
+  }
+  var msg=document.getElementById('bulk-progress-msg');
+  if(msg) msg.textContent=filled>0?filled+' of '+total+' months filled':'Fill in the months you want to save';
+  var btn=document.getElementById('bulk-save-btn');
+  if(btn) btn.disabled=(filled===0);
+}
+
+window.saveBulkFill=function(){
+  var total=window._bulkRowCount||0;
+  if(!_bulkGoalId||!_bulkPartner) return;
+  var g=goalsData[_bulkGoalId];
+  if(!g) return;
+
+  var saved=0, latestVal=g[_bulkPartner]||0, latestMk=null;
+
+  // Collect all rows
+  var updates=[];
+  for(var i=0;i<total;i++){
+    var inp=document.getElementById('bv-'+i);
+    var noteInp=document.getElementById('bn-'+i);
+    if(!inp||inp.value.trim()==='') continue;
+    var val=parseFloat(inp.value);
+    if(isNaN(val)||val<0) continue;
+    var mk=inp.getAttribute('data-mk');
+    var noteText=noteInp?noteInp.value.trim():'';
+    updates.push({mk:mk,val:val,note:noteText});
+  }
+
+  if(!updates.length){toast('No values to save');return;}
+
+  var btn=document.getElementById('bulk-save-btn');
+  if(btn){btn.disabled=true;btn.textContent='Saving...';}
+
+  var done=0;
+  updates.forEach(function(u){
+    var histId=_bulkGoalId+'_'+u.mk;
+    var existing=historyData[histId]||{
+      goalId:_bulkGoalId,goalName:g.name,goalUnit:g.unit,
+      goalIcon:g.icon||'🎯',goalType:g.type||'shared',
+      goalOwner:g.owner||null,month:u.mk,p1:null,p2:null
+    };
+    existing[_bulkPartner]=u.val;
+    if(u.note){
+      if(!existing.notes) existing.notes={};
+      existing.notes[_bulkPartner]=u.note;
+    }
+    // Track latest month for goal current value
+    if(!latestMk||u.mk>latestMk){latestMk=u.mk;latestVal=u.val;}
+    db.collection('history').doc(histId).set(existing).then(function(){
+      done++;
+      if(done===updates.length){
+        // Update goal's current value to the most recent month's value
+        var goalUpdate=Object.assign({},g);
+        goalUpdate[_bulkPartner]=latestVal;
+        goalUpdate.lastUpdated=Date.now();
+        db.collection('goals').doc(_bulkGoalId).set(goalUpdate).then(function(){
+          if(btn){btn.disabled=false;btn.textContent='Save all filled months →';}
+          toast('Saved '+updates.length+' month'+(updates.length>1?'s':'')+'!',2500);
+          closeBulkModal();
+        });
+      }
+    });
+  });
+};
 
 // ── Settings ───────────────────────────────────────────────────────────
 window.openSettings=function(){document.getElementById('settings-panel').classList.add('open');};
@@ -2237,6 +2563,12 @@ function postLoginInit(){
   checkHsBanner();
   renderCatFilter();
   initColourPicker();
+  if(config){
+    var bp1=document.getElementById('bpt-p1');
+    var bp2=document.getElementById('bpt-p2');
+    if(bp1) bp1.textContent=config.name1;
+    if(bp2) bp2.textContent=config.name2;
+  }
   switchTab('dashboard');
 }
 </script>
