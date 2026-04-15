@@ -6,7 +6,7 @@
 <title>Our Goals</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#F7F4EF;--surface:#FFFFFF;--surface2:#F0EDE8;--text:#1A1714;--text2:#6B6560;--text3:#A09A94;--accent:#C4522A;--accent2:#E8D5C8;--p1:#3B6FAA;--p1bg:#E8F0F9;--p2:#7B5EA7;--p2bg:#F0EBF8;--border:rgba(26,23,20,0.1);--border2:rgba(26,23,20,0.06);--r:14px;--rs:8px;--shadow:0 2px 16px rgba(26,23,20,0.08)}
+:root{--bg:#F7F4EF;--surface:#FFF;--surface2:#F0EDE8;--text:#1A1714;--text2:#6B6560;--text3:#A09A94;--accent:#C4522A;--accent2:#E8D5C8;--p1:#3B6FAA;--p1bg:#E8F0F9;--p2:#7B5EA7;--p2bg:#F0EBF8;--green:#1D8348;--greenbg:#E9F7EF;--border:rgba(26,23,20,0.1);--border2:rgba(26,23,20,0.06);--rs:8px;--r:14px;--shadow:0 2px 16px rgba(26,23,20,0.08)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -14,245 +14,227 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 .screen.active{display:flex;flex-direction:column}
 
 /* LOCK */
-#screen-lock{align-items:center;justify-content:center;background:var(--bg)}
-.lock-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
-.app-logo-big{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
-.app-logo-big span{color:var(--accent)}
-.lock-icon{font-size:36px;margin-bottom:.75rem}
-.lock-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
-.lock-input-wrap{position:relative;margin-bottom:10px}
-.lock-input{width:100%;padding:11px 40px 11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);letter-spacing:.1em;text-align:center}
-.lock-input:focus{outline:none;border-color:var(--accent)}
-.lock-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3)}
+#screen-lock,#screen-pin{align-items:center;justify-content:center;background:var(--bg)}
+.auth-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
+.app-brand{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:4px}
+.app-brand span{color:var(--accent)}
+.lock-icon{font-size:36px;margin:.5rem 0}
+.auth-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.lock-wrap{position:relative;margin-bottom:10px}
+.lock-inp{width:100%;padding:11px 40px 11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);letter-spacing:.1em;text-align:center}
+.lock-inp:focus{outline:none;border-color:var(--accent)}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3)}
 .lock-btn{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
-.lock-error{font-size:12px;color:#C0392B;margin-top:8px;min-height:18px}
-.lock-attempts{font-size:11px;color:var(--text3);margin-top:6px}
-
-/* PIN */
-#screen-pin{align-items:center;justify-content:center;background:var(--bg)}
-.pin-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
-.pin-sub{font-size:13px;color:var(--text2);margin-bottom:2rem}
-.pin-who{display:flex;gap:8px;margin-bottom:1.75rem}
-.pin-who-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s}
-.pin-who-btn.active[data-who="p1"]{background:var(--p1bg);border-color:var(--p1);color:var(--p1)}
-.pin-who-btn.active[data-who="p2"]{background:var(--p2bg);border-color:var(--p2);color:var(--p2)}
-.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:1.75rem;height:14px}
-.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all .15s}
-.pin-dot.filled{border-color:var(--accent);background:var(--accent)}
-.pin-dot.error{border-color:#C0392B;background:#C0392B}
+.err-msg{font-size:12px;color:#C0392B;margin-top:8px;min-height:18px}
+.hint-msg{font-size:11px;color:var(--text3);margin-top:6px}
+.who-row{display:flex;gap:8px;margin-bottom:1.75rem}
+.who-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s}
+.who-btn.active[data-who="p1"]{background:var(--p1bg);border-color:var(--p1);color:var(--p1)}
+.who-btn.active[data-who="p2"]{background:var(--p2bg);border-color:var(--p2);color:var(--p2)}
+.dots{display:flex;justify-content:center;gap:12px;margin-bottom:1.75rem}
+.dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all .15s}
+.dot.filled{border-color:var(--accent);background:var(--accent)}
+.dot.error{border-color:#C0392B;background:#C0392B}
 .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.pin-key{aspect-ratio:1;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);font-family:'DM Sans',sans-serif;font-size:20px;cursor:pointer;color:var(--text);transition:all .1s;display:flex;align-items:center;justify-content:center}
-.pin-key:active{transform:scale(.93);background:var(--border)}
-.pin-key.del{font-size:15px;color:var(--text2)}
-.pin-key.empty{background:transparent;border:none;cursor:default}
-.pin-error{font-size:12px;color:#C0392B;margin-top:1rem;min-height:18px}
-.pin-setup-hint{font-size:11px;color:var(--text3);margin-top:.75rem}
+.pk{aspect-ratio:1;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);font-family:'DM Sans',sans-serif;font-size:20px;cursor:pointer;color:var(--text);transition:all .1s;display:flex;align-items:center;justify-content:center}
+.pk:active{transform:scale(.93)}
+.pk.del{font-size:15px;color:var(--text2)}
+.pk.empty{background:transparent;border:none;cursor:default}
 
 /* SETUP */
-#screen-setup{align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
-.setup-card{background:var(--surface);border-radius:24px;padding:2rem 1.75rem;width:min(480px,100%);box-shadow:var(--shadow)}
-.setup-card h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px}
-.setup-card .desc{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
-.step-block{background:var(--surface2);border-radius:var(--rs);padding:1rem 1.25rem;margin-bottom:1rem;font-size:13px;line-height:1.7}
-.step-block code{background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:12px}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
-.form-group input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
-.form-group input:focus{outline:none;border-color:var(--accent)}
-.names-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-primary{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
-.setup-toggle{text-align:center;margin-top:1rem;font-size:12px;color:var(--text2)}
-.setup-toggle a{color:var(--accent);cursor:pointer}
+#screen-setup{align-items:center;justify-content:flex-start;padding:1.5rem;overflow-y:auto}
+.setup-card{background:var(--surface);border-radius:24px;padding:2rem 1.75rem;width:min(480px,100%);box-shadow:var(--shadow);margin:auto}
+.setup-card h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:.5rem}
+.setup-desc{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.step-hint{background:var(--surface2);border-radius:var(--rs);padding:1rem;margin-bottom:1rem;font-size:12px;line-height:1.7;color:var(--text2)}
+.step-hint code{background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:3px;font-family:monospace}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.fg input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
+.fg input:focus{outline:none;border-color:var(--accent)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-submit{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
+.setup-link{text-align:center;margin-top:.75rem;font-size:12px;color:var(--text2)}
+.setup-link a{color:var(--accent);cursor:pointer}
 
-/* APP */
+/* APP SHELL */
 #screen-app{background:var(--bg)}
-.app-header{background:var(--surface);padding:1rem 1.25rem .5rem;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
-.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.app-bar{background:var(--surface);padding:.875rem 1.25rem .5rem;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
+.app-bar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.625rem}
 .app-logo{font-family:'DM Serif Display',serif;font-size:20px}
 .app-logo span{color:var(--accent)}
-.header-actions{display:flex;gap:8px;align-items:center}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:#27AE60;display:inline-block;margin-right:4px}
-.sync-dot.offline{background:#E74C3C}
-.sync-label{font-size:11px;color:var(--text3)}
-.icon-btn{width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
-
-/* Tab bar */
-.tab-bar{display:flex;border-bottom:1px solid var(--border2);margin-top:.25rem}
-.tab-item{flex:1;padding:8px 4px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all .15s}
-.tab-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+.bar-actions{display:flex;gap:8px;align-items:center}
+.sync-pip{width:7px;height:7px;border-radius:50%;background:#27AE60;display:inline-block;margin-right:3px}
+.sync-pip.off{background:#E74C3C}
+.sync-txt{font-size:11px;color:var(--text3)}
+.iBtn{width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text2)}
 
 /* Who toggle */
-.who-tabs{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:.75rem}
-.who-tab{flex:1;padding:6px 10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s}
+.who-tabs{display:flex;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:.625rem}
+.who-tab{flex:1;padding:6px 10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);transition:all .15s}
 .who-tab.active[data-who="p1"]{background:var(--p1bg);color:var(--p1)}
 .who-tab.active[data-who="p2"]{background:var(--p2bg);color:var(--p2)}
 
-.app-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:5rem}
-.tab-content{display:none}
-.tab-content.active{display:block}
+/* Main tabs */
+.main-tabs{display:flex;gap:0}
+.main-tab{flex:1;padding:8px 4px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all .15s}
+.main-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* Summary strip */
-.summary-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.25rem}
-.summary-card{background:var(--surface);border-radius:var(--rs);padding:.75rem;text-align:center;border:1px solid var(--border2)}
-.summary-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)}
-.summary-lbl{font-size:10px;color:var(--text3);margin-top:1px}
+.app-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:6rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* Cards */
+.goal-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
+.gc-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:1rem}
+.gc-icon{width:38px;height:38px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.gc-meta{flex:1}
+.gc-name{font-size:15px;font-weight:500;color:var(--text)}
+.gc-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.gc-del{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 4px;line-height:1}
+
+/* Progress bar */
+.bar-bg{height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;margin-bottom:6px;display:flex}
+.bar-p1{height:100%;background:var(--p1);transition:width .5s;border-radius:5px 0 0 5px}
+.bar-p2{height:100%;background:var(--p2);transition:width .5s;border-radius:0 5px 5px 0}
+.bar-solo{height:100%;border-radius:5px;transition:width .5s}
+.bar-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:10px}
+
+/* Partner breakdown */
+.partner-grid{display:flex;gap:8px;margin-bottom:12px}
+.partner-tile{flex:1;padding:8px 10px;border-radius:var(--rs);background:var(--surface2);display:flex;flex-direction:column;gap:2px}
+.pt-name{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.pt-val{font-size:16px;font-weight:500}
+.pt-pct{font-size:10px;color:var(--text3)}
+.pt-combined{background:var(--accent2)}
+.pt-combined .pt-val{color:var(--accent)}
+.you-tag{font-size:8px;background:var(--accent);color:#fff;padding:1px 4px;border-radius:3px}
+
+/* Update row */
+.update-section{padding-top:10px;border-top:1px solid var(--border2)}
+.month-row{display:flex;gap:8px;margin-bottom:8px}
+.month-select{flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
+.month-select:focus{outline:none;border-color:var(--accent)}
+.val-row{display:flex;gap:8px}
+.val-inp{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
+.val-inp:focus{outline:none;border-color:var(--accent)}
+.upd-btn{padding:8px 16px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
 
 /* Section headers */
-.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:4px}
-.section-hdr h3{font-size:13px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
-.section-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
-.badge-shared{background:var(--accent2);color:var(--accent)}
-.badge-mine{background:var(--p1bg);color:var(--p1)}
-.badge-hers{background:var(--p2bg);color:var(--p2)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin:1rem 0 .625rem}
+.sec-hdr h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.sec-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
 
-/* Goal cards */
-.goal-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
-.goal-card.individual{border-left:3px solid var(--p1)}
-.goal-card.individual.p2-goal{border-left-color:var(--p2)}
-.goal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
-.goal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--surface2)}
-.goal-meta{flex:1;padding:0 10px}
-.goal-name{font-size:15px;font-weight:500;color:var(--text)}
-.goal-target{font-size:11px;color:var(--text3);margin-top:1px}
-.goal-owner-badge{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;margin-top:3px}
-.goal-menu{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px}
-.prog-wrap{height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;margin-bottom:8px;display:flex;gap:1px}
-.prog-p1{height:100%;background:var(--p1);border-radius:5px 0 0 5px;transition:width .5s ease}
-.prog-p2{height:100%;background:var(--p2);border-radius:0 5px 5px 0;transition:width .5s ease}
-.prog-single{height:100%;border-radius:5px;transition:width .5s ease}
-.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:12px}
-.partner-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.partner-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rs);background:var(--surface2)}
-.p-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
-.p-avatar.p1{background:var(--p1bg);color:var(--p1)}
-.p-avatar.p2{background:var(--p2bg);color:var(--p2)}
-.p-name{font-size:12px;color:var(--text2);flex:1}
-.p-val{font-size:13px;font-weight:500;color:var(--text)}
-.p-pct{font-size:11px;color:var(--text3)}
-.p-you-badge{font-size:9px;background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:500}
-.update-row{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border2)}
-.update-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
-.update-input:focus{outline:none;border-color:var(--accent)}
-.update-btn{padding:8px 16px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+/* Summary strip */
+.sum-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
+.sum-card{background:var(--surface);border-radius:var(--rs);padding:.75rem;text-align:center;border:1px solid var(--border2)}
+.sum-val{font-family:'DM Serif Display',serif;font-size:22px}
+.sum-lbl{font-size:10px;color:var(--text3);margin-top:2px}
 
-/* History chart area */
-.history-toggle{display:flex;align-items:center;gap:6px;padding-top:10px;border-top:1px solid var(--border2);cursor:pointer;font-size:12px;color:var(--text2)}
-.history-toggle span{margin-left:auto;font-size:11px;color:var(--text3)}
-.history-area{display:none;padding-top:12px}
-.history-area.open{display:block}
-.month-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:6px}
-.month-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-.month-bar-bg{width:100%;background:var(--surface2);border-radius:3px;position:relative;flex:1;display:flex;align-items:flex-end}
-.month-bar-fill{width:100%;border-radius:3px;transition:height .4s ease}
-.month-label{font-size:9px;color:var(--text3);text-align:center}
-.month-val{font-size:9px;color:var(--text2);font-weight:500}
-.history-legend{display:flex;gap:12px;font-size:10px;color:var(--text3)}
-.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
-.no-history{font-size:12px;color:var(--text3);text-align:center;padding:.75rem 0}
+/* History tab */
+.hist-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
+.hist-head{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.hist-icon{font-size:20px}
+.hist-name{font-size:14px;font-weight:500}
+.chart-wrap{display:flex;align-items:flex-end;gap:3px;height:100px;margin-bottom:6px}
+.ch-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;height:100%}
+.ch-bars{flex:1;width:100%;display:flex;align-items:flex-end;gap:1px}
+.ch-bar{flex:1;border-radius:2px 2px 0 0;min-height:2px;transition:height .4s}
+.ch-lbl{font-size:9px;color:var(--text3);text-align:center}
+.ch-legend{display:flex;gap:12px;font-size:10px;color:var(--text3);margin-top:4px;flex-wrap:wrap}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
+.hist-latest{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border2);margin-top:10px}
+.hist-tile{flex:1;text-align:center;padding:6px}
+.ht-label{font-size:10px;color:var(--text3)}
+.ht-val{font-size:15px;font-weight:500;margin-top:2px}
+.ht-unit{font-size:10px;color:var(--text3)}
+.no-data{font-size:12px;color:var(--text3);text-align:center;padding:1.5rem 0}
 
 /* FAB */
-.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(196,82,42,0.4);z-index:20;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(196,82,42,.4);z-index:20;display:flex;align-items:center;justify-content:center}
 .fab:active{transform:scale(.93)}
 
 /* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.4);z-index:30;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;transform:translateY(40px);transition:transform .25s ease;max-height:90vh;overflow-y:auto}
-.modal-overlay.open .modal-sheet{transform:translateY(0)}
-.modal-drag{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem}
-.modal-sheet h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:1.25rem}
-.mfield{margin-bottom:12px}
-.mfield label{display:block;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
-.mfield input,.mfield select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
-.mfield input:focus,.mfield select:focus{outline:none;border-color:var(--accent)}
-.mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.overlay{position:fixed;inset:0;background:rgba(26,23,20,.4);z-index:30;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.25rem 2.5rem;width:100%;max-width:480px;transform:translateY(40px);transition:transform .25s;max-height:88vh;overflow-y:auto}
+.overlay.open .sheet{transform:translateY(0)}
+.drag-bar{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem}
+.sheet h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:1.25rem}
+.mf{margin-bottom:12px}
+.mf label{display:block;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.mf input,.mf select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
+.mf input:focus,.mf select:focus{outline:none;border-color:var(--accent)}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .icon-grid{display:flex;gap:8px;flex-wrap:wrap}
-.icon-opt{width:38px;height:38px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .12s}
-.icon-opt.selected{border-color:var(--accent);background:var(--accent2)}
-.goal-type-toggle{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:12px}
-.gtype-btn{flex:1;padding:9px 6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s;text-align:center}
-.gtype-btn.active{background:var(--accent);color:#fff}
-.modal-btns{display:flex;gap:8px;margin-top:1.25rem}
+.ico{width:38px;height:38px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.ico.sel{border-color:var(--accent);background:var(--accent2)}
+.type-toggle{display:flex;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:12px}
+.tt-btn{flex:1;padding:9px 6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);text-align:center}
+.tt-btn.active{background:var(--accent);color:#fff}
+.modal-actions{display:flex;gap:8px;margin-top:1.25rem}
 .btn-cancel{flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--rs);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;color:var(--text2)}
 .btn-save{flex:2;padding:10px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
 
-/* History screen */
-#screen-history{background:var(--bg)}
-.history-screen-header{display:flex;align-items:center;gap:10px;padding:1rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
-.back-btn{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
-.history-screen-header h2{font-family:'DM Serif Display',serif;font-size:18px}
-.history-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:2rem}
-.month-record-card{background:var(--surface);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:10px;border:1px solid var(--border2)}
-.month-record-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.month-record-title{font-size:14px;font-weight:500;color:var(--text)}
-.month-record-pct{font-size:13px;color:var(--text3)}
-.month-bars{display:flex;gap:3px;height:120px;align-items:flex-end;margin-bottom:6px}
-.mbar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
-.mbar-bg{width:100%;background:var(--surface2);border-radius:3px 3px 0 0;position:relative;flex:1;display:flex;align-items:flex-end;overflow:hidden}
-.mbar-inner{width:100%;border-radius:2px}
-.mbar-lbl{font-size:8px;color:var(--text3);text-align:center;line-height:1.2}
-
-/* Settings */
-.settings-panel{position:fixed;inset:0;background:var(--bg);z-index:40;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto}
+/* Settings panel */
+.settings-panel{position:fixed;inset:0;background:var(--bg);z-index:40;transform:translateX(100%);transition:transform .25s;overflow-y:auto}
 .settings-panel.open{transform:translateX(0)}
-.settings-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-bottom:1px solid var(--border2)}
-.settings-back{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
-.settings-header h2{font-family:'DM Serif Display',serif;font-size:20px}
-.settings-body{padding:1rem 1.25rem}
-.settings-section{margin-bottom:1.5rem}
-.settings-section h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2);font-size:14px}
-.settings-row:last-child{border:none}
-.settings-row span{color:var(--text2);font-size:13px}
+.sp-head{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border2)}
+.sp-back{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
+.sp-head h2{font-family:'DM Serif Display',serif;font-size:20px}
+.sp-body{padding:1rem 1.25rem}
+.sp-section{margin-bottom:1.5rem}
+.sp-section h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.sp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2);font-size:13px;color:var(--text2)}
+.sp-row:last-child{border:none}
 .danger-btn{padding:10px;width:100%;border:1px solid #C0392B;border-radius:var(--rs);background:transparent;color:#C0392B;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px}
 
 /* Toast */
 .toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:50;opacity:0;pointer-events:none;transition:all .25s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.8}
 </style>
 </head>
 <body>
 
 <!-- LOCK -->
 <div class="screen active" id="screen-lock">
-  <div class="lock-card">
-    <div class="app-logo-big">Our<span>Goals</span></div>
+  <div class="auth-card">
+    <div class="app-brand">Our<span>Goals</span></div>
     <div class="lock-icon">🔒</div>
-    <div class="lock-sub">Enter the app passphrase to continue</div>
-    <div class="lock-input-wrap">
-      <input class="lock-input" type="password" id="lock-input" placeholder="passphrase" onkeydown="if(event.key==='Enter')checkPassphrase()"/>
-      <button class="lock-eye" onclick="toggleLockVis()" id="lock-eye">👁</button>
+    <div class="auth-sub">Enter the app passphrase to continue</div>
+    <div class="lock-wrap">
+      <input class="lock-inp" type="password" id="lock-inp" placeholder="passphrase" onkeydown="if(event.key==='Enter')checkPass()"/>
+      <button class="eye-btn" onclick="toggleEye()">👁</button>
     </div>
-    <button class="lock-btn" onclick="checkPassphrase()">Unlock →</button>
-    <div class="lock-error" id="lock-error"></div>
-    <div class="lock-attempts" id="lock-attempts"></div>
+    <button class="lock-btn" onclick="checkPass()">Unlock →</button>
+    <div class="err-msg" id="lock-err"></div>
+    <div class="hint-msg" id="lock-hint"></div>
   </div>
 </div>
 
 <!-- PIN -->
 <div class="screen" id="screen-pin">
-  <div class="pin-card">
-    <div class="app-logo-big">Our<span>Goals</span></div>
-    <div class="pin-sub" id="pin-sub">Select who you are</div>
-    <div class="pin-who">
-      <button class="pin-who-btn" data-who="p1" onclick="selectWho('p1')" id="who-p1">Partner 1</button>
-      <button class="pin-who-btn" data-who="p2" onclick="selectWho('p2')" id="who-p2">Partner 2</button>
+  <div class="auth-card">
+    <div class="app-brand">Our<span>Goals</span></div>
+    <div class="auth-sub" id="pin-sub">Select who you are</div>
+    <div class="who-row">
+      <button class="who-btn" data-who="p1" id="who-p1" onclick="selectWho('p1')">Partner 1</button>
+      <button class="who-btn" data-who="p2" id="who-p2" onclick="selectWho('p2')">Partner 2</button>
     </div>
-    <div class="pin-dots" id="pin-dots">
-      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+    <div class="dots" id="dots">
+      <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
     </div>
     <div class="pin-pad">
-      <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
-      <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
-      <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
-      <button class="pin-key empty"></button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key del" onclick="pinDel()">⌫</button>
+      <button class="pk" onclick="pk('1')">1</button><button class="pk" onclick="pk('2')">2</button><button class="pk" onclick="pk('3')">3</button>
+      <button class="pk" onclick="pk('4')">4</button><button class="pk" onclick="pk('5')">5</button><button class="pk" onclick="pk('6')">6</button>
+      <button class="pk" onclick="pk('7')">7</button><button class="pk" onclick="pk('8')">8</button><button class="pk" onclick="pk('9')">9</button>
+      <button class="pk empty"></button><button class="pk" onclick="pk('0')">0</button><button class="pk del" onclick="pkDel()">⌫</button>
     </div>
-    <div class="pin-error" id="pin-error"></div>
-    <div class="pin-setup-hint" id="pin-setup-hint"></div>
+    <div class="err-msg" id="pin-err"></div>
   </div>
 </div>
 
@@ -260,110 +242,112 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 <div class="screen" id="screen-setup">
   <div class="setup-card">
     <h2>Connect Firebase</h2>
-    <p class="desc">One-time setup to sync goals between both of you in real time.</p>
-    <div class="step-block">Go to <code>console.firebase.google.com</code> → Create project → Firestore Database → Start in test mode → Project Settings → Your apps → Web app → copy the config values below.</div>
-    <div class="form-group"><label>API Key</label><input id="fb-apiKey" placeholder="AIzaSy..."/></div>
-    <div class="form-group"><label>Project ID</label><input id="fb-projectId" placeholder="my-goals-app"/></div>
-    <div class="form-group"><label>App ID</label><input id="fb-appId" placeholder="1:123456:web:abc..."/></div>
-    <div class="form-group"><label>App Passphrase <small style="color:var(--text3)">(shared secret — both need this)</small></label><input id="fb-passphrase" type="password" placeholder="e.g. sunshine2024"/></div>
-    <div class="names-row form-group">
-      <div><label>Your name (Partner 1)</label><input id="fb-name1" placeholder="e.g. Rahul"/></div>
-      <div><label>Wife's name (Partner 2)</label><input id="fb-name2" placeholder="e.g. Priya"/></div>
+    <p class="setup-desc">One-time setup. Both partners enter the same Firebase config on their phones.</p>
+    <div class="step-hint">Go to <code>console.firebase.google.com</code> → Create project → Firestore Database → Start in test mode → Project Settings → Your apps → Web app → copy config values below.</div>
+    <div class="fg"><label>API Key</label><input id="fb-apiKey" placeholder="AIzaSy..."/></div>
+    <div class="fg"><label>Project ID</label><input id="fb-projectId" placeholder="my-goals-app"/></div>
+    <div class="fg"><label>App ID</label><input id="fb-appId" placeholder="1:123456:web:abc..."/></div>
+    <div class="fg"><label>App Passphrase <small style="color:var(--text3);text-transform:none">(shared — both need this)</small></label><input id="fb-pass" type="password" placeholder="e.g. sunshine2024"/></div>
+    <div class="fg-row fg">
+      <div><label>Your name (P1)</label><input id="fb-n1" placeholder="e.g. Rahul"/></div>
+      <div><label>Wife's name (P2)</label><input id="fb-n2" placeholder="e.g. Priya"/></div>
     </div>
-    <div class="form-group names-row">
+    <div class="fg-row fg">
       <div><label>Your PIN (4 digits)</label><input id="fb-pin1" type="password" maxlength="4" placeholder="••••"/></div>
       <div><label>Wife's PIN (4 digits)</label><input id="fb-pin2" type="password" maxlength="4" placeholder="••••"/></div>
     </div>
-    <button class="btn-primary" onclick="saveSetup()">Save & Continue</button>
-    <div class="setup-toggle">Already set up? <a onclick="showPin()">Back to login</a></div>
+    <button class="setup-submit" onclick="saveSetup()">Save & Continue</button>
+    <div class="setup-link">Already set up? <a onclick="goToLock()">Back to login</a></div>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div class="screen" id="screen-app">
-  <div class="app-header">
-    <div class="app-header-top">
+  <div class="app-bar">
+    <div class="app-bar-top">
       <div class="app-logo">Our<span>Goals</span></div>
-      <div class="header-actions">
-        <span><span class="sync-dot" id="sync-dot"></span><span class="sync-label" id="sync-label">Live</span></span>
-        <button class="icon-btn" onclick="openSettings()">⚙</button>
-        <button class="icon-btn" onclick="logout()">👤</button>
+      <div class="bar-actions">
+        <span><span class="sync-pip" id="sync-pip"></span><span class="sync-txt" id="sync-txt">Live</span></span>
+        <button class="iBtn" onclick="openSettings()">⚙</button>
+        <button class="iBtn" onclick="logout()">👤</button>
       </div>
     </div>
     <div class="who-tabs">
-      <button class="who-tab active" data-who="p1" id="tab-p1" onclick="switchWho('p1')">Partner 1</button>
-      <button class="who-tab" data-who="p2" id="tab-p2" onclick="switchWho('p2')">Partner 2</button>
+      <button class="who-tab active" data-who="p1" id="wtab-p1" onclick="switchWho('p1')">Partner 1</button>
+      <button class="who-tab" data-who="p2" id="wtab-p2" onclick="switchWho('p2')">Partner 2</button>
     </div>
-    <div class="tab-bar">
-      <button class="tab-item active" onclick="switchTab('shared')" id="tabBtn-shared">Shared goals</button>
-      <button class="tab-item" onclick="switchTab('mine')" id="tabBtn-mine">My goals</button>
-      <button class="tab-item" onclick="switchTab('history')" id="tabBtn-history">Progress history</button>
+    <div class="main-tabs">
+      <button class="main-tab active" id="mtab-goals" onclick="switchTab('goals')">Goals</button>
+      <button class="main-tab" id="mtab-history" onclick="switchTab('history')">Month-on-month</button>
     </div>
   </div>
 
   <div class="app-body">
-    <!-- SHARED TAB -->
-    <div class="tab-content active" id="tab-shared">
-      <div class="summary-strip" id="summary-strip"></div>
-      <div class="section-hdr"><h3>Combined goals</h3><span class="section-badge badge-shared">both partners</span></div>
-      <div id="goals-list-shared"></div>
-    </div>
 
-    <!-- MY GOALS TAB -->
-    <div class="tab-content" id="tab-mine">
-      <div class="section-hdr"><h3 id="my-goals-title">My goals</h3><span class="section-badge badge-mine" id="my-goals-badge">just me</span></div>
-      <div id="goals-list-mine"></div>
-      <div style="height:.5rem"></div>
-      <div class="section-hdr"><h3 id="her-goals-title">Her goals</h3><span class="section-badge badge-hers" id="her-goals-badge">read only</span></div>
-      <div id="goals-list-hers"></div>
+    <!-- GOALS TAB -->
+    <div class="tab-pane active" id="pane-goals">
+      <div class="sum-strip" id="sum-strip"></div>
+
+      <!-- Shared section -->
+      <div class="sec-hdr">
+        <h3>Shared goals</h3>
+        <span class="sec-badge" style="background:var(--accent2);color:var(--accent)">both contribute</span>
+      </div>
+      <div id="list-shared"></div>
+
+      <!-- Individual section -->
+      <div class="sec-hdr" style="margin-top:1.5rem">
+        <h3 id="sec-ind-title">Individual goals</h3>
+        <span class="sec-badge" id="sec-ind-badge" style="background:var(--p1bg);color:var(--p1)">per person</span>
+      </div>
+      <div id="list-ind"></div>
     </div>
 
     <!-- HISTORY TAB -->
-    <div class="tab-content" id="tab-history">
-      <div class="section-hdr"><h3>Month-on-month progress</h3></div>
-      <div id="history-list"></div>
+    <div class="tab-pane" id="pane-history">
+      <div id="list-history"></div>
     </div>
-  </div>
 
-  <button class="fab" onclick="openAddGoal()">+</button>
+  </div>
+  <button class="fab" onclick="openModal()">+</button>
 </div>
 
 <!-- ADD GOAL MODAL -->
-<div class="modal-overlay" id="add-modal" onclick="closeAddGoal(event)">
-  <div class="modal-sheet">
-    <div class="modal-drag"></div>
+<div class="overlay" id="modal" onclick="closeModal(event)">
+  <div class="sheet">
+    <div class="drag-bar"></div>
     <h3>New goal</h3>
-    <div class="mfield">
+    <div class="mf">
       <label>Goal type</label>
-      <div class="goal-type-toggle">
-        <button class="gtype-btn active" id="gtype-shared" onclick="setGoalType('shared')">🤝 Shared (combined)</button>
-        <button class="gtype-btn" id="gtype-individual" onclick="setGoalType('individual')">👤 Individual (just me)</button>
+      <div class="type-toggle">
+        <button class="tt-btn active" id="tt-shared" onclick="setType('shared')">🤝 Shared — both contribute</button>
+        <button class="tt-btn" id="tt-individual" onclick="setType('individual')">👤 Individual — per person</button>
       </div>
     </div>
-    <div class="mfield">
+    <div class="mf">
       <label>Icon</label>
-      <div class="icon-grid" id="icon-grid">
-        <div class="icon-opt selected" data-icon="📚" onclick="selectIcon(this)">📚</div>
-        <div class="icon-opt" data-icon="💰" onclick="selectIcon(this)">💰</div>
-        <div class="icon-opt" data-icon="🏋️" onclick="selectIcon(this)">🏋️</div>
-        <div class="icon-opt" data-icon="🚶" onclick="selectIcon(this)">🚶</div>
-        <div class="icon-opt" data-icon="🧘" onclick="selectIcon(this)">🧘</div>
-        <div class="icon-opt" data-icon="✈️" onclick="selectIcon(this)">✈️</div>
-        <div class="icon-opt" data-icon="🍎" onclick="selectIcon(this)">🍎</div>
-        <div class="icon-opt" data-icon="😴" onclick="selectIcon(this)">😴</div>
-        <div class="icon-opt" data-icon="🎯" onclick="selectIcon(this)">🎯</div>
-        <div class="icon-opt" data-icon="🌱" onclick="selectIcon(this)">🌱</div>
-        <div class="icon-opt" data-icon="💧" onclick="selectIcon(this)">💧</div>
-        <div class="icon-opt" data-icon="🎸" onclick="selectIcon(this)">🎸</div>
+      <div class="icon-grid">
+        <div class="ico sel" data-icon="📚" onclick="selIcon(this)">📚</div>
+        <div class="ico" data-icon="💰" onclick="selIcon(this)">💰</div>
+        <div class="ico" data-icon="🏋️" onclick="selIcon(this)">🏋️</div>
+        <div class="ico" data-icon="🚶" onclick="selIcon(this)">🚶</div>
+        <div class="ico" data-icon="🧘" onclick="selIcon(this)">🧘</div>
+        <div class="ico" data-icon="✈️" onclick="selIcon(this)">✈️</div>
+        <div class="ico" data-icon="🍎" onclick="selIcon(this)">🍎</div>
+        <div class="ico" data-icon="😴" onclick="selIcon(this)">😴</div>
+        <div class="ico" data-icon="🎯" onclick="selIcon(this)">🎯</div>
+        <div class="ico" data-icon="🌱" onclick="selIcon(this)">🌱</div>
+        <div class="ico" data-icon="💧" onclick="selIcon(this)">💧</div>
+        <div class="ico" data-icon="🎸" onclick="selIcon(this)">🎸</div>
       </div>
     </div>
-    <div class="mfield"><label>Goal name</label><input id="m-name" placeholder="e.g. Books read this year"/></div>
-    <div class="mrow">
-      <div class="mfield"><label>Target</label><input id="m-target" type="number" placeholder="24"/></div>
-      <div class="mfield"><label>Unit</label><input id="m-unit" placeholder="books"/></div>
+    <div class="mf"><label>Goal name</label><input id="m-name" placeholder="e.g. Books read this year"/></div>
+    <div class="mf-row">
+      <div class="mf"><label>Target</label><input id="m-target" type="number" placeholder="24"/></div>
+      <div class="mf"><label>Unit</label><input id="m-unit" placeholder="books"/></div>
     </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeAddGoal()">Cancel</button>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-save" onclick="saveGoal()">Add goal →</button>
     </div>
   </div>
@@ -371,28 +355,28 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 
 <!-- SETTINGS -->
 <div class="settings-panel" id="settings-panel">
-  <div class="settings-header">
-    <button class="settings-back" onclick="closeSettings()">←</button>
+  <div class="sp-head">
+    <button class="sp-back" onclick="closeSettings()">←</button>
     <h2>Settings</h2>
   </div>
-  <div class="settings-body">
-    <div class="settings-section">
+  <div class="sp-body">
+    <div class="sp-section">
       <h3>Partners</h3>
-      <div class="settings-row">Partner 1 <span id="s-name1">—</span></div>
-      <div class="settings-row">Partner 2 <span id="s-name2">—</span></div>
+      <div class="sp-row">Partner 1 <span id="sp-n1">—</span></div>
+      <div class="sp-row">Partner 2 <span id="sp-n2">—</span></div>
     </div>
-    <div class="settings-section">
-      <h3>App Passphrase</h3>
-      <div class="mfield"><label>New passphrase</label><input id="s-passphrase" type="password" placeholder="Enter new passphrase"/></div>
-      <button class="btn-primary" onclick="savePassphrase()" style="width:auto;padding:9px 20px">Update</button>
+    <div class="sp-section">
+      <h3>App passphrase</h3>
+      <div class="fg"><label>New passphrase</label><input id="sp-pass" type="password" placeholder="Min 4 characters"/></div>
+      <button class="setup-submit" onclick="savePass()" style="width:auto;padding:9px 20px">Update</button>
     </div>
-    <div class="settings-section">
+    <div class="sp-section">
       <h3>Change PINs</h3>
-      <div class="mfield"><label>New PIN for Partner 1</label><input id="s-pin1" type="password" maxlength="4" placeholder="4 digits"/></div>
-      <div class="mfield"><label>New PIN for Partner 2</label><input id="s-pin2" type="password" maxlength="4" placeholder="4 digits"/></div>
-      <button class="btn-primary" onclick="savePins()" style="width:auto;padding:9px 20px">Update PINs</button>
+      <div class="fg"><label>New PIN — Partner 1</label><input id="sp-pin1" type="password" maxlength="4" placeholder="4 digits"/></div>
+      <div class="fg"><label>New PIN — Partner 2</label><input id="sp-pin2" type="password" maxlength="4" placeholder="4 digits"/></div>
+      <button class="setup-submit" onclick="savePins()" style="width:auto;padding:9px 20px">Update PINs</button>
     </div>
-    <div class="settings-section">
+    <div class="sp-section">
       <h3>Danger zone</h3>
       <button class="danger-btn" onclick="resetApp()">Reset app & clear all data</button>
     </div>
@@ -404,585 +388,578 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-var db = null;
-var currentWho = null;
-var goalsData = {};
-var historyData = {};
-var config = null;
-var pinEntry = '';
-var whoForPin = null;
-var currentTab = 'shared';
-var newGoalType = 'shared';
-var selectedIcon = '📚';
-var lockFailCount = parseInt(sessionStorage.getItem('og_fails') || '0');
-var lockUntil = parseInt(sessionStorage.getItem('og_lockuntil') || '0');
+// ── State ──────────────────────────────────────────────────────────────
+var db=null, currentWho=null, config=null;
+var goalsData={}, historyData={};
+var pinEntry='', whoForPin=null;
+var currentTab='goals', newGoalType='shared', selIco='📚';
+var lockFails=parseInt(sessionStorage.getItem('og_fails')||'0');
+var lockUntil=parseInt(sessionStorage.getItem('og_lockuntil')||'0');
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-// ── Helpers ──
-function showToast(msg, dur) {
-  dur = dur || 2000;
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, dur);
+// ── Month helpers ──────────────────────────────────────────────────────
+function getMonthOptions() {
+  var opts=[], now=new Date();
+  for(var i=11;i>=0;i--){
+    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    var key=d.getFullYear()+'-'+(d.getMonth()+1);
+    var label=MONTHS[d.getMonth()]+' '+d.getFullYear();
+    var isCurrent=(i===0);
+    opts.push({key:key,label:label+(isCurrent?' (current)':'')});
+  }
+  return opts;
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+function buildMonthSelect(id) {
+  var opts=getMonthOptions();
+  var html='<select class="month-select" id="'+id+'">';
+  opts.forEach(function(o){
+    html+='<option value="'+o.key+'"'+(o.key===opts[opts.length-1].key?' selected':'')+'>'+o.label+'</option>';
+  });
+  return html+'</select>';
+}
+
+function getCurrentMonthKey() {
+  var d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1);
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────
+function toast(msg,dur){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},dur||2000);
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById('screen-'+id).classList.add('active');
 }
+function loadConfig(){try{return JSON.parse(localStorage.getItem('og_cfg')||'null');}catch(e){return null;}}
+function saveConfig(c){localStorage.setItem('og_cfg',JSON.stringify(c));}
 
-function loadConfig() {
-  try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
-  catch(e) { return null; }
-}
-function saveConfig(cfg) { localStorage.setItem('og_config', JSON.stringify(cfg)); }
-
-// ── Lock ──
-window.toggleLockVis = function() {
-  var inp = document.getElementById('lock-input');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
+// ── Lock ───────────────────────────────────────────────────────────────
+window.toggleEye=function(){
+  var i=document.getElementById('lock-inp');
+  i.type=i.type==='password'?'text':'password';
 };
-
-function getRemainingLock() {
-  var rem = lockUntil - Date.now();
-  return rem > 0 ? Math.ceil(rem/1000) : 0;
-}
-
-window.checkPassphrase = function() {
-  var rem = getRemainingLock();
-  if (rem > 0) { document.getElementById('lock-error').textContent = 'Too many attempts. Wait '+rem+'s'; return; }
-  if (!config) { showScreen('setup'); return; }
-  var entered = document.getElementById('lock-input').value;
-  if (entered === config.passphrase) {
-    lockFailCount = 0;
-    sessionStorage.setItem('og_fails','0');
-    sessionStorage.setItem('og_lockuntil','0');
+function getRemLock(){var r=lockUntil-Date.now();return r>0?Math.ceil(r/1000):0;}
+window.checkPass=function(){
+  var rem=getRemLock();
+  if(rem>0){document.getElementById('lock-err').textContent='Wait '+rem+'s';return;}
+  if(!config){showScreen('setup');return;}
+  var v=document.getElementById('lock-inp').value;
+  if(v===config.passphrase){
+    lockFails=0;
+    sessionStorage.setItem('og_fails','0');sessionStorage.setItem('og_lockuntil','0');
     sessionStorage.setItem('og_unlocked','1');
     showScreen('pin');
-    document.getElementById('lock-input').value = '';
-    document.getElementById('lock-error').textContent = '';
+    document.getElementById('lock-inp').value='';
+    document.getElementById('lock-err').textContent='';
   } else {
-    lockFailCount++;
-    sessionStorage.setItem('og_fails', lockFailCount);
-    var maxA = 5, left = maxA - lockFailCount;
-    if (lockFailCount >= maxA) {
-      var secs = 30 * Math.pow(2, Math.floor(lockFailCount/maxA)-1);
-      lockUntil = Date.now() + secs*1000;
-      sessionStorage.setItem('og_lockuntil', lockUntil);
-      document.getElementById('lock-error').textContent = 'Locked for '+secs+'s';
-      startLockCountdown();
+    lockFails++;
+    sessionStorage.setItem('og_fails',lockFails);
+    var max=5,left=max-lockFails;
+    if(lockFails>=max){
+      var secs=30*Math.pow(2,Math.floor(lockFails/max)-1);
+      lockUntil=Date.now()+secs*1000;
+      sessionStorage.setItem('og_lockuntil',lockUntil);
+      document.getElementById('lock-err').textContent='Locked for '+secs+'s';
+      lockTick();
     } else {
-      document.getElementById('lock-error').textContent = 'Wrong passphrase — '+left+' attempt'+(left===1?'':'s')+' left';
+      document.getElementById('lock-err').textContent='Wrong passphrase — '+left+' attempt'+(left===1?'':'s')+' left';
     }
-    var card = document.querySelector('.lock-card');
-    card.classList.add('shake');
-    setTimeout(function(){ card.classList.remove('shake'); }, 400);
+    var c=document.querySelector('.auth-card');
+    c.classList.add('shake');setTimeout(function(){c.classList.remove('shake');},400);
   }
 };
-
-function startLockCountdown() {
-  var el = document.getElementById('lock-attempts');
-  function tick() {
-    var rem = getRemainingLock();
-    if (rem <= 0) { el.textContent=''; document.getElementById('lock-error').textContent=''; return; }
-    el.textContent = 'Unlocks in '+rem+'s';
-    setTimeout(tick, 1000);
+function lockTick(){
+  var el=document.getElementById('lock-hint');
+  function t(){
+    var r=getRemLock();
+    if(r<=0){el.textContent='';document.getElementById('lock-err').textContent='';return;}
+    el.textContent='Unlocks in '+r+'s';setTimeout(t,1000);
   }
-  tick();
+  t();
 }
 
-// ── Firebase ──
-function initFirebase(cfg) {
-  if (!firebase.apps.length) {
-    firebase.initializeApp({ apiKey:cfg.apiKey, authDomain:cfg.projectId+'.firebaseapp.com', projectId:cfg.projectId, appId:cfg.appId });
+// ── Firebase ───────────────────────────────────────────────────────────
+function initFB(cfg){
+  if(!firebase.apps.length){
+    firebase.initializeApp({apiKey:cfg.apiKey,authDomain:cfg.projectId+'.firebaseapp.com',projectId:cfg.projectId,appId:cfg.appId});
   }
-  db = firebase.firestore();
-  listenGoals();
-  listenHistory();
-}
-
-function listenGoals() {
-  db.collection('goals').onSnapshot(function(snap) {
-    goalsData = {};
-    snap.forEach(function(d){ goalsData[d.id] = Object.assign({id:d.id}, d.data()); });
+  db=firebase.firestore();
+  db.collection('goals').onSnapshot(function(snap){
+    goalsData={};
+    snap.forEach(function(d){goalsData[d.id]=Object.assign({id:d.id},d.data());});
     renderAll();
-    updateSyncStatus(true);
-  }, function(){ updateSyncStatus(false); });
-}
-
-function listenHistory() {
-  db.collection('history').onSnapshot(function(snap) {
-    historyData = {};
-    snap.forEach(function(d){ historyData[d.id] = Object.assign({id:d.id}, d.data()); });
-    renderHistory();
+    setSyncStatus(true);
+  },function(){setSyncStatus(false);});
+  db.collection('history').onSnapshot(function(snap){
+    historyData={};
+    snap.forEach(function(d){historyData[d.id]=Object.assign({id:d.id},d.data());});
+    if(currentTab==='history') renderHistory();
   });
 }
-
-function updateSyncStatus(ok) {
-  document.getElementById('sync-dot').className = 'sync-dot'+(ok?'':' offline');
-  document.getElementById('sync-label').textContent = ok ? 'Live' : 'Offline';
+function setSyncStatus(ok){
+  document.getElementById('sync-pip').className='sync-pip'+(ok?'':' off');
+  document.getElementById('sync-txt').textContent=ok?'Live':'Offline';
 }
 
-// ── Setup ──
-window.saveSetup = function() {
-  var apiKey = document.getElementById('fb-apiKey').value.trim();
-  var projectId = document.getElementById('fb-projectId').value.trim();
-  var appId = document.getElementById('fb-appId').value.trim();
-  var passphrase = document.getElementById('fb-passphrase').value.trim();
-  var name1 = document.getElementById('fb-name1').value.trim() || 'Partner 1';
-  var name2 = document.getElementById('fb-name2').value.trim() || 'Partner 2';
-  var pin1 = document.getElementById('fb-pin1').value.trim();
-  var pin2 = document.getElementById('fb-pin2').value.trim();
-  if (!apiKey||!projectId||!appId) { showToast('Fill all Firebase fields'); return; }
-  if (!passphrase||passphrase.length<4) { showToast('Passphrase must be 4+ characters'); return; }
-  if (pin1.length!==4||pin2.length!==4) { showToast('Both PINs must be 4 digits'); return; }
-  config = {apiKey:apiKey,projectId:projectId,appId:appId,passphrase:passphrase,name1:name1,name2:name2,pin1:pin1,pin2:pin2};
+// ── Setup ──────────────────────────────────────────────────────────────
+window.saveSetup=function(){
+  var ak=document.getElementById('fb-apiKey').value.trim();
+  var pid=document.getElementById('fb-projectId').value.trim();
+  var aid=document.getElementById('fb-appId').value.trim();
+  var pass=document.getElementById('fb-pass').value.trim();
+  var n1=document.getElementById('fb-n1').value.trim()||'Partner 1';
+  var n2=document.getElementById('fb-n2').value.trim()||'Partner 2';
+  var p1=document.getElementById('fb-pin1').value.trim();
+  var p2=document.getElementById('fb-pin2').value.trim();
+  if(!ak||!pid||!aid){toast('Fill all Firebase fields');return;}
+  if(!pass||pass.length<4){toast('Passphrase must be 4+ characters');return;}
+  if(p1.length!==4||p2.length!==4){toast('Both PINs must be 4 digits');return;}
+  config={apiKey:ak,projectId:pid,appId:aid,passphrase:pass,name1:n1,name2:n2,pin1:p1,pin2:p2};
   saveConfig(config);
-  initFirebase(config);
-  updatePartnerNames();
+  initFB(config);
+  applyNames();
   sessionStorage.setItem('og_unlocked','1');
   showScreen('pin');
-  showToast('Setup saved!');
+  toast('Setup saved!');
 };
+window.goToLock=function(){showScreen(config?'lock':'setup');};
 
-window.showPin = function() { showScreen(config?'lock':'setup'); };
-
-// ── PIN ──
-window.selectWho = function(who) {
-  whoForPin = who;
-  pinEntry = '';
-  renderPinDots();
-  document.getElementById('who-p1').className = 'pin-who-btn'+(who==='p1'?' active':'');
-  document.getElementById('who-p2').className = 'pin-who-btn'+(who==='p2'?' active':'');
-  if (!config) { showScreen('setup'); return; }
-  document.getElementById('pin-sub').textContent = 'Enter PIN for '+(who==='p1'?config.name1:config.name2);
-  document.getElementById('pin-error').textContent = '';
+// ── PIN ────────────────────────────────────────────────────────────────
+window.selectWho=function(who){
+  whoForPin=who; pinEntry=''; drawDots();
+  document.getElementById('who-p1').className='who-btn'+(who==='p1'?' active':'');
+  document.getElementById('who-p2').className='who-btn'+(who==='p2'?' active':'');
+  if(!config){showScreen('setup');return;}
+  document.getElementById('pin-sub').textContent='Enter PIN for '+(who==='p1'?config.name1:config.name2);
+  document.getElementById('pin-err').textContent='';
 };
-
-window.pinKey = function(k) {
-  if (!whoForPin) { showToast('Select a partner first'); return; }
-  if (pinEntry.length>=4) return;
-  pinEntry += k;
-  renderPinDots();
-  if (pinEntry.length===4) setTimeout(checkPin, 150);
+window.pk=function(k){
+  if(!whoForPin){toast('Select a partner first');return;}
+  if(pinEntry.length>=4) return;
+  pinEntry+=k; drawDots();
+  if(pinEntry.length===4) setTimeout(checkPin,150);
 };
-
-window.pinDel = function() { pinEntry = pinEntry.slice(0,-1); renderPinDots(); };
-
-function renderPinDots(state) {
-  state = state || '';
-  for (var i=0;i<4;i++) {
-    var d = document.getElementById('d'+i);
-    d.className = 'pin-dot'+(i<pinEntry.length?(' '+(state||'filled')):'');
+window.pkDel=function(){pinEntry=pinEntry.slice(0,-1);drawDots();};
+function drawDots(state){
+  for(var i=0;i<4;i++){
+    var d=document.getElementById('d'+i);
+    d.className='dot'+(i<pinEntry.length?' '+(state||'filled'):'');
   }
 }
-
-function checkPin() {
-  if (!config) return;
-  var correct = whoForPin==='p1' ? config.pin1 : config.pin2;
-  if (pinEntry===correct) {
-    currentWho = whoForPin;
-    updateWhoUI();
-    showScreen('app');
-    showToast('Welcome, '+(whoForPin==='p1'?config.name1:config.name2)+'!');
+function checkPin(){
+  if(!config) return;
+  var correct=whoForPin==='p1'?config.pin1:config.pin2;
+  if(pinEntry===correct){
+    currentWho=whoForPin; applyWhoUI(); showScreen('app');
+    toast('Welcome, '+(whoForPin==='p1'?config.name1:config.name2)+'!');
   } else {
-    renderPinDots('error');
-    var card = document.querySelector('.pin-card');
-    card.classList.add('shake');
-    setTimeout(function(){ card.classList.remove('shake'); }, 400);
-    document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
-    setTimeout(function(){ pinEntry=''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
+    drawDots('error');
+    var c=document.querySelector('.auth-card');
+    c.classList.add('shake');setTimeout(function(){c.classList.remove('shake');},400);
+    document.getElementById('pin-err').textContent='Wrong PIN — try again';
+    setTimeout(function(){pinEntry='';drawDots();document.getElementById('pin-err').textContent='';},900);
   }
 }
 
-// ── App UI ──
-function updatePartnerNames() {
-  if (!config) return;
-  document.getElementById('tab-p1').textContent = config.name1;
-  document.getElementById('tab-p2').textContent = config.name2;
-  document.getElementById('s-name1').textContent = config.name1;
-  document.getElementById('s-name2').textContent = config.name2;
-  document.getElementById('who-p1').textContent = config.name1;
-  document.getElementById('who-p2').textContent = config.name2;
+// ── Names & who UI ─────────────────────────────────────────────────────
+function applyNames(){
+  if(!config) return;
+  var n1=config.name1, n2=config.name2;
+  document.getElementById('wtab-p1').textContent=n1;
+  document.getElementById('wtab-p2').textContent=n2;
+  document.getElementById('who-p1').textContent=n1;
+  document.getElementById('who-p2').textContent=n2;
+  document.getElementById('sp-n1').textContent=n1;
+  document.getElementById('sp-n2').textContent=n2;
 }
-
-function updateWhoUI() {
-  if (!config) return;
-  updatePartnerNames();
-  document.getElementById('tab-p1').className = 'who-tab'+(currentWho==='p1'?' active':'');
-  document.getElementById('tab-p2').className = 'who-tab'+(currentWho==='p2'?' active':'');
-  document.getElementById('tab-p1').setAttribute('data-who','p1');
-  document.getElementById('tab-p2').setAttribute('data-who','p2');
-  // Update my goals section titles
-  var myName = currentWho==='p1' ? config.name1 : config.name2;
-  var herName = currentWho==='p1' ? config.name2 : config.name1;
-  document.getElementById('my-goals-title').textContent = myName+"'s goals";
-  document.getElementById('her-goals-title').textContent = herName+"'s goals";
-  document.getElementById('my-goals-badge').textContent = 'just '+myName;
-  document.getElementById('her-goals-badge').textContent = 'read only';
-  var myBadge = document.getElementById('my-goals-badge');
-  myBadge.className = 'section-badge '+(currentWho==='p1'?'badge-mine':'badge-hers');
+function applyWhoUI(){
+  applyNames();
+  document.getElementById('wtab-p1').className='who-tab'+(currentWho==='p1'?' active':'');
+  document.getElementById('wtab-p2').className='who-tab'+(currentWho==='p2'?' active':'');
+  document.getElementById('wtab-p1').setAttribute('data-who','p1');
+  document.getElementById('wtab-p2').setAttribute('data-who','p2');
+  var myName=currentWho==='p1'?config.name1:config.name2;
+  document.getElementById('sec-ind-title').textContent='Individual goals';
+  document.getElementById('sec-ind-badge').textContent='per person · '+myName+' can edit';
 }
-
-window.switchWho = function(who) {
-  currentWho = who;
-  updateWhoUI();
-  renderAll();
-};
-
-window.logout = function() {
-  currentWho = null; whoForPin = null; pinEntry = '';
-  renderPinDots();
+window.switchWho=function(who){currentWho=who;applyWhoUI();renderAll();};
+window.logout=function(){
+  currentWho=null;whoForPin=null;pinEntry='';drawDots();
   sessionStorage.removeItem('og_unlocked');
-  document.getElementById('pin-sub').textContent = 'Select who you are';
-  document.getElementById('who-p1').className = 'pin-who-btn';
-  document.getElementById('who-p2').className = 'pin-who-btn';
-  document.getElementById('lock-input').value = '';
-  document.getElementById('lock-error').textContent = '';
+  document.getElementById('pin-sub').textContent='Select who you are';
+  document.getElementById('who-p1').className='who-btn';
+  document.getElementById('who-p2').className='who-btn';
+  document.getElementById('lock-inp').value='';
+  document.getElementById('lock-err').textContent='';
   showScreen('lock');
 };
 
-// ── Tab switching ──
-window.switchTab = function(tab) {
-  currentTab = tab;
-  ['shared','mine','history'].forEach(function(t) {
-    document.getElementById('tab-'+t).className = 'tab-content'+(t===tab?' active':'');
-    document.getElementById('tabBtn-'+t).className = 'tab-item'+(t===tab?' active':'');
+// ── Tab switching ──────────────────────────────────────────────────────
+window.switchTab=function(tab){
+  currentTab=tab;
+  ['goals','history'].forEach(function(t){
+    document.getElementById('pane-'+t).className='tab-pane'+(t===tab?' active':'');
+    document.getElementById('mtab-'+t).className='main-tab'+(t===tab?' active':'');
   });
-  if (tab==='history') renderHistory();
+  if(tab==='history') renderHistory();
 };
 
-// ── Render all ──
-function renderAll() {
-  renderSharedGoals();
-  renderIndividualGoals();
-  renderSummary();
+// ── Render ─────────────────────────────────────────────────────────────
+function renderAll(){renderSummary();renderShared();renderIndividual();}
+
+function renderSummary(){
+  var shared=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
+  var ind=Object.values(goalsData).filter(function(g){return g.type==='individual';});
+  var completed=shared.filter(function(g){return (g.p1||0)+(g.p2||0)>=g.target;}).length;
+  var avgPct=shared.length?Math.round(shared.reduce(function(a,g){return a+Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100);},0)/shared.length):0;
+  document.getElementById('sum-strip').innerHTML=
+    '<div class="sum-card"><div class="sum-val">'+shared.length+'</div><div class="sum-lbl">Shared goals</div></div>'+
+    '<div class="sum-card"><div class="sum-val">'+ind.length+'</div><div class="sum-lbl">Individual goals</div></div>'+
+    '<div class="sum-card"><div class="sum-val">'+avgPct+'%</div><div class="sum-lbl">Avg shared</div></div>';
 }
 
-function renderSummary() {
-  var goals = Object.values(goalsData).filter(function(g){ return g.type==='shared'||!g.type; });
-  var total = goals.length;
-  var completed = goals.filter(function(g){ return (g.p1||0)+(g.p2||0)>=g.target; }).length;
-  var avgPct = total ? Math.round(goals.reduce(function(a,g){ return a+Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100); },0)/total) : 0;
-  document.getElementById('summary-strip').innerHTML =
-    '<div class="summary-card"><div class="summary-val">'+total+'</div><div class="summary-lbl">Shared goals</div></div>'+
-    '<div class="summary-card"><div class="summary-val">'+completed+'</div><div class="summary-lbl">Completed</div></div>'+
-    '<div class="summary-card"><div class="summary-val">'+avgPct+'%</div><div class="summary-lbl">Avg progress</div></div>';
+function renderShared(){
+  var goals=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
+  var el=document.getElementById('list-shared');
+  if(!goals.length){el.innerHTML='<div class="empty-state">No shared goals yet<br>Tap + to add one — both of you contribute to these</div>';return;}
+  el.innerHTML=goals.map(sharedCard).join('');
 }
 
-function renderSharedGoals() {
-  var goals = Object.values(goalsData).filter(function(g){ return g.type==='shared'||!g.type; });
-  var list = document.getElementById('goals-list-shared');
-  if (!goals.length) {
-    list.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No shared goals yet — tap + to add one</div>';
-    return;
-  }
-  var n1 = config?config.name1:'P1', n2 = config?config.name2:'P2';
-  list.innerHTML = goals.map(function(g){ return buildSharedCard(g, n1, n2); }).join('');
-}
-
-function buildSharedCard(g, n1, n2) {
-  var v1=g.p1||0, v2=g.p2||0;
+function sharedCard(g){
+  var v1=g.p1||0, v2=g.p2||0, combo=v1+v2;
   var pct1=Math.min(100,Math.round(v1/g.target*100));
   var pct2=Math.min(100,Math.round(v2/g.target*100));
-  var pctC=Math.min(100,Math.round((v1+v2)/g.target*100));
+  var pctC=Math.min(100,Math.round(combo/g.target*100));
+  var n1=config.name1, n2=config.name2;
   var isMe1=currentWho==='p1', isMe2=currentWho==='p2';
-  return '<div class="goal-card" id="gc-'+g.id+'">' +
-    '<div class="goal-header">' +
-      '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
-      '<div class="goal-meta">' +
-        '<div class="goal-name">'+g.name+'</div>' +
-        '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>' +
-      '</div>' +
-      '<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>' +
-    '</div>' +
-    '<div class="prog-wrap"><div class="prog-p1" style="width:'+pct1+'%"></div><div class="prog-p2" style="width:'+pct2+'%"></div></div>' +
-    '<div class="prog-labels"><span style="color:var(--p1)">'+n1+': '+pct1+'%</span><span style="color:var(--p2)">'+n2+': '+pct2+'%</span></div>' +
-    '<div class="partner-rows">' +
-      '<div class="partner-row">' +
-        '<div class="p-avatar p1">'+n1.slice(0,2).toUpperCase()+'</div>' +
-        '<div class="p-name">'+n1+(isMe1?' <span class="p-you-badge">you</span>':'')+'</div>' +
-        '<div class="p-val">'+v1.toLocaleString()+' '+g.unit+'</div><div class="p-pct">&nbsp;'+pct1+'%</div>' +
-      '</div>' +
-      '<div class="partner-row">' +
-        '<div class="p-avatar p2">'+n2.slice(0,2).toUpperCase()+'</div>' +
-        '<div class="p-name">'+n2+(isMe2?' <span class="p-you-badge">you</span>':'')+'</div>' +
-        '<div class="p-val">'+v2.toLocaleString()+' '+g.unit+'</div><div class="p-pct">&nbsp;'+pct2+'%</div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="update-row">' +
-      '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
-      '<button class="update-btn" onclick="updateGoal(\''+g.id+'\',\'shared\')">Update</button>' +
-    '</div>' +
+  return '<div class="goal-card">'+
+    '<div class="gc-head">'+
+      '<div class="gc-icon">'+(g.icon||'🎯')+'</div>'+
+      '<div class="gc-meta">'+
+        '<div class="gc-name">'+g.name+'</div>'+
+        '<div class="gc-sub">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>'+
+      '</div>'+
+      '<button class="gc-del" onclick="delGoal(\''+g.id+'\')">×</button>'+
+    '</div>'+
+    '<div class="bar-bg"><div class="bar-p1" style="width:'+pct1+'%"></div><div class="bar-p2" style="width:'+pct2+'%"></div></div>'+
+    '<div class="bar-labels"><span style="color:var(--p1)">'+n1+' '+pct1+'%</span><span style="color:var(--p2)">'+n2+' '+pct2+'%</span></div>'+
+    '<div class="partner-grid">'+
+      '<div class="partner-tile">'+
+        '<div class="pt-name"><span style="width:8px;height:8px;border-radius:50%;background:var(--p1);display:inline-block"></span>'+n1+(isMe1?' <span class="you-tag">you</span>':'')+'</div>'+
+        '<div class="pt-val" style="color:var(--p1)">'+v1.toLocaleString()+'</div>'+
+        '<div class="pt-pct">'+g.unit+' · '+pct1+'%</div>'+
+      '</div>'+
+      '<div class="partner-tile">'+
+        '<div class="pt-name"><span style="width:8px;height:8px;border-radius:50%;background:var(--p2);display:inline-block"></span>'+n2+(isMe2?' <span class="you-tag">you</span>':'')+'</div>'+
+        '<div class="pt-val" style="color:var(--p2)">'+v2.toLocaleString()+'</div>'+
+        '<div class="pt-pct">'+g.unit+' · '+pct2+'%</div>'+
+      '</div>'+
+      '<div class="partner-tile pt-combined">'+
+        '<div class="pt-name">Combined</div>'+
+        '<div class="pt-val">'+combo.toLocaleString()+'</div>'+
+        '<div class="pt-pct">'+g.unit+' · '+pctC+'%</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="update-section">'+
+      '<div class="month-row">'+
+        buildMonthSelect('ms-'+g.id)+
+      '</div>'+
+      '<div class="val-row">'+
+        '<input class="val-inp" id="vi-'+g.id+'" type="number" placeholder="My value for that month ('+g.unit+')"/>'+
+        '<button class="upd-btn" onclick="updateGoal(\''+g.id+'\',\'shared\')">Save</button>'+
+      '</div>'+
+    '</div>'+
   '</div>';
 }
 
-function renderIndividualGoals() {
-  var all = Object.values(goalsData).filter(function(g){ return g.type==='individual'; });
-  var mine = all.filter(function(g){ return g.owner===currentWho; });
-  var hers = all.filter(function(g){ return g.owner!==currentWho; });
-  var n1=config?config.name1:'P1', n2=config?config.name2:'P2';
-
-  var mineList = document.getElementById('goals-list-mine');
-  var hersList = document.getElementById('goals-list-hers');
-
-  if (!mine.length) {
-    mineList.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No individual goals yet — tap + to add one</div>';
-  } else {
-    mineList.innerHTML = mine.map(function(g){ return buildIndividualCard(g, true, n1, n2); }).join('');
-  }
-
-  if (!hers.length) {
-    hersList.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No goals added yet</div>';
-  } else {
-    hersList.innerHTML = hers.map(function(g){ return buildIndividualCard(g, false, n1, n2); }).join('');
-  }
+function renderIndividual(){
+  var all=Object.values(goalsData).filter(function(g){return g.type==='individual';});
+  var el=document.getElementById('list-ind');
+  if(!all.length){el.innerHTML='<div class="empty-state">No individual goals yet<br>Tap + → choose "Individual" to track something just for you</div>';return;}
+  var n1=config.name1, n2=config.name2;
+  // Group by goal — show both partners' numbers on every card
+  el.innerHTML=all.map(function(g){return indCard(g,n1,n2);}).join('');
 }
 
-function buildIndividualCard(g, canEdit, n1, n2) {
-  var owner = g.owner;
-  var val = g[owner] || 0;
-  var pct = Math.min(100, Math.round(val/g.target*100));
-  var ownerName = owner==='p1' ? n1 : n2;
-  var isP2 = owner==='p2';
-  var color = isP2 ? 'var(--p2)' : 'var(--p1)';
-  var bgColor = isP2 ? 'var(--p2bg)' : 'var(--p1bg)';
-
-  return '<div class="goal-card individual'+(isP2?' p2-goal':'')+'" id="gc-'+g.id+'">' +
-    '<div class="goal-header">' +
-      '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
-      '<div class="goal-meta">' +
-        '<div class="goal-name">'+g.name+'</div>' +
-        '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+'</div>' +
-        '<span class="goal-owner-badge" style="background:'+bgColor+';color:'+color+'">'+ownerName+'\'s goal</span>' +
-      '</div>' +
-      (canEdit?'<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>':'') +
-    '</div>' +
-    '<div class="prog-wrap"><div class="prog-single" style="width:'+pct+'%;background:'+color+'"></div></div>' +
-    '<div class="prog-labels"><span style="color:'+color+'">'+pct+'% of target</span><span>'+val.toLocaleString()+' / '+g.target.toLocaleString()+' '+g.unit+'</span></div>' +
-    (canEdit ?
-      '<div class="update-row">' +
-        '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
-        '<button class="update-btn" onclick="updateGoal(\''+g.id+'\',\'individual\')">Update</button>' +
+function indCard(g, n1, n2){
+  var owner=g.owner;
+  var v1=g.p1||0, v2=g.p2||0;
+  var ownerVal=owner==='p1'?v1:v2;
+  var pct=Math.min(100,Math.round(ownerVal/g.target*100));
+  var ownerName=owner==='p1'?n1:n2;
+  var ownerColor=owner==='p1'?'var(--p1)':'var(--p2)';
+  var ownerBg=owner==='p1'?'var(--p1bg)':'var(--p2bg)';
+  var canEdit=currentWho===owner;
+  return '<div class="goal-card" style="border-left:3px solid '+ownerColor+'">'+
+    '<div class="gc-head">'+
+      '<div class="gc-icon">'+(g.icon||'🎯')+'</div>'+
+      '<div class="gc-meta">'+
+        '<div class="gc-name">'+g.name+'</div>'+
+        '<div class="gc-sub">'+ownerName+"'s goal · Target: "+g.target.toLocaleString()+' '+g.unit+'</div>'+
+        '<span style="display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;background:'+ownerBg+';color:'+ownerColor+';margin-top:3px">'+ownerName+'</span>'+
+      '</div>'+
+      (canEdit?'<button class="gc-del" onclick="delGoal(\''+g.id+'\')">×</button>':'')+
+    '</div>'+
+    '<div class="bar-bg"><div class="bar-solo" style="width:'+pct+'%;background:'+ownerColor+'"></div></div>'+
+    '<div class="bar-labels"><span style="color:'+ownerColor+'">'+pct+'% of target</span><span>'+ownerVal.toLocaleString()+' / '+g.target.toLocaleString()+' '+g.unit+'</span></div>'+
+    (canEdit?
+      '<div class="update-section">'+
+        '<div class="month-row">'+buildMonthSelect('ms-'+g.id)+'</div>'+
+        '<div class="val-row">'+
+          '<input class="val-inp" id="vi-'+g.id+'" type="number" placeholder="My value for that month ('+g.unit+')"/>'+
+          '<button class="upd-btn" onclick="updateGoal(\''+g.id+'\',\'individual\')">Save</button>'+
+        '</div>'+
       '</div>'
-    : '<div style="font-size:12px;color:var(--text3);padding-top:8px;border-top:1px solid var(--border2)">View only</div>') +
+    :'<div style="font-size:11px;color:var(--text3);padding-top:8px;border-top:1px solid var(--border2)">View only — '+ownerName+" updates this</div>")+
   '</div>';
 }
 
-// ── Update goal ──
-window.updateGoal = function(id, type) {
-  var inp = document.getElementById('inp-'+id);
-  var val = parseFloat(inp.value);
-  if (isNaN(val)||val<0) { inp.style.borderColor='#E74C3C'; return; }
-  inp.style.borderColor = '';
-  var g = goalsData[id];
-  if (!g) return;
-  var update = Object.assign({}, g);
-  update[currentWho] = val;
+// ── Update goal ────────────────────────────────────────────────────────
+window.updateGoal=function(id, type){
+  var monthEl=document.getElementById('ms-'+id);
+  var valEl=document.getElementById('vi-'+id);
+  if(!monthEl||!valEl) return;
+  var monthKey=monthEl.value;
+  var val=parseFloat(valEl.value);
+  if(isNaN(val)||val<0){valEl.style.borderColor='#E74C3C';return;}
+  valEl.style.borderColor='';
 
-  // Save history snapshot
-  var now = new Date();
-  var monthKey = now.getFullYear()+'-'+(now.getMonth()+1);
-  var histId = id+'_'+monthKey;
-  var histDoc = historyData[histId] || {goalId:id, goalName:g.name, goalUnit:g.unit, goalIcon:g.icon||'🎯', type:type||'shared', month:monthKey, p1:g.p1||0, p2:g.p2||0};
-  histDoc[currentWho] = val;
+  var g=goalsData[id];
+  if(!g) return;
 
+  // Update the goal's current value for this partner
+  var update=Object.assign({},g);
+  update[currentWho]=val;
   db.collection('goals').doc(id).set(update);
-  db.collection('history').doc(histId).set(histDoc);
-  inp.value = '';
-  showToast('Progress updated!');
+
+  // Save history record for that specific month
+  var histId=id+'_'+monthKey;
+  var existing=historyData[histId]||{
+    goalId:id, goalName:g.name, goalUnit:g.unit,
+    goalIcon:g.icon||'🎯', goalType:type||g.type||'shared',
+    goalOwner:g.owner||null, month:monthKey, p1:null, p2:null
+  };
+  existing[currentWho]=val;
+  db.collection('history').doc(histId).set(existing);
+
+  valEl.value='';
+  var d=new Date(monthKey.split('-')[0], parseInt(monthKey.split('-')[1])-1, 1);
+  toast('Saved for '+MONTHS[d.getMonth()]+' '+d.getFullYear()+'!');
 };
 
-window.deleteGoal = function(id) {
-  if (!confirm('Delete this goal?')) return;
-  db.collection('goals').doc(id).delete().then(function(){ showToast('Goal deleted'); });
+window.delGoal=function(id){
+  if(!confirm('Delete this goal?')) return;
+  db.collection('goals').doc(id).delete().then(function(){toast('Deleted');});
 };
 
-// ── History render ──
-function renderHistory() {
-  var list = document.getElementById('history-list');
-  var goals = Object.values(goalsData);
-  if (!goals.length) {
-    list.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:13px">No goals yet</div>';
-    return;
-  }
-  var n1=config?config.name1:'P1', n2=config?config.name2:'P2';
-  var html = '';
+// ── History render ─────────────────────────────────────────────────────
+function renderHistory(){
+  var el=document.getElementById('list-history');
+  var goals=Object.values(goalsData);
+  if(!goals.length){el.innerHTML='<div class="empty-state">No goals yet.<br>Add goals and start updating them to see month-on-month progress here.</div>';return;}
+  var n1=config.name1, n2=config.name2;
+  var html='';
 
-  goals.forEach(function(g) {
-    var gHistory = Object.values(historyData).filter(function(h){ return h.goalId===g.id; });
-    gHistory.sort(function(a,b){ return a.month.localeCompare(b.month); });
+  goals.forEach(function(g){
+    var isShared=g.type==='shared'||!g.type;
+    var owner=g.owner;
 
-    // Get last 6 months
-    var last6 = [];
-    var now = new Date();
-    for (var i=5;i>=0;i--) {
-      var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-      var mk = d.getFullYear()+'-'+(d.getMonth()+1);
-      var rec = gHistory.find(function(h){ return h.month===mk; });
-      last6.push({month:mk, label:MONTHS[d.getMonth()], p1:rec?rec.p1:null, p2:rec?rec.p2:null});
+    // Build 12-month window
+    var now=new Date();
+    var months=[];
+    for(var i=11;i>=0;i--){
+      var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      var mk=d.getFullYear()+'-'+(d.getMonth()+1);
+      var rec=historyData[g.id+'_'+mk];
+      months.push({
+        key:mk, label:MONTHS[d.getMonth()].slice(0,3),
+        p1:rec&&rec.p1!==null&&rec.p1!==undefined?rec.p1:null,
+        p2:rec&&rec.p2!==null&&rec.p2!==undefined?rec.p2:null
+      });
     }
 
-    var isShared = g.type==='shared'||!g.type;
-    var maxVal = g.target;
-    last6.forEach(function(m){
-      if (m.p1!==null && m.p1>maxVal) maxVal=m.p1;
-      if (m.p2!==null && m.p2>maxVal) maxVal=m.p2;
+    var hasData=months.some(function(m){return m.p1!==null||m.p2!==null;});
+
+    // Find max for scaling
+    var maxVal=1;
+    months.forEach(function(m){
+      if(isShared){if(m.p1!==null&&m.p1>maxVal)maxVal=m.p1;if(m.p2!==null&&m.p2>maxVal)maxVal=m.p2;}
+      else{var ov=owner==='p1'?m.p1:m.p2;if(ov!==null&&ov>maxVal)maxVal=ov;}
     });
 
-    var hasData = last6.some(function(m){ return m.p1!==null||m.p2!==null; });
-
-    html += '<div class="month-record-card">' +
-      '<div class="month-record-hdr">' +
-        '<div style="display:flex;align-items:center;gap:8px">' +
-          '<span style="font-size:18px">'+(g.icon||'🎯')+'</span>' +
-          '<span class="month-record-title">'+g.name+'</span>' +
-        '</div>' +
-        '<span class="month-record-pct">Target: '+g.target.toLocaleString()+' '+g.unit+'</span>' +
+    html+='<div class="hist-card">'+
+      '<div class="hist-head">'+
+        '<span class="hist-icon">'+(g.icon||'🎯')+'</span>'+
+        '<div>'+
+          '<div class="hist-name">'+g.name+'</div>'+
+          '<div style="font-size:11px;color:var(--text3)">Target: '+g.target.toLocaleString()+' '+g.unit+(isShared?' · shared':'· '+( owner==='p1'?n1:n2 )+"'s goal")+'</div>'+
+        '</div>'+
       '</div>';
 
-    if (!hasData) {
-      html += '<div class="no-history">No updates yet this period</div>';
+    if(!hasData){
+      html+='<div class="no-data">No data entered yet.<br>Update progress on the Goals tab — choose a month when saving.</div>';
     } else {
-      html += '<div class="month-bars">';
-      last6.forEach(function(m) {
-        var h1 = m.p1!==null ? Math.round((m.p1/maxVal)*100) : 0;
-        var h2 = m.p2!==null ? Math.round((m.p2/maxVal)*100) : 0;
-        var hasAny = m.p1!==null||m.p2!==null;
-        html += '<div class="mbar-col">' +
-          '<div class="mbar-bg">';
-        if (isShared && hasAny) {
-          html += '<div style="width:100%;height:100%;display:flex;align-items:flex-end;gap:1px">';
-          if (m.p1!==null) html += '<div style="flex:1;height:'+h1+'%;background:var(--p1);border-radius:2px 2px 0 0"></div>';
-          if (m.p2!==null) html += '<div style="flex:1;height:'+h2+'%;background:var(--p2);border-radius:2px 2px 0 0"></div>';
-          html += '</div>';
-        } else if (!isShared && hasAny) {
-          var ownVal = g.owner==='p1' ? m.p1 : m.p2;
-          var ownH = ownVal!==null ? Math.round((ownVal/maxVal)*100) : 0;
-          var ownColor = g.owner==='p1' ? 'var(--p1)' : 'var(--p2)';
-          html += '<div style="width:100%;height:'+ownH+'%;background:'+ownColor+';border-radius:2px 2px 0 0"></div>';
+      // Show last 6 months in chart (more readable)
+      var show=months.slice(-6);
+      html+='<div class="chart-wrap">';
+      show.forEach(function(m){
+        html+='<div class="ch-col"><div class="ch-bars">';
+        if(isShared){
+          var h1=m.p1!==null?Math.max(4,Math.round((m.p1/maxVal)*90)):0;
+          var h2=m.p2!==null?Math.max(4,Math.round((m.p2/maxVal)*90)):0;
+          if(m.p1!==null) html+='<div class="ch-bar" style="height:'+h1+'%;background:var(--p1)" title="'+n1+': '+m.p1+'"></div>';
+          else html+='<div class="ch-bar" style="height:4%;background:var(--border)"></div>';
+          if(m.p2!==null) html+='<div class="ch-bar" style="height:'+h2+'%;background:var(--p2)" title="'+n2+': '+m.p2+'"></div>';
+          else html+='<div class="ch-bar" style="height:4%;background:var(--border)"></div>';
+        } else {
+          var ov=owner==='p1'?m.p1:m.p2;
+          var oh=ov!==null?Math.max(4,Math.round((ov/maxVal)*90)):0;
+          var oc=owner==='p1'?'var(--p1)':'var(--p2)';
+          html+='<div class="ch-bar" style="height:'+oh+'%;background:'+(ov!==null?oc:'var(--border)')+'" title="'+ov+'"></div>';
         }
-        html += '</div>' +
-          '<div class="mbar-lbl">'+m.label+'</div>' +
-        '</div>';
+        html+='</div><div class="ch-lbl">'+m.label+'</div></div>';
       });
-      html += '</div>';
+      html+='</div>';
 
       // Legend
-      if (isShared) {
-        html += '<div class="history-legend">' +
-          '<span><span class="legend-dot" style="background:var(--p1)"></span>'+n1+'</span>' +
-          '<span><span class="legend-dot" style="background:var(--p2)"></span>'+n2+'</span>' +
+      if(isShared){
+        html+='<div class="ch-legend">'+
+          '<span><span class="leg-dot" style="background:var(--p1)"></span>'+n1+'</span>'+
+          '<span><span class="leg-dot" style="background:var(--p2)"></span>'+n2+'</span>'+
         '</div>';
       }
 
-      // Latest values
-      var latest = last6.filter(function(m){ return m.p1!==null||m.p2!==null; });
-      if (latest.length) {
-        var last = latest[latest.length-1];
-        html += '<div style="display:flex;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">';
-        if (isShared) {
-          if (last.p1!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+n1+'</div><div style="font-size:15px;font-weight:500;color:var(--p1)">'+last.p1.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
-          if (last.p2!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+n2+'</div><div style="font-size:15px;font-weight:500;color:var(--p2)">'+last.p2.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
-          if (last.p1!==null&&last.p2!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">Combined</div><div style="font-size:15px;font-weight:500;color:var(--accent)">'+(last.p1+last.p2).toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
+      // Latest values row
+      var latestMonths=months.filter(function(m){return m.p1!==null||m.p2!==null;});
+      if(latestMonths.length){
+        var latest=latestMonths[latestMonths.length-1];
+        var latestDate=new Date(latest.key.split('-')[0],parseInt(latest.key.split('-')[1])-1,1);
+        html+='<div class="hist-latest">';
+        if(isShared){
+          if(latest.p1!==null) html+='<div class="hist-tile"><div class="ht-label">'+n1+'</div><div class="ht-val" style="color:var(--p1)">'+latest.p1.toLocaleString()+'</div><div class="ht-unit">'+g.unit+'</div></div>';
+          if(latest.p2!==null) html+='<div class="hist-tile"><div class="ht-label">'+n2+'</div><div class="ht-val" style="color:var(--p2)">'+latest.p2.toLocaleString()+'</div><div class="ht-unit">'+g.unit+'</div></div>';
+          if(latest.p1!==null&&latest.p2!==null){
+            var combo=latest.p1+latest.p2;
+            var pctC=Math.min(100,Math.round(combo/g.target*100));
+            html+='<div class="hist-tile"><div class="ht-label">Combined</div><div class="ht-val" style="color:var(--accent)">'+combo.toLocaleString()+'</div><div class="ht-unit">'+pctC+'% of target</div></div>';
+          }
         } else {
-          var ov = g.owner==='p1' ? last.p1 : last.p2;
-          var oc = g.owner==='p1' ? 'var(--p1)' : 'var(--p2)';
-          var on = g.owner==='p1' ? n1 : n2;
-          if (ov!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+on+' latest</div><div style="font-size:15px;font-weight:500;color:'+oc+'">'+ov.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
-          var pct = Math.min(100,Math.round((ov||0)/g.target*100));
-          html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">Progress</div><div style="font-size:15px;font-weight:500;color:var(--accent)">'+pct+'%</div><div style="font-size:10px;color:var(--text3)">of target</div></div>';
+          var ov2=owner==='p1'?latest.p1:latest.p2;
+          var oc2=owner==='p1'?'var(--p1)':'var(--p2)';
+          var on=owner==='p1'?n1:n2;
+          if(ov2!==null){
+            var pct2=Math.min(100,Math.round(ov2/g.target*100));
+            html+='<div class="hist-tile"><div class="ht-label">'+on+'</div><div class="ht-val" style="color:'+oc2+'">'+ov2.toLocaleString()+'</div><div class="ht-unit">'+g.unit+'</div></div>';
+            html+='<div class="hist-tile"><div class="ht-label">Progress</div><div class="ht-val" style="color:var(--accent)">'+pct2+'%</div><div class="ht-unit">of target</div></div>';
+          }
         }
-        html += '</div>';
+        html+='<div class="hist-tile"><div class="ht-label">As of</div><div class="ht-val" style="font-size:13px;color:var(--text2)">'+MONTHS[latestDate.getMonth()]+'</div><div class="ht-unit">'+latestDate.getFullYear()+'</div></div>';
+        html+='</div>';
+      }
+
+      // Month-by-month table if multiple entries
+      if(latestMonths.length>1){
+        html+='<div style="margin-top:12px;border-top:1px solid var(--border2);padding-top:10px">';
+        html+='<div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">All entries</div>';
+        latestMonths.forEach(function(m){
+          var d2=new Date(m.key.split('-')[0],parseInt(m.key.split('-')[1])-1,1);
+          html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border2);font-size:12px">';
+          html+='<span style="color:var(--text2)">'+MONTHS[d2.getMonth()]+' '+d2.getFullYear()+'</span>';
+          html+='<span style="display:flex;gap:12px">';
+          if(isShared){
+            if(m.p1!==null) html+='<span style="color:var(--p1)">'+n1+': <strong>'+m.p1.toLocaleString()+'</strong></span>';
+            if(m.p2!==null) html+='<span style="color:var(--p2)">'+n2+': <strong>'+m.p2.toLocaleString()+'</strong></span>';
+            if(m.p1!==null&&m.p2!==null) html+='<span style="color:var(--accent)">= <strong>'+(m.p1+m.p2).toLocaleString()+'</strong></span>';
+          } else {
+            var ov3=owner==='p1'?m.p1:m.p2;
+            var oc3=owner==='p1'?'var(--p1)':'var(--p2)';
+            if(ov3!==null) html+='<span style="color:'+oc3+'"><strong>'+ov3.toLocaleString()+'</strong> '+g.unit+'</span>';
+          }
+          html+='</span></div>';
+        });
+        html+='</div>';
       }
     }
-
-    html += '</div>';
+    html+='</div>';
   });
 
-  list.innerHTML = html;
+  el.innerHTML=html;
 }
 
-// ── Add Goal Modal ──
-window.openAddGoal = function() { document.getElementById('add-modal').classList.add('open'); };
-window.closeAddGoal = function(e) {
-  if (!e||e.target===document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
+// ── Add Goal Modal ─────────────────────────────────────────────────────
+window.openModal=function(){document.getElementById('modal').classList.add('open');};
+window.closeModal=function(e){
+  if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
 };
-
-window.setGoalType = function(type) {
-  newGoalType = type;
-  document.getElementById('gtype-shared').className = 'gtype-btn'+(type==='shared'?' active':'');
-  document.getElementById('gtype-individual').className = 'gtype-btn'+(type==='individual'?' active':'');
+window.setType=function(t){
+  newGoalType=t;
+  document.getElementById('tt-shared').className='tt-btn'+(t==='shared'?' active':'');
+  document.getElementById('tt-individual').className='tt-btn'+(t==='individual'?' active':'');
 };
-
-window.selectIcon = function(el) {
-  document.querySelectorAll('.icon-opt').forEach(function(e){ e.classList.remove('selected'); });
-  el.classList.add('selected');
-  selectedIcon = el.getAttribute('data-icon');
+window.selIcon=function(el){
+  document.querySelectorAll('.ico').forEach(function(e){e.classList.remove('sel');});
+  el.classList.add('sel');
+  selIco=el.getAttribute('data-icon');
 };
-
-window.saveGoal = function() {
-  var name = document.getElementById('m-name').value.trim();
-  var target = parseFloat(document.getElementById('m-target').value);
-  var unit = document.getElementById('m-unit').value.trim() || 'units';
-  if (!name||isNaN(target)||target<=0) { showToast('Fill all fields'); return; }
-  var id = 'g_'+Date.now();
-  var doc = {name:name, target:target, unit:unit, icon:selectedIcon, type:newGoalType, p1:0, p2:0};
-  if (newGoalType==='individual') doc.owner = currentWho;
+window.saveGoal=function(){
+  var name=document.getElementById('m-name').value.trim();
+  var target=parseFloat(document.getElementById('m-target').value);
+  var unit=document.getElementById('m-unit').value.trim()||'units';
+  if(!name||isNaN(target)||target<=0){toast('Fill all fields');return;}
+  var id='g_'+Date.now();
+  var doc={name:name,target:target,unit:unit,icon:selIco,type:newGoalType,p1:0,p2:0};
+  if(newGoalType==='individual') doc.owner=currentWho;
   db.collection('goals').doc(id).set(doc).then(function(){
     document.getElementById('m-name').value='';
     document.getElementById('m-target').value='';
     document.getElementById('m-unit').value='';
-    closeAddGoal();
-    showToast('Goal added!');
-    if (newGoalType==='individual') switchTab('mine');
+    closeModal();
+    toast('Goal added!');
   });
 };
 
-// ── Settings ──
-window.openSettings = function() { document.getElementById('settings-panel').classList.add('open'); };
-window.closeSettings = function() { document.getElementById('settings-panel').classList.remove('open'); };
-
-window.savePassphrase = function() {
-  var p = document.getElementById('s-passphrase').value.trim();
-  if (!p||p.length<4) { showToast('4+ characters required'); return; }
-  config.passphrase = p;
-  saveConfig(config);
-  document.getElementById('s-passphrase').value='';
-  showToast('Passphrase updated');
+// ── Settings ───────────────────────────────────────────────────────────
+window.openSettings=function(){document.getElementById('settings-panel').classList.add('open');};
+window.closeSettings=function(){document.getElementById('settings-panel').classList.remove('open');};
+window.savePass=function(){
+  var p=document.getElementById('sp-pass').value.trim();
+  if(!p||p.length<4){toast('4+ characters required');return;}
+  config.passphrase=p; saveConfig(config);
+  document.getElementById('sp-pass').value='';
+  toast('Passphrase updated');
 };
-
-window.savePins = function() {
-  var p1=document.getElementById('s-pin1').value.trim();
-  var p2=document.getElementById('s-pin2').value.trim();
-  if ((p1&&p1.length!==4)||(p2&&p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
-  if (p1) config.pin1=p1;
-  if (p2) config.pin2=p2;
+window.savePins=function(){
+  var p1=document.getElementById('sp-pin1').value.trim();
+  var p2=document.getElementById('sp-pin2').value.trim();
+  if((p1&&p1.length!==4)||(p2&&p2.length!==4)){toast('PINs must be 4 digits');return;}
+  if(p1) config.pin1=p1;
+  if(p2) config.pin2=p2;
   saveConfig(config);
-  document.getElementById('s-pin1').value='';
-  document.getElementById('s-pin2').value='';
-  showToast('PINs updated');
+  document.getElementById('sp-pin1').value='';
+  document.getElementById('sp-pin2').value='';
+  toast('PINs updated');
 };
-
-window.resetApp = function() {
-  if (!confirm('Delete all local config?')) return;
-  localStorage.removeItem('og_config');
+window.resetApp=function(){
+  if(!confirm('Delete all local config?')) return;
+  localStorage.removeItem('og_cfg');
   sessionStorage.clear();
   location.reload();
 };
 
-// ── Boot ──
-config = loadConfig();
-if (!config) {
+// ── Boot ───────────────────────────────────────────────────────────────
+config=loadConfig();
+if(!config){
   showScreen('setup');
 } else {
-  initFirebase(config);
-  updatePartnerNames();
-  if (sessionStorage.getItem('og_unlocked')==='1') showScreen('pin');
+  initFB(config);
+  applyNames();
+  if(sessionStorage.getItem('og_unlocked')==='1') showScreen('pin');
   else showScreen('lock');
-  if (getRemainingLock()>0) startLockCountdown();
+  if(getRemLock()>0) lockTick();
 }
 </script>
 </body>
