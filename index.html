@@ -195,6 +195,69 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.8}
+/* ── Motivational quote ── */
+.quote-card{background:var(--surface);border-radius:var(--r);padding:1.25rem 1.5rem;border:1px solid var(--border2);margin-bottom:1rem;position:relative;overflow:hidden}
+.quote-card::before{content:'';position:absolute;top:-20px;left:-10px;font-size:80px;opacity:.06;line-height:1}
+.quote-text{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text);line-height:1.6;font-style:italic}
+.quote-author{font-size:11px;color:var(--text3);margin-top:6px}
+.quote-refresh{position:absolute;top:10px;right:10px;background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--text3)}
+
+/* ── Couple score ── */
+.couple-score-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;border:1px solid var(--border2);margin-bottom:1rem;display:flex;align-items:center;gap:16px}
+.score-ring{position:relative;width:72px;height:72px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2}
+.score-num{font-family:'DM Serif Display',serif;font-size:20px}
+.score-label{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.score-breakdown{flex:1}
+.score-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:4px}
+.score-bar-bg{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;width:80px}
+.score-bar-fill{height:100%;border-radius:2px;transition:width .5s}
+
+/* ── Notes timeline ── */
+.notes-feed{margin-top:8px}
+.note-entry{display:flex;gap:10px;margin-bottom:10px}
+.note-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.note-body{flex:1;background:var(--surface2);border-radius:var(--rs);padding:8px 10px}
+.note-meta{font-size:10px;color:var(--text3);margin-bottom:3px;display:flex;gap:8px}
+.note-content{font-size:13px;color:var(--text);line-height:1.4}
+
+/* ── Heatmap ── */
+.heatmap-wrap{overflow-x:auto;margin-bottom:1rem}
+.heatmap-grid{display:grid;gap:3px}
+.hm-cell{width:20px;height:20px;border-radius:3px;cursor:default;transition:transform .1s}
+.hm-cell:hover{transform:scale(1.3)}
+.hm-label{font-size:9px;color:var(--text3);text-align:center;width:20px}
+.hm-month-row{display:flex;gap:3px;align-items:flex-end}
+
+/* ── Shareable card ── */
+.share-preview{background:linear-gradient(135deg,#1A1714 0%,#2C2420 100%);border-radius:16px;padding:1.5rem;margin-bottom:1rem;color:#fff}
+.share-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px}
+.share-subtitle{font-size:11px;opacity:.6;margin-bottom:1.25rem}
+.share-goal-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:rgba(255,255,255,.08);border-radius:8px}
+.share-goal-name{font-size:12px;flex:1;opacity:.9}
+.share-goal-pct{font-size:14px;font-weight:500}
+.share-bar{height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;margin-top:4px}
+.share-bar-fill{height:100%;border-radius:2px}
+.share-footer{font-size:10px;opacity:.4;text-align:center;margin-top:1rem}
+.share-btn{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+
+/* ── Undo toast ── */
+.undo-toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:51;opacity:0;pointer-events:none;transition:all .25s;display:flex;align-items:center;gap:10px}
+.undo-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all}
+.undo-btn{background:var(--accent);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:3px 10px;border-radius:10px;cursor:pointer}
+
+/* ── Custom colour ── */
+.colour-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.colour-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s}
+.colour-swatch:hover{transform:scale(1.15)}
+.colour-swatch.sel{border-color:var(--text)}
+
+/* ── Sort bar ── */
+.sort-bar{display:flex;align-items:center;gap:6px;margin-bottom:.75rem}
+.sort-lbl{font-size:11px;color:var(--text3)}
+.sort-select{padding:4px 8px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:11px;background:var(--bg);color:var(--text);cursor:pointer}
+
 /* ── Category tags ── */
 .cat-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;margin-right:4px;margin-bottom:4px;cursor:pointer;border:none}
 .cat-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
@@ -328,6 +391,7 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <div class="app-logo">Our<span>Goals</span></div>
       <div class="bar-actions">
         <span><span class="sync-pip" id="sync-pip"></span><span class="sync-txt" id="sync-txt">Live</span></span>
+        <button class="iBtn" onclick="openShareModal()" title="Share progress">📤</button>
         <button class="iBtn" onclick="openSettings()">⚙</button>
         <button class="iBtn" onclick="logout()">👤</button>
       </div>
@@ -341,6 +405,8 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <button class="main-tab active" id="mtab-goals" onclick="switchTab('goals')">Goals</button>
       <button class="main-tab" id="mtab-history" onclick="switchTab('history')">History</button>
       <button class="main-tab" id="mtab-report" onclick="switchTab('report')">Report</button>
+      <button class="main-tab" id="mtab-heatmap" onclick="switchTab('heatmap')">Heatmap</button>
+      <button class="main-tab" id="mtab-notes" onclick="switchTab('notes')">Notes</button>
     </div>
   </div>
 
@@ -379,8 +445,19 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <div id="report-content"></div>
     </div>
 
+    <!-- HEATMAP TAB -->
+    <div class="tab-pane" id="pane-heatmap">
+      <div id="heatmap-content"></div>
+    </div>
+
+    <!-- NOTES FEED TAB -->
+    <div class="tab-pane" id="pane-notes">
+      <div id="notes-feed-content"></div>
+    </div>
+
     <!-- GOALS TAB -->
     <div class="tab-pane active" id="pane-goals">
+      <div class="sort-bar"><span class="sort-lbl">Sort by</span><select class="sort-select" id="sort-select" onchange="setSortOrder(this.value)"><option value="default">Default</option><option value="behind">Most behind</option><option value="deadline">Closest deadline</option><option value="updated">Recently updated</option><option value="progress">% progress</option></select></div>
       <div class="sum-strip" id="sum-strip"></div>
 
       <!-- Shared section -->
@@ -502,6 +579,20 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   </div>
 </div>
 
+
+<!-- SHARE MODAL -->
+<div class="overlay" id="share-modal" onclick="closeShareModal(event)">
+  <div class="sheet">
+    <div class="drag-bar"></div>
+    <h3>Share progress card</h3>
+    <div id="share-preview-area"></div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:1rem">Screenshot this card and share to WhatsApp, Instagram, or anywhere!</p>
+    <button class="share-btn" onclick="downloadShareCard()">⬇ Save as image</button>
+    <div style="height:.5rem"></div>
+    <button class="btn-cancel" style="width:100%;margin-top:6px" onclick="closeShareModal()">Close</button>
+  </div>
+</div>
+
 <!-- SETTINGS -->
 <div class="settings-panel" id="settings-panel">
   <div class="sp-head">
@@ -532,6 +623,10 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <div style="font-size:11px;color:var(--text3);margin-top:6px">A banner will appear on this day each month reminding both of you to log progress.</div>
     </div>
     <div class="sp-section">
+      <h3>Accent colour</h3>
+      <div class="colour-grid" id="colour-grid"></div>
+    </div>
+    <div class="sp-section">
       <h3>Danger zone</h3>
       <button class="danger-btn" onclick="resetApp()">Reset app & clear all data</button>
     </div>
@@ -539,6 +634,7 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="undo-toast" id="undo-toast"><span id="undo-msg">Update saved</span><button class="undo-btn" onclick="doUndo()">Undo</button></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -764,17 +860,19 @@ window.logout=function(){
 // ── Tab switching ──────────────────────────────────────────────────────
 window.switchTab=function(tab){
   currentTab=tab;
-  ['dashboard','goals','history','report'].forEach(function(t){
+  ['dashboard','goals','history','report','heatmap','notes'].forEach(function(t){
     document.getElementById('pane-'+t).className='tab-pane'+(t===tab?' active':'');
     document.getElementById('mtab-'+t).className='main-tab'+(t===tab?' active':'');
   });
   if(tab==='history') renderHistory();
   if(tab==='dashboard') renderDashboard();
   if(tab==='report') renderReport();
+  if(tab==='heatmap') renderHeatmap();
+  if(tab==='notes') renderNotesFeed();
 };
 
 // ── Render ─────────────────────────────────────────────────────────────
-function renderAll(){renderSummary();renderShared();renderIndividual();renderCatFilter();if(currentTab==='dashboard')renderDashboard();if(currentTab==='report')renderReport();}
+function renderAll(){renderSummary();renderShared();renderIndividual();renderCatFilter();if(currentTab==='dashboard')renderDashboard();if(currentTab==='report')renderReport();if(currentTab==='heatmap')renderHeatmap();if(currentTab==='notes')renderNotesFeed();}
 
 function renderSummary(){
   var shared=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
@@ -788,7 +886,7 @@ function renderSummary(){
 }
 
 function renderShared(){
-  var goals=applyFilter(Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;}));
+  var goals=sortGoals(applyFilter(Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;})));
   var el=document.getElementById('list-shared');
   if(!goals.length){el.innerHTML='<div class="empty-state">No shared goals yet<br>Tap + to add one — both of you contribute to these</div>';return;}
   el.innerHTML=goals.map(sharedCard).join('');
@@ -846,7 +944,7 @@ function sharedCard(g){
 }
 
 function renderIndividual(){
-  var all=applyFilter(Object.values(goalsData).filter(function(g){return g.type==='individual';}));
+  var all=sortGoals(applyFilter(Object.values(goalsData).filter(function(g){return g.type==='individual';})));
   var el=document.getElementById('list-ind');
   if(!all.length){el.innerHTML='<div class="empty-state">No individual goals yet<br>Tap + → choose "Individual" to track something just for you</div>';return;}
   var n1=config.name1, n2=config.name2;
@@ -919,6 +1017,8 @@ window.updateGoal=function(id, type){
   var oldVal=g[currentWho]||0;
   existing[currentWho]=val;
   checkMilestone(id,oldVal,val,g.target);
+  saveUndoSnapshot(id,oldVal,monthKey);
+  update.lastUpdated=Date.now();
   var noteEl=document.getElementById('ni-'+id);
   var note=noteEl?noteEl.value.trim():'';
   if(note){
@@ -1699,6 +1799,399 @@ window.setReportMonth=function(mk){
   renderReport();
 };
 
+
+// ── Motivational quotes ───────────────────────────────────────────────────
+var QUOTES=[
+  {text:"The secret of getting ahead is getting started.",author:"Mark Twain"},
+  {text:"Small daily improvements lead to staggering long-term results.",author:"Robin Sharma"},
+  {text:"A goal without a plan is just a wish.",author:"Antoine de Saint-Exupéry"},
+  {text:"You don't have to be great to start, but you have to start to be great.",author:"Zig Ziglar"},
+  {text:"The only way to do great work is to love what you do.",author:"Steve Jobs"},
+  {text:"Success is the sum of small efforts repeated day in and day out.",author:"Robert Collier"},
+  {text:"Dream big. Start small. Act now.",author:"Robin Sharma"},
+  {text:"Progress, not perfection.",author:"Unknown"},
+  {text:"Together we can achieve more than we ever could alone.",author:"Unknown"},
+  {text:"Every accomplishment starts with the decision to try.",author:"John F. Kennedy"},
+  {text:"The best time to plant a tree was 20 years ago. The second best time is now.",author:"Chinese Proverb"},
+  {text:"Believe you can and you're halfway there.",author:"Theodore Roosevelt"},
+  {text:"It always seems impossible until it's done.",author:"Nelson Mandela"},
+  {text:"Your only limit is you.",author:"Unknown"},
+  {text:"Push yourself because no one else is going to do it for you.",author:"Unknown"}
+];
+var quoteIdx=Math.floor(Math.random()*QUOTES.length);
+function getQuote(){return QUOTES[quoteIdx%QUOTES.length];}
+window.nextQuote=function(){quoteIdx++;renderDashboardQuote();};
+function renderDashboardQuote(){
+  var el=document.getElementById('dash-quote');
+  if(!el) return;
+  var q=getQuote();
+  el.innerHTML='<div class="quote-text">"'+q.text+'"</div><div class="quote-author">— '+q.author+'</div>';
+}
+
+// ── Couple score ──────────────────────────────────────────────────────────
+function calcCoupleScore(){
+  var goals=Object.values(goalsData);
+  if(!goals.length) return {score:0,progress:0,consistency:0,completion:0};
+  var shared=goals.filter(function(g){return g.type==='shared'||!g.type;});
+
+  // Progress score (0-40): avg % across shared goals
+  var avgPct=shared.length?shared.reduce(function(a,g){return a+Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100);},0)/shared.length:0;
+  var progressScore=Math.round(avgPct*0.4);
+
+  // Consistency score (0-40): % of months both partners updated at least one goal
+  var allHistory=Object.values(historyData);
+  var months=[...new Set(allHistory.map(function(h){return h.month;}))];
+  var bothUpdated=0;
+  months.forEach(function(mk){
+    var hasP1=allHistory.some(function(h){return h.month===mk&&h.p1!=null;});
+    var hasP2=allHistory.some(function(h){return h.month===mk&&h.p2!=null;});
+    if(hasP1&&hasP2) bothUpdated++;
+  });
+  var consistencyScore=months.length?Math.round((bothUpdated/months.length)*40):0;
+
+  // Completion score (0-20): % of goals completed
+  var completed=shared.filter(function(g){return (g.p1||0)+(g.p2||0)>=g.target;}).length;
+  var completionScore=shared.length?Math.round((completed/shared.length)*20):0;
+
+  var total=Math.min(100,progressScore+consistencyScore+completionScore);
+  return {score:total,progress:Math.round(avgPct),consistency:months.length?Math.round(bothUpdated/months.length*100):0,completion:shared.length?Math.round(completed/shared.length*100):0};
+}
+
+// ── Sort order ────────────────────────────────────────────────────────────
+var currentSort='default';
+window.setSortOrder=function(v){currentSort=v;renderShared();renderIndividual();};
+function sortGoals(goals){
+  var sorted=goals.slice();
+  if(currentSort==='behind'){
+    sorted.sort(function(a,b){
+      var pa=Math.min(100,((a.p1||0)+(a.p2||0))/a.target*100);
+      var pb=Math.min(100,((b.p1||0)+(b.p2||0))/b.target*100);
+      return pa-pb;
+    });
+  } else if(currentSort==='deadline'){
+    sorted.sort(function(a,b){
+      var da=a.endDate?new Date(a.endDate):new Date('2099-01-01');
+      var db2=b.endDate?new Date(b.endDate):new Date('2099-01-01');
+      return da-db2;
+    });
+  } else if(currentSort==='progress'){
+    sorted.sort(function(a,b){
+      var pa=Math.min(100,((a.p1||0)+(a.p2||0))/a.target*100);
+      var pb=Math.min(100,((b.p1||0)+(b.p2||0))/b.target*100);
+      return pb-pa;
+    });
+  } else if(currentSort==='updated'){
+    sorted.sort(function(a,b){return (b.lastUpdated||0)-(a.lastUpdated||0);});
+  }
+  return sorted;
+}
+
+// ── Undo last update ──────────────────────────────────────────────────────
+var lastUpdateSnapshot=null;
+var undoTimer=null;
+function saveUndoSnapshot(goalId,prevVal,monthKey){
+  lastUpdateSnapshot={goalId:goalId,who:currentWho,prevVal:prevVal,monthKey:monthKey};
+  clearTimeout(undoTimer);
+  var ut=document.getElementById('undo-toast');
+  var um=document.getElementById('undo-msg');
+  if(um) um.textContent='Progress saved';
+  if(ut){ut.classList.add('show');undoTimer=setTimeout(function(){ut.classList.remove('show');lastUpdateSnapshot=null;},5000);}
+}
+window.doUndo=function(){
+  if(!lastUpdateSnapshot) return;
+  var s=lastUpdateSnapshot;
+  var g=goalsData[s.goalId];
+  if(!g) return;
+  var update=Object.assign({},g);
+  update[s.who]=s.prevVal;
+  db.collection('goals').doc(s.goalId).set(update);
+  var histId=s.goalId+'_'+s.monthKey;
+  var existing=historyData[histId];
+  if(existing){existing[s.who]=s.prevVal===0?null:s.prevVal;db.collection('history').doc(histId).set(existing);}
+  lastUpdateSnapshot=null;
+  var ut=document.getElementById('undo-toast');
+  if(ut) ut.classList.remove('show');
+  toast('Undone!');
+};
+
+// ── Notes feed ────────────────────────────────────────────────────────────
+function renderNotesFeed(){
+  var el=document.getElementById('notes-feed-content');
+  if(!el) return;
+  var n1=config.name1,n2=config.name2;
+  var allNotes=[];
+  Object.values(historyData).forEach(function(h){
+    if(!h.notes) return;
+    var parts=h.month.split('-');
+    var d=new Date(parts[0],parseInt(parts[1])-1,1);
+    var monthLabel=MONTHS[d.getMonth()]+' '+d.getFullYear();
+    var gName=(goalsData[h.goalId]||{}).name||h.goalName||'Unknown goal';
+    var gIcon=(goalsData[h.goalId]||{}).icon||h.goalIcon||'🎯';
+    if(h.notes.p1) allNotes.push({who:'p1',name:n1,text:h.notes.p1,month:h.month,monthLabel:monthLabel,goalName:gName,goalIcon:gIcon,color:'var(--p1)'});
+    if(h.notes.p2) allNotes.push({who:'p2',name:n2,text:h.notes.p2,month:h.month,monthLabel:monthLabel,goalName:gName,goalIcon:gIcon,color:'var(--p2)'});
+  });
+  allNotes.sort(function(a,b){return b.month.localeCompare(a.month);});
+  if(!allNotes.length){el.innerHTML='<div class="empty-state">No notes yet.<br>Add a note when saving progress on any goal.</div>';return;}
+  var html='<div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">All notes &amp; comments</div>';
+  html+='<div class="notes-feed">';
+  allNotes.forEach(function(n){
+    html+='<div class="note-entry">'+
+      '<div class="note-dot" style="background:'+n.color+'"></div>'+
+      '<div class="note-body">'+
+        '<div class="note-meta">'+
+          '<span style="color:'+n.color+';font-weight:500">'+n.name+'</span>'+
+          '<span>'+n.goalIcon+' '+n.goalName+'</span>'+
+          '<span>'+n.monthLabel+'</span>'+
+        '</div>'+
+        '<div class="note-content">'+escHtml(n.text)+'</div>'+
+      '</div>'+
+    '</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// ── Year heatmap ──────────────────────────────────────────────────────────
+function renderHeatmap(){
+  var el=document.getElementById('heatmap-content');
+  if(!el) return;
+  var goals=Object.values(goalsData);
+  if(!goals.length){el.innerHTML='<div class="empty-state">No goals yet.</div>';return;}
+  var n1=config.name1,n2=config.name2;
+  var html='<div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Update activity — April 2025 to March 2027</div>';
+
+  // Overall heatmap: per month, how many goals were updated
+  var allMonths=[];
+  var mStart=new Date(2025,3,1),mEnd=new Date(2027,2,1),mCur=new Date(mStart);
+  while(mCur<=mEnd){
+    allMonths.push(mCur.getFullYear()+'-'+(mCur.getMonth()+1));
+    mCur=new Date(mCur.getFullYear(),mCur.getMonth()+1,1);
+  }
+  var maxUpdates=1;
+  var monthCounts={};
+  allMonths.forEach(function(mk){
+    var count=Object.values(historyData).filter(function(h){return h.month===mk&&(h.p1!=null||h.p2!=null);}).length;
+    monthCounts[mk]=count;
+    if(count>maxUpdates) maxUpdates=count;
+  });
+
+  // Render as a grid: 12 cols × 2 rows (24 months Apr25-Mar27)
+  html+='<div style="margin-bottom:1.5rem"><div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500">Overall activity</div>';
+  html+='<div class="heatmap-wrap"><div style="display:flex;gap:3px;flex-wrap:wrap">';
+  allMonths.forEach(function(mk){
+    var count=monthCounts[mk]||0;
+    var pct=maxUpdates?count/maxUpdates:0;
+    var parts=mk.split('-');
+    var d=new Date(parts[0],parseInt(parts[1])-1,1);
+    var lbl=MONTHS[d.getMonth()].slice(0,3)+"'"+(d.getFullYear()%100);
+    var alpha=pct>0?0.2+pct*0.8:0.08;
+    var bg='rgba(196,82,42,'+alpha.toFixed(2)+')';
+    html+='<div style="text-align:center"><div class="hm-cell" style="background:'+bg+'" title="'+lbl+': '+count+' updates"></div><div class="hm-label">'+lbl+'</div></div>';
+  });
+  html+='</div></div></div>';
+
+  // Per-goal heatmap
+  html+='<div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500">Per goal</div>';
+  goals.forEach(function(g){
+    var isShared=g.type==='shared'||!g.type;
+    html+='<div style="margin-bottom:1rem"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span>'+(g.icon||'🎯')+'</span><span style="font-size:12px;font-weight:500;color:var(--text)">'+g.name+'</span></div>';
+    html+='<div class="heatmap-wrap"><div style="display:flex;gap:3px;flex-wrap:wrap">';
+    allMonths.forEach(function(mk){
+      var h=historyData[g.id+'_'+mk];
+      var parts=mk.split('-');
+      var d=new Date(parts[0],parseInt(parts[1])-1,1);
+      var lbl=MONTHS[d.getMonth()].slice(0,3)+"'"+(d.getFullYear()%100);
+      var hasP1=h&&h.p1!=null;
+      var hasP2=h&&h.p2!=null;
+      var hasBoth=hasP1&&hasP2;
+      var bg=hasBoth?'var(--green)':hasP1?'var(--p1)':hasP2?'var(--p2)':'rgba(0,0,0,0.06)';
+      var title=lbl+(hasBoth?' — both updated':hasP1?' — '+n1:hasP2?' — '+n2:' — no data');
+      html+='<div style="text-align:center"><div class="hm-cell" style="background:'+bg+'" title="'+title+'"></div><div class="hm-label">'+lbl+'</div></div>';
+    });
+    html+='</div></div></div>';
+  });
+
+  // Legend
+  html+='<div style="display:flex;gap:12px;font-size:10px;color:var(--text3);flex-wrap:wrap;margin-top:.5rem">'+
+    '<span><span style="display:inline-block;width:10px;height:10px;background:var(--p1);border-radius:2px;margin-right:3px;vertical-align:middle"></span>'+n1+' only</span>'+
+    '<span><span style="display:inline-block;width:10px;height:10px;background:var(--p2);border-radius:2px;margin-right:3px;vertical-align:middle"></span>'+n2+' only</span>'+
+    '<span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:3px;vertical-align:middle"></span>Both</span>'+
+  '</div>';
+  el.innerHTML=html;
+}
+
+// ── Shareable progress card ───────────────────────────────────────────────
+window.openShareModal=function(){
+  renderSharePreview();
+  document.getElementById('share-modal').classList.add('open');
+};
+window.closeShareModal=function(e){
+  if(!e||e.target===document.getElementById('share-modal'))
+    document.getElementById('share-modal').classList.remove('open');
+};
+function renderSharePreview(){
+  var el=document.getElementById('share-preview-area');
+  if(!el) return;
+  var goals=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
+  var n1=config.name1,n2=config.name2;
+  var now=new Date();
+  var dateStr=MONTHS[now.getMonth()]+' '+now.getFullYear();
+  var html='<div class="share-preview" id="share-card">'+
+    '<div class="share-title">Our Goals</div>'+
+    '<div class="share-subtitle">'+n1+' & '+n2+' · '+dateStr+'</div>';
+  goals.slice(0,6).forEach(function(g){
+    var v1=g.p1||0,v2=g.p2||0,combo=v1+v2;
+    var pct=Math.min(100,Math.round(combo/g.target*100));
+    var p1pct=Math.min(100,Math.round(v1/g.target*100));
+    var p2pct=Math.min(100,Math.round(v2/g.target*100));
+    html+='<div class="share-goal-row">'+
+      '<span style="font-size:18px">'+(g.icon||'🎯')+'</span>'+
+      '<div style="flex:1">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between">'+
+          '<span class="share-goal-name">'+g.name+'</span>'+
+          '<span class="share-goal-pct" style="color:'+(pct>=100?'#4CAF50':'#E8D5C8')+'">'+pct+'%</span>'+
+        '</div>'+
+        '<div class="share-bar"><div class="share-bar-fill" style="width:'+p1pct+'%;background:#3B6FAA;float:left"></div><div class="share-bar-fill" style="width:'+p2pct+'%;background:#7B5EA7;float:left"></div></div>'+
+      '</div>'+
+    '</div>';
+  });
+  html+='<div class="share-footer">OurGoals App</div></div>';
+  el.innerHTML=html;
+}
+window.downloadShareCard=function(){
+  toast('Screenshot your screen to save this card!',3000);
+};
+
+// ── Custom accent colour ──────────────────────────────────────────────────
+var COLOURS=[
+  {name:'Terracotta',val:'#C4522A'},{name:'Indigo',val:'#4A4AC4'},
+  {name:'Forest',val:'#2A7A4A'},{name:'Rose',val:'#C4456A'},
+  {name:'Ocean',val:'#2A6FA0'},{name:'Amber',val:'#C47A2A'},
+  {name:'Plum',val:'#7A2AC4'},{name:'Slate',val:'#4A6A7A'}
+];
+function initColourPicker(){
+  var grid=document.getElementById('colour-grid');
+  if(!grid) return;
+  var saved=localStorage.getItem('og_accent')||'#C4522A';
+  applyAccent(saved,false);
+  grid.innerHTML=COLOURS.map(function(c,i){
+    return '<div class="colour-swatch'+(c.val===saved?' sel':'')+'" style="background:'+c.val+'" title="'+c.name+'" onclick="pickColour('+i+')" data-idx="'+i+'"></div>';
+  }).join('');
+}
+window.pickColour=function(i){
+  var c=COLOURS[i];
+  if(!c) return;
+  document.querySelectorAll('.colour-swatch').forEach(function(s){s.classList.remove('sel');});
+  var sw=document.querySelector('.colour-swatch[data-idx="'+i+'"]');
+  if(sw) sw.classList.add('sel');
+  applyAccent(c.val,true);
+  toast('Colour changed to '+c.name);
+};
+function applyAccent(hex,save){
+  document.documentElement.style.setProperty('--accent',hex);
+  // derive accent2 as light tint
+  document.documentElement.style.setProperty('--accent2',hex+'22');
+  if(save) localStorage.setItem('og_accent',hex);
+}
+
+// ── Dashboard upgrade (add quote + couple score) ──────────────────────────
+var _origRenderDashboard=null;
+function renderDashboard(){
+  var el=document.getElementById('dash-content');
+  var goals=Object.values(goalsData);
+  var n1=config?config.name1:'P1', n2=config?config.name2:'P2';
+
+  // Quote card
+  var quoteHtml='<div class="quote-card" id="dash-quote-wrap">'+
+    '<button class="quote-refresh" onclick="nextQuote()" title="Next quote">🔄</button>'+
+    '<div id="dash-quote"></div>'+
+  '</div>';
+
+  // Couple score
+  var cs=calcCoupleScore();
+  var r=30,circ=2*Math.PI*r,dash=circ*cs.score/100;
+  var scoreColor=cs.score>=75?'var(--green)':cs.score>=50?'#BA7517':'var(--accent)';
+  var coupleHtml='<div class="couple-score-card">'+
+    '<div class="score-ring">'+
+      '<svg width="72" height="72" viewBox="0 0 72 72">'+
+        '<circle cx="36" cy="36" r="'+r+'" fill="none" stroke="var(--surface2)" stroke-width="8"/>'+
+        '<circle cx="36" cy="36" r="'+r+'" fill="none" stroke="'+scoreColor+'" stroke-width="8" stroke-dasharray="'+dash+' '+circ+'" stroke-linecap="round" transform="rotate(-90 36 36)"/>'+
+      '</svg>'+
+      '<div class="score-inner"><span class="score-num" style="color:'+scoreColor+'">'+cs.score+'</span><span class="score-label">score</span></div>'+
+    '</div>'+
+    '<div class="score-breakdown">'+
+      '<div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px">Couple score</div>'+
+      '<div class="score-row"><span>Progress</span><div style="display:flex;align-items:center;gap:6px"><div class="score-bar-bg"><div class="score-bar-fill" style="width:'+cs.progress+'%;background:var(--p1)"></div></div><span>'+cs.progress+'%</span></div></div>'+
+      '<div class="score-row"><span>Consistency</span><div style="display:flex;align-items:center;gap:6px"><div class="score-bar-bg"><div class="score-bar-fill" style="width:'+cs.consistency+'%;background:var(--p2)"></div></div><span>'+cs.consistency+'%</span></div></div>'+
+      '<div class="score-row"><span>Completion</span><div style="display:flex;align-items:center;gap:6px"><div class="score-bar-bg"><div class="score-bar-fill" style="width:'+cs.completion+'%;background:var(--green)"></div></div><span>'+cs.completion+'%</span></div></div>'+
+    '</div>'+
+  '</div>';
+
+  if(!goals.length){el.innerHTML=quoteHtml+coupleHtml+'<div class="empty-state">No goals yet.<br>Add your first goal on the Goals tab.</div>';setTimeout(renderDashboardQuote,50);return;}
+
+  var shared=goals.filter(function(g){return g.type==='shared'||!g.type;});
+  var ind=goals.filter(function(g){return g.type==='individual';});
+  var html=quoteHtml+coupleHtml;
+
+  if(shared.length){
+    html+='<div class="dash-section-hdr">Shared goals</div><div class="dash-grid">';
+    shared.forEach(function(g){
+      var v1=g.p1||0,v2=g.p2||0,combo=v1+v2;
+      var pct=Math.min(100,Math.round(combo/g.target*100));
+      var pct1=Math.min(100,Math.round(v1/g.target*100));
+      var pct2=Math.min(100,Math.round(v2/g.target*100));
+      var r2=34,circ2=2*Math.PI*r2,dash1=circ2*pct1/100,dash2=circ2*pct2/100;
+      html+='<div class="dash-ring-card">'+
+        '<div class="ring-wrap">'+
+          '<svg width="80" height="80" viewBox="0 0 80 80">'+
+            '<circle cx="40" cy="40" r="'+r2+'" fill="none" stroke="var(--surface2)" stroke-width="8"/>'+
+            '<circle cx="40" cy="40" r="'+r2+'" fill="none" stroke="var(--p1)" stroke-width="8" stroke-dasharray="'+dash1+' '+circ2+'" stroke-linecap="round"/>'+
+            '<circle cx="40" cy="40" r="'+r2+'" fill="none" stroke="var(--p2)" stroke-width="4" stroke-dasharray="'+dash2+' '+circ2+'" stroke-dashoffset="-'+dash1+'" stroke-linecap="round"/>'+
+          '</svg>'+
+          '<div class="ring-label"><span class="ring-pct">'+pct+'%</span></div>'+
+        '</div>'+
+        '<div class="ring-name">'+(g.icon||'')+' '+g.name+'</div>'+
+        '<div class="ring-sub" style="color:var(--p1)">'+n1+': '+v1.toLocaleString()+'</div>'+
+        '<div class="ring-sub" style="color:var(--p2)">'+n2+': '+v2.toLocaleString()+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+  }
+  if(ind.length){
+    html+='<div class="dash-section-hdr">Individual goals</div><div class="dash-grid">';
+    ind.forEach(function(g){
+      var owner=g.owner,val=g[owner]||0;
+      var pct=Math.min(100,Math.round(val/g.target*100));
+      var oc=owner==='p1'?'var(--p1)':'var(--p2)';
+      var oName=owner==='p1'?n1:n2;
+      var r3=34,circ3=2*Math.PI*r3,dash3=circ3*pct/100;
+      html+='<div class="dash-ring-card">'+
+        '<div class="ring-wrap">'+
+          '<svg width="80" height="80" viewBox="0 0 80 80">'+
+            '<circle cx="40" cy="40" r="'+r3+'" fill="none" stroke="var(--surface2)" stroke-width="8"/>'+
+            '<circle cx="40" cy="40" r="'+r3+'" fill="none" stroke="'+oc+'" stroke-width="8" stroke-dasharray="'+dash3+' '+circ3+'" stroke-linecap="round"/>'+
+          '</svg>'+
+          '<div class="ring-label"><span class="ring-pct">'+pct+'%</span></div>'+
+        '</div>'+
+        '<div class="ring-name">'+(g.icon||'')+' '+g.name+'</div>'+
+        '<div class="ring-sub" style="color:'+oc+'">'+oName+': '+val.toLocaleString()+' '+g.unit+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+  }
+
+  var p1Total=0,p2Total=0,p1Goals=0,p2Goals=0;
+  shared.forEach(function(g){p1Total+=(g.p1||0);p2Total+=(g.p2||0);});
+  ind.forEach(function(g){if(g.owner==='p1')p1Goals++;else p2Goals++;});
+  var completedShared=shared.filter(function(g){return (g.p1||0)+(g.p2||0)>=g.target;}).length;
+  html+='<div class="dash-section-hdr">Leaderboard</div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n1+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p1)">'+p1Total.toLocaleString()+'</span></div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n2+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p2)">'+p2Total.toLocaleString()+'</span></div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">Shared goals completed</span><span class="dash-stat-val" style="color:var(--green)">'+completedShared+' / '+shared.length+'</span></div>';
+  el.innerHTML=html;
+  setTimeout(renderDashboardQuote,50);
+}
+
 // ── Settings ───────────────────────────────────────────────────────────
 window.openSettings=function(){document.getElementById('settings-panel').classList.add('open');};
 window.closeSettings=function(){document.getElementById('settings-panel').classList.remove('open');};
@@ -1743,6 +2236,7 @@ function postLoginInit(){
   checkReminderBanner();
   checkHsBanner();
   renderCatFilter();
+  initColourPicker();
   switchTab('dashboard');
 }
 </script>
