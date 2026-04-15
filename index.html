@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Our Goals</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #F7F4EF;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE8;
+  --text: #1A1714;
+  --text2: #6B6560;
+  --text3: #A09A94;
+  --accent: #C4522A;
+  --accent2: #E8D5C8;
+  --p1: #3B6FAA;
+  --p1bg: #E8F0F9;
+  --p2: #7B5EA7;
+  --p2bg: #F0EBF8;
+  --border: rgba(26,23,20,0.1);
+  --border2: rgba(26,23,20,0.06);
+  --r: 14px;
+  --rs: 8px;
+  --shadow: 0 2px 16px rgba(26,23,20,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── Screen system ── */
+.screen{display:none;min-height:100vh;padding:0}
+.screen.active{display:flex;flex-direction:column}
+
+/* ══════════════════════════════
+   APP LOCK SCREEN
+══════════════════════════════ */
+#screen-lock{align-items:center;justify-content:center;background:var(--bg)}
+.lock-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
+.lock-logo{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
+.lock-logo span{color:var(--accent)}
+.lock-icon{font-size:36px;margin-bottom:0.75rem}
+.lock-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.lock-input-wrap{position:relative;margin-bottom:10px}
+.lock-input{width:100%;padding:11px 40px 11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);letter-spacing:0.1em;text-align:center}
+.lock-input:focus{outline:none;border-color:var(--accent)}
+.lock-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3)}
+.lock-btn{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
+.lock-error{font-size:12px;color:#C0392B;margin-top:8px;min-height:18px}
+.lock-attempts{font-size:11px;color:var(--text3);margin-top:6px}
+
+/* ══════════════════════════════
+   PIN SCREEN
+══════════════════════════════ */
+#screen-pin{align-items:center;justify-content:center;background:var(--bg)}
+.pin-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
+.pin-logo{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
+.pin-logo span{color:var(--accent)}
+.pin-sub{font-size:13px;color:var(--text2);margin-bottom:2rem}
+.pin-who{display:flex;gap:8px;margin-bottom:1.75rem}
+.pin-who-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s}
+.pin-who-btn.active[data-who="p1"]{background:var(--p1bg);border-color:var(--p1);color:var(--p1)}
+.pin-who-btn.active[data-who="p2"]{background:var(--p2bg);border-color:var(--p2);color:var(--p2)}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:1.75rem;height:14px}
+.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all 0.15s}
+.pin-dot.filled{border-color:var(--accent);background:var(--accent)}
+.pin-dot.error{border-color:#C0392B;background:#C0392B}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pin-key{aspect-ratio:1;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);font-family:'DM Sans',sans-serif;font-size:20px;font-weight:400;cursor:pointer;color:var(--text);transition:all 0.1s;display:flex;align-items:center;justify-content:center}
+.pin-key:active{transform:scale(0.93);background:var(--border)}
+.pin-key.del{font-size:15px;color:var(--text2)}
+.pin-key.empty{background:transparent;border:none;cursor:default}
+.pin-error{font-size:12px;color:#C0392B;margin-top:1rem;min-height:18px;transition:opacity 0.2s}
+.pin-setup-hint{font-size:11px;color:var(--text3);margin-top:0.75rem}
+
+/* ══════════════════════════════
+   SETUP FIREBASE SCREEN
+══════════════════════════════ */
+#screen-setup{align-items:center;justify-content:center;padding:1.5rem}
+.setup-card{background:var(--surface);border-radius:24px;padding:2rem 1.75rem;width:min(480px,100%);box-shadow:var(--shadow)}
+.setup-card h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px}
+.setup-card .desc{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.step-block{background:var(--surface2);border-radius:var(--rs);padding:1rem 1.25rem;margin-bottom:1rem;font-size:13px;line-height:1.7}
+.step-block strong{font-weight:500;color:var(--text)}
+.step-block code{background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:12px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.form-group input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
+.form-group input:focus{outline:none;border-color:var(--accent)}
+.names-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-primary{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity 0.15s}
+.btn-primary:hover{opacity:0.9}
+.setup-toggle{text-align:center;margin-top:1rem;font-size:12px;color:var(--text2)}
+.setup-toggle a{color:var(--accent);cursor:pointer;text-decoration:none}
+
+/* ══════════════════════════════
+   MAIN APP SCREEN
+══════════════════════════════ */
+#screen-app{background:var(--bg)}
+.app-header{background:var(--surface);padding:1rem 1.25rem 0.75rem;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
+.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+.app-logo{font-family:'DM Serif Display',serif;font-size:20px}
+.app-logo span{color:var(--accent)}
+.header-actions{display:flex;gap:8px;align-items:center}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#27AE60;display:inline-block;margin-right:4px}
+.sync-dot.offline{background:#E74C3C}
+.sync-label{font-size:11px;color:var(--text3)}
+.icon-btn{width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
+.who-tabs{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border)}
+.who-tab{flex:1;padding:6px 10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s}
+.who-tab.active[data-who="p1"]{background:var(--p1bg);color:var(--p1)}
+.who-tab.active[data-who="p2"]{background:var(--p2bg);color:var(--p2)}
+
+.app-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:5rem}
+
+/* summary strip */
+.summary-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.25rem}
+.summary-card{background:var(--surface);border-radius:var(--rs);padding:0.75rem;text-align:center;border:1px solid var(--border2)}
+.summary-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)}
+.summary-lbl{font-size:10px;color:var(--text3);margin-top:1px}
+
+/* goal cards */
+.goal-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
+.goal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
+.goal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.goal-meta{flex:1;padding:0 10px}
+.goal-name{font-size:15px;font-weight:500;color:var(--text)}
+.goal-target{font-size:11px;color:var(--text3);margin-top:1px}
+.goal-menu{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px}
+
+/* progress bar */
+.prog-wrap{height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;margin-bottom:8px;display:flex;gap:1px}
+.prog-p1{height:100%;background:var(--p1);border-radius:5px 0 0 5px;transition:width 0.5s ease}
+.prog-p2{height:100%;background:var(--p2);border-radius:0 5px 5px 0;transition:width 0.5s ease}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:12px}
+
+/* partner rows */
+.partner-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.partner-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rs);background:var(--surface2)}
+.p-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.p-avatar.p1{background:var(--p1bg);color:var(--p1)}
+.p-avatar.p2{background:var(--p2bg);color:var(--p2)}
+.p-name{font-size:12px;color:var(--text2);flex:1}
+.p-val{font-size:13px;font-weight:500;color:var(--text)}
+.p-pct{font-size:11px;color:var(--text3)}
+.p-you-badge{font-size:9px;background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:500}
+
+/* update row */
+.update-row{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border2)}
+.update-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
+.update-input:focus{outline:none;border-color:var(--accent)}
+.update-btn{padding:8px 16px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity 0.15s}
+.update-btn:hover{opacity:0.85}
+
+/* FAB */
+.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(196,82,42,0.4);z-index:20;display:flex;align-items:center;justify-content:center;transition:transform 0.15s}
+.fab:active{transform:scale(0.93)}
+
+/* ── Add Goal Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.4);z-index:30;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;transform:translateY(40px);transition:transform 0.25s ease}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-drag{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem}
+.modal-sheet h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:1.25rem}
+.mfield{margin-bottom:12px}
+.mfield label{display:block;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px}
+.mfield input,.mfield select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
+.mfield input:focus,.mfield select:focus{outline:none;border-color:var(--accent)}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.icon-grid{display:flex;gap:8px;flex-wrap:wrap}
+.icon-opt{width:38px;height:38px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.12s}
+.icon-opt.selected{border-color:var(--accent);background:var(--accent2)}
+.modal-btns{display:flex;gap:8px;margin-top:1.25rem}
+.btn-cancel{flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--rs);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;color:var(--text2)}
+.btn-save{flex:2;padding:10px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:50;opacity:0;pointer-events:none;transition:all 0.25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Settings panel */
+.settings-panel{position:fixed;inset:0;background:var(--bg);z-index:40;transform:translateX(100%);transition:transform 0.25s ease;overflow-y:auto}
+.settings-panel.open{transform:translateX(0)}
+.settings-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-bottom:1px solid var(--border2)}
+.settings-back{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
+.settings-header h2{font-family:'DM Serif Display',serif;font-size:20px}
+.settings-body{padding:1rem 1.25rem}
+.settings-section{margin-bottom:1.5rem}
+.settings-section h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2);font-size:14px}
+.settings-row:last-child{border:none}
+.settings-row span{color:var(--text2);font-size:13px}
+.danger-btn{padding:10px;width:100%;border:1px solid #C0392B;border-radius:var(--rs);background:transparent;color:#C0392B;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px}
+
+/* Animations */
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake 0.3s ease}
+@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
+.goal-card{animation:pop 0.2s ease}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ APP LOCK SCREEN ═══════════════ -->
+<div class="screen active" id="screen-lock">
+  <div class="lock-card">
+    <div class="lock-logo">Our<span>Goals</span></div>
+    <div class="lock-icon">🔒</div>
+    <div class="lock-sub" id="lock-sub">Enter the app passphrase to continue</div>
+    <div class="lock-input-wrap">
+      <input class="lock-input" type="password" id="lock-input" placeholder="passphrase" onkeydown="if(event.key==='Enter')checkPassphrase()"/>
+      <button class="lock-eye" onclick="toggleLockVis()" id="lock-eye">👁</button>
+    </div>
+    <button class="lock-btn" onclick="checkPassphrase()">Unlock →</button>
+    <div class="lock-error" id="lock-error"></div>
+    <div class="lock-attempts" id="lock-attempts"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PIN SCREEN ═══════════════ -->
+<div class="screen active" id="screen-pin">
+  <div class="pin-card">
+    <div class="pin-logo">Our<span>Goals</span></div>
+    <div class="pin-sub" id="pin-sub">Select who you are</div>
+
+    <div class="pin-who">
+      <button class="pin-who-btn" data-who="p1" onclick="selectWho('p1')" id="who-p1">Partner 1</button>
+      <button class="pin-who-btn" data-who="p2" onclick="selectWho('p2')" id="who-p2">Partner 2</button>
+    </div>
+
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <div class="pin-setup-hint" id="pin-setup-hint"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ FIREBASE SETUP SCREEN ═══════════════ -->
+<div class="screen" id="screen-setup">
+  <div class="setup-card">
+    <h2>Connect Firebase</h2>
+    <p class="desc">You need a free Firebase project so both of you can sync goals in real time. Takes ~5 minutes.</p>
+
+    <div class="step-block">
+      <strong>Step 1:</strong> Go to <code>console.firebase.google.com</code> → Create project → Give it any name<br/>
+      <strong>Step 2:</strong> Click <code>Firestore Database</code> → Create → Start in <code>test mode</code><br/>
+      <strong>Step 3:</strong> Go to <code>Project Settings</code> → Your apps → Add Web app → Copy the config below
+    </div>
+
+    <div class="form-group">
+      <label>API Key</label>
+      <input id="fb-apiKey" placeholder="AIzaSy..."/>
+    </div>
+    <div class="form-group">
+      <label>Project ID</label>
+      <input id="fb-projectId" placeholder="my-goals-app"/>
+    </div>
+    <div class="form-group">
+      <label>App ID</label>
+      <input id="fb-appId" placeholder="1:123456:web:abc..."/>
+    </div>
+
+    <div class="form-group">
+      <label>App Passphrase <span style="font-size:11px;color:var(--text3)">(shared secret — both partners need this to open the app)</span></label>
+      <input id="fb-passphrase" type="password" placeholder="e.g. sunshine2024"/>
+    </div>
+
+    <div class="names-row form-group">
+      <div>
+        <label>Your name (Partner 1)</label>
+        <input id="fb-name1" placeholder="e.g. Rahul"/>
+      </div>
+      <div>
+        <label>Wife's name (Partner 2)</label>
+        <input id="fb-name2" placeholder="e.g. Priya"/>
+      </div>
+    </div>
+
+    <div class="form-group names-row">
+      <div>
+        <label>Your PIN (4 digits)</label>
+        <input id="fb-pin1" type="password" maxlength="4" placeholder="••••"/>
+      </div>
+      <div>
+        <label>Wife's PIN (4 digits)</label>
+        <input id="fb-pin2" type="password" maxlength="4" placeholder="••••"/>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="saveSetup()">Save & Continue</button>
+    <div class="setup-toggle">Already set up? <a onclick="showPin()">Back to login</a></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div class="screen" id="screen-app">
+  <div class="app-header">
+    <div class="app-header-top">
+      <div class="app-logo">Our<span>Goals</span></div>
+      <div class="header-actions">
+        <span><span class="sync-dot" id="sync-dot"></span><span class="sync-label" id="sync-label">Live</span></span>
+        <button class="icon-btn" onclick="openSettings()" title="Settings">⚙</button>
+        <button class="icon-btn" onclick="logout()" title="Switch user">👤</button>
+      </div>
+    </div>
+    <div class="who-tabs">
+      <button class="who-tab active" data-who="p1" id="tab-p1" onclick="switchWho('p1')">— Partner 1</button>
+      <button class="who-tab" data-who="p2" id="tab-p2" onclick="switchWho('p2')">— Partner 2</button>
+    </div>
+  </div>
+
+  <div class="app-body" id="app-body">
+    <div class="summary-strip" id="summary-strip"></div>
+    <div id="goals-list"></div>
+    <div style="height:1rem"></div>
+  </div>
+
+  <button class="fab" onclick="openAddGoal()">+</button>
+</div>
+
+<!-- ═══════════════ ADD GOAL MODAL ═══════════════ -->
+<div class="modal-overlay" id="add-modal" onclick="closeAddGoal(event)">
+  <div class="modal-sheet">
+    <div class="modal-drag"></div>
+    <h3>New shared goal</h3>
+
+    <div class="mfield">
+      <label>Icon</label>
+      <div class="icon-grid" id="icon-grid">
+        <div class="icon-opt selected" data-icon="📚" onclick="selectIcon(this)">📚</div>
+        <div class="icon-opt" data-icon="💰" onclick="selectIcon(this)">💰</div>
+        <div class="icon-opt" data-icon="🏋️" onclick="selectIcon(this)">🏋️</div>
+        <div class="icon-opt" data-icon="🚶" onclick="selectIcon(this)">🚶</div>
+        <div class="icon-opt" data-icon="🧘" onclick="selectIcon(this)">🧘</div>
+        <div class="icon-opt" data-icon="✈️" onclick="selectIcon(this)">✈️</div>
+        <div class="icon-opt" data-icon="🍎" onclick="selectIcon(this)">🍎</div>
+        <div class="icon-opt" data-icon="😴" onclick="selectIcon(this)">😴</div>
+        <div class="icon-opt" data-icon="🎯" onclick="selectIcon(this)">🎯</div>
+        <div class="icon-opt" data-icon="🌱" onclick="selectIcon(this)">🌱</div>
+      </div>
+    </div>
+
+    <div class="mfield">
+      <label>Goal name</label>
+      <input id="m-name" placeholder="e.g. Books read this year"/>
+    </div>
+
+    <div class="mrow">
+      <div class="mfield">
+        <label>Target number</label>
+        <input id="m-target" type="number" placeholder="24"/>
+      </div>
+      <div class="mfield">
+        <label>Unit</label>
+        <input id="m-unit" placeholder="books"/>
+      </div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAddGoal()">Cancel</button>
+      <button class="btn-save" onclick="saveGoal()">Add goal →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SETTINGS PANEL ═══════════════ -->
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-header">
+    <button class="settings-back" onclick="closeSettings()">←</button>
+    <h2>Settings</h2>
+  </div>
+  <div class="settings-body">
+    <div class="settings-section">
+      <h3>Partners</h3>
+      <div class="settings-row">Partner 1 name <span id="s-name1">—</span></div>
+      <div class="settings-row">Partner 2 name <span id="s-name2">—</span></div>
+    </div>
+    <div class="settings-section">
+      <h3>App Passphrase</h3>
+      <div class="mfield"><label>New passphrase (shared with wife)</label><input id="s-passphrase" type="password" placeholder="Enter new passphrase"/></div>
+      <button class="btn-primary" onclick="savePassphrase()" style="width:auto;padding:9px 20px">Update Passphrase</button>
+    </div>
+    <div class="settings-section">
+      <h3>Change PINs</h3>
+      <div class="mfield"><label>New PIN for Partner 1</label><input id="s-pin1" type="password" maxlength="4" placeholder="4 digits"/></div>
+      <div class="mfield"><label>New PIN for Partner 2</label><input id="s-pin2" type="password" maxlength="4" placeholder="4 digits"/></div>
+      <button class="btn-primary" onclick="savePins()" style="width:auto;padding:9px 20px">Update PINs</button>
+    </div>
+    <div class="settings-section">
+      <h3>Danger zone</h3>
+      <button class="danger-btn" onclick="resetApp()">Reset app & clear all data</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TOAST ═══════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── State ──────────────────────────────────────────────
+let db = null;
+let currentWho = null;
+let goalsData = {};
+let config = null;
+let pinEntry = '';
+let whoForPin = null;
+
+// ── Lockout state (in-memory, resets on reload — intentional) ──
+let lockFailCount = parseInt(sessionStorage.getItem('og_fails') || '0');
+let lockUntil = parseInt(sessionStorage.getItem('og_lockuntil') || '0');
+
+// ── Helpers ────────────────────────────────────────────
+window.showToast = (msg, dur=2000) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+};
+
+window.showScreen = (id) => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+};
+
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
+  catch { return null; }
+}
+
+function saveConfig(cfg) {
+  localStorage.setItem('og_config', JSON.stringify(cfg));
+}
+
+// ── Passphrase / App Lock ──────────────────────────────
+window.toggleLockVis = () => {
+  const inp = document.getElementById('lock-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
+function getRemainingLock() {
+  const rem = lockUntil - Date.now();
+  return rem > 0 ? Math.ceil(rem/1000) : 0;
+}
+
+window.checkPassphrase = () => {
+  const rem = getRemainingLock();
+  if (rem > 0) {
+    document.getElementById('lock-error').textContent = `Too many attempts. Wait ${rem}s`;
+    return;
+  }
+  if (!config) { showScreen('setup'); return; }
+
+  const entered = document.getElementById('lock-input').value;
+  if (entered === config.passphrase) {
+    lockFailCount = 0;
+    sessionStorage.setItem('og_fails','0');
+    sessionStorage.setItem('og_lockuntil','0');
+    sessionStorage.setItem('og_unlocked','1');
+    showScreen('pin');
+    document.getElementById('lock-input').value = '';
+    document.getElementById('lock-error').textContent = '';
+  } else {
+    lockFailCount++;
+    sessionStorage.setItem('og_fails', lockFailCount);
+    const maxAttempts = 5;
+    const left = maxAttempts - lockFailCount;
+    if (lockFailCount >= maxAttempts) {
+      const lockSecs = 30 * Math.pow(2, Math.floor(lockFailCount/maxAttempts) - 1); // 30s, 60s, 120s…
+      lockUntil = Date.now() + lockSecs * 1000;
+      sessionStorage.setItem('og_lockuntil', lockUntil);
+      document.getElementById('lock-error').textContent = `Too many attempts — locked for ${lockSecs}s`;
+      startLockCountdown();
+    } else {
+      document.getElementById('lock-error').textContent = `Wrong passphrase — ${left} attempt${left===1?'':'s'} left`;
+    }
+    const card = document.querySelector('.lock-card');
+    card.classList.add('shake');
+    setTimeout(() => card.classList.remove('shake'), 400);
+  }
+};
+
+function startLockCountdown() {
+  const el = document.getElementById('lock-attempts');
+  const tick = () => {
+    const rem = getRemainingLock();
+    if (rem <= 0) { el.textContent = ''; document.getElementById('lock-error').textContent=''; return; }
+    el.textContent = `Unlocks in ${rem}s`;
+    setTimeout(tick, 1000);
+  };
+  tick();
+}
+
+// ── Firebase init ──────────────────────────────────────
+function initFirebase(cfg) {
+  const app = initializeApp({
+    apiKey: cfg.apiKey,
+    authDomain: `${cfg.projectId}.firebaseapp.com`,
+    projectId: cfg.projectId,
+    appId: cfg.appId
+  });
+  db = getFirestore(app);
+  listenGoals();
+}
+
+function listenGoals() {
+  onSnapshot(collection(db, 'goals'), snap => {
+    goalsData = {};
+    snap.forEach(d => { goalsData[d.id] = { id: d.id, ...d.data() }; });
+    renderGoals();
+    updateSyncStatus(true);
+  }, () => updateSyncStatus(false));
+}
+
+function updateSyncStatus(ok) {
+  document.getElementById('sync-dot').className = 'sync-dot' + (ok ? '' : ' offline');
+  document.getElementById('sync-label').textContent = ok ? 'Live' : 'Offline';
+}
+
+// ── Setup ──────────────────────────────────────────────
+window.saveSetup = () => {
+  const apiKey      = document.getElementById('fb-apiKey').value.trim();
+  const projectId   = document.getElementById('fb-projectId').value.trim();
+  const appId       = document.getElementById('fb-appId').value.trim();
+  const passphrase  = document.getElementById('fb-passphrase').value.trim();
+  const name1       = document.getElementById('fb-name1').value.trim() || 'Partner 1';
+  const name2       = document.getElementById('fb-name2').value.trim() || 'Partner 2';
+  const pin1        = document.getElementById('fb-pin1').value.trim();
+  const pin2        = document.getElementById('fb-pin2').value.trim();
+
+  if (!apiKey || !projectId || !appId) { showToast('Fill all Firebase fields'); return; }
+  if (!passphrase || passphrase.length < 4) { showToast('Passphrase must be at least 4 characters'); return; }
+  if (pin1.length !== 4 || pin2.length !== 4) { showToast('Both PINs must be 4 digits'); return; }
+
+  config = { apiKey, projectId, appId, passphrase, name1, name2, pin1, pin2 };
+  saveConfig(config);
+  initFirebase(config);
+  updatePartnerNames();
+  sessionStorage.setItem('og_unlocked','1');
+  showScreen('pin');
+  showToast('Setup saved! Log in to continue');
+};
+
+window.showPin = () => showScreen(config ? 'lock' : 'setup');
+
+// ── PIN logic ──────────────────────────────────────────
+window.selectWho = (who) => {
+  whoForPin = who;
+  pinEntry = '';
+  renderPinDots();
+  document.getElementById('who-p1').className = 'pin-who-btn' + (who==='p1' ? ' active' : '');
+  document.getElementById('who-p2').className = 'pin-who-btn' + (who==='p2' ? ' active' : '');
+
+  if (!config) { showScreen('setup'); return; }
+  document.getElementById('pin-sub').textContent = `Enter PIN for ${who==='p1' ? config.name1 : config.name2}`;
+  document.getElementById('pin-error').textContent = '';
+};
+
+window.pinKey = (k) => {
+  if (!whoForPin) { showToast('Select a partner first'); return; }
+  if (pinEntry.length >= 4) return;
+  pinEntry += k;
+  renderPinDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 150);
+};
+
+window.pinDel = () => {
+  pinEntry = pinEntry.slice(0, -1);
+  renderPinDots();
+};
+
+function renderPinDots(state='') {
+  for (let i=0; i<4; i++) {
+    const d = document.getElementById('d'+i);
+    d.className = 'pin-dot' + (i < pinEntry.length ? (' '+(state || 'filled')) : '');
+  }
+}
+
+function checkPin() {
+  if (!config) return;
+  const correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
+  if (pinEntry === correct) {
+    currentWho = whoForPin;
+    updateWhoUI();
+    showScreen('app');
+    showToast(`Welcome, ${whoForPin==='p1' ? config.name1 : config.name2}!`);
+  } else {
+    renderPinDots('error');
+    const card = document.querySelector('.pin-card');
+    card.classList.add('shake');
+    setTimeout(() => card.classList.remove('shake'), 400);
+    document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
+    setTimeout(() => { pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
+  }
+}
+
+// ── App UI ─────────────────────────────────────────────
+function updatePartnerNames() {
+  if (!config) return;
+  document.getElementById('tab-p1').textContent = config.name1;
+  document.getElementById('tab-p2').textContent = config.name2;
+  document.getElementById('s-name1').textContent = config.name1;
+  document.getElementById('s-name2').textContent = config.name2;
+}
+
+function updateWhoUI() {
+  if (!config) return;
+  updatePartnerNames();
+  document.getElementById('tab-p1').className = 'who-tab' + (currentWho==='p1' ? ' active' : '');
+  document.getElementById('tab-p2').className = 'who-tab' + (currentWho==='p2' ? ' active' : '');
+}
+
+window.switchWho = (who) => {
+  currentWho = who;
+  updateWhoUI();
+  renderGoals();
+};
+
+window.logout = () => {
+  currentWho = null;
+  whoForPin = null;
+  pinEntry = '';
+  renderPinDots();
+  sessionStorage.removeItem('og_unlocked');
+  document.getElementById('pin-sub').textContent = 'Select who you are';
+  document.getElementById('who-p1').className = 'pin-who-btn';
+  document.getElementById('who-p2').className = 'pin-who-btn';
+  document.getElementById('lock-input').value = '';
+  document.getElementById('lock-error').textContent = '';
+  showScreen('lock');
+};
+
+// ── Goals rendering ────────────────────────────────────
+function renderGoals() {
+  const goals = Object.values(goalsData);
+  const list = document.getElementById('goals-list');
+  const strip = document.getElementById('summary-strip');
+
+  const total = goals.length;
+  const completed = goals.filter(g => (g.p1||0)+(g.p2||0) >= g.target).length;
+  const avgPct = total ? Math.round(goals.reduce((a,g) => a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100), 0)/total) : 0;
+
+  strip.innerHTML = `
+    <div class="summary-card"><div class="summary-val">${total}</div><div class="summary-lbl">Goals</div></div>
+    <div class="summary-card"><div class="summary-val">${completed}</div><div class="summary-lbl">Done</div></div>
+    <div class="summary-card"><div class="summary-val">${avgPct}%</div><div class="summary-lbl">Avg progress</div></div>
+  `;
+
+  if (!goals.length) {
+    list.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>`;
+    return;
+  }
+
+  const n1 = config ? config.name1 : 'Partner 1';
+  const n2 = config ? config.name2 : 'Partner 2';
+
+  list.innerHTML = goals.map(g => {
+    const v1 = g.p1||0, v2 = g.p2||0;
+    const total = v1+v2;
+    const pct1 = Math.min(100, Math.round(v1/g.target*100));
+    const pct2 = Math.min(100, Math.round(v2/g.target*100));
+    const pctCombined = Math.min(100, Math.round(total/g.target*100));
+    const isMe1 = currentWho==='p1', isMe2 = currentWho==='p2';
+    return `
+    <div class="goal-card" id="gc-${g.id}">
+      <div class="goal-header">
+        <div class="goal-icon">${g.icon||'🎯'}</div>
+        <div class="goal-meta">
+          <div class="goal-name">${g.name}</div>
+          <div class="goal-target">Target: ${g.target.toLocaleString()} ${g.unit} · ${pctCombined}% combined</div>
+        </div>
+        <button class="goal-menu" onclick="deleteGoal('${g.id}')">×</button>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-p1" style="width:${pct1}%"></div>
+        <div class="prog-p2" style="width:${pct2}%"></div>
+      </div>
+      <div class="prog-labels"><span style="color:var(--p1)">${n1}: ${pct1}%</span><span style="color:var(--p2)">${n2}: ${pct2}%</span></div>
+      <div class="partner-rows">
+        <div class="partner-row">
+          <div class="p-avatar p1">${n1.slice(0,2).toUpperCase()}</div>
+          <div class="p-name">${n1}${isMe1?' <span class="p-you-badge">you</span>':''}</div>
+          <div class="p-val">${v1.toLocaleString()} ${g.unit}</div>
+          <div class="p-pct">&nbsp;${pct1}%</div>
+        </div>
+        <div class="partner-row">
+          <div class="p-avatar p2">${n2.slice(0,2).toUpperCase()}</div>
+          <div class="p-name">${n2}${isMe2?' <span class="p-you-badge">you</span>':''}</div>
+          <div class="p-val">${v2.toLocaleString()} ${g.unit}</div>
+          <div class="p-pct">&nbsp;${pct2}%</div>
+        </div>
+      </div>
+      <div class="update-row">
+        <input class="update-input" id="inp-${g.id}" type="number" placeholder="My new total (${g.unit})"/>
+        <button class="update-btn" onclick="updateGoal('${g.id}')">Update</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.updateGoal = async (id) => {
+  const inp = document.getElementById('inp-'+id);
+  const val = parseFloat(inp.value);
+  if (isNaN(val) || val < 0) { inp.style.borderColor='#E74C3C'; return; }
+  inp.style.borderColor = '';
+  const g = goalsData[id];
+  if (!g) return;
+  const update = { ...g };
+  update[currentWho] = val;
+  await setDoc(doc(db,'goals',id), update);
+  inp.value = '';
+  showToast('Progress updated!');
+};
+
+window.deleteGoal = async (id) => {
+  if (!confirm('Delete this goal?')) return;
+  await deleteDoc(doc(db,'goals',id));
+  showToast('Goal deleted');
+};
+
+// ── Add Goal Modal ─────────────────────────────────────
+window.openAddGoal = () => document.getElementById('add-modal').classList.add('open');
+window.closeAddGoal = (e) => {
+  if (!e || e.target===document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
+};
+
+let selectedIcon = '📚';
+window.selectIcon = (el) => {
+  document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedIcon = el.getAttribute('data-icon');
+};
+
+window.saveGoal = async () => {
+  const name   = document.getElementById('m-name').value.trim();
+  const target = parseFloat(document.getElementById('m-target').value);
+  const unit   = document.getElementById('m-unit').value.trim() || 'units';
+  if (!name || isNaN(target) || target<=0) { showToast('Fill all fields'); return; }
+  const id = 'g_'+Date.now();
+  await setDoc(doc(db,'goals',id), { name, target, unit, icon: selectedIcon, p1:0, p2:0 });
+  document.getElementById('m-name').value = '';
+  document.getElementById('m-target').value = '';
+  document.getElementById('m-unit').value = '';
+  closeAddGoal();
+  showToast('Goal added!');
+};
+
+// ── Settings ───────────────────────────────────────────
+window.openSettings  = () => document.getElementById('settings-panel').classList.add('open');
+window.closeSettings = () => document.getElementById('settings-panel').classList.remove('open');
+
+window.savePassphrase = () => {
+  const p = document.getElementById('s-passphrase').value.trim();
+  if (!p || p.length < 4) { showToast('Passphrase must be 4+ characters'); return; }
+  config.passphrase = p;
+  saveConfig(config);
+  document.getElementById('s-passphrase').value = '';
+  showToast('Passphrase updated — share the new one with your wife');
+};
+
+window.savePins = () => {
+  const p1 = document.getElementById('s-pin1').value.trim();
+  const p2 = document.getElementById('s-pin2').value.trim();
+  if ((p1 && p1.length!==4)||(p2 && p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
+  if (p1) config.pin1 = p1;
+  if (p2) config.pin2 = p2;
+  saveConfig(config);
+  document.getElementById('s-pin1').value = '';
+  document.getElementById('s-pin2').value = '';
+  showToast('PINs updated');
+};
+
+window.resetApp = () => {
+  if (!confirm('This will delete all local config. Are you sure?')) return;
+  localStorage.removeItem('og_config');
+  sessionStorage.clear();
+  location.reload();
+};
+
+// ── Boot ───────────────────────────────────────────────
+config = loadConfig();
+if (!config) {
+  showScreen('setup');
+} else {
+  initFirebase(config);
+  updatePartnerNames();
+  // If already unlocked this session, skip lock screen
+  if (sessionStorage.getItem('og_unlocked') === '1') {
+    showScreen('pin');
+  } else {
+    showScreen('lock');
+  }
+  // Resume lockout countdown if active
+  if (getRemainingLock() > 0) startLockCountdown();
+}
+</script>
+
+// ── State ──────────────────────────────────────────────
+let db = null;
+let currentWho = null; // 'p1' | 'p2'
+let goalsData = {};    // id → goal object
+let config = null;
+let pinEntry = '';
+let whoForPin = null;
+let isSettingUpPin = false;
+
+// ── Helpers ────────────────────────────────────────────
+window.showToast = (msg, dur=2000) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+};
+
+window.showScreen = (id) => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+};
+
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
+  catch { return null; }
+}
+
+function saveConfig(cfg) {
+  localStorage.setItem('og_config', JSON.stringify(cfg));
+}
+
+// ── Firebase init ──────────────────────────────────────
+function initFirebase(cfg) {
+  const app = initializeApp({
+    apiKey: cfg.apiKey,
+    authDomain: `${cfg.projectId}.firebaseapp.com`,
+    projectId: cfg.projectId,
+    appId: cfg.appId
+  });
+  db = getFirestore(app);
+  listenGoals();
+}
+
+function listenGoals() {
+  onSnapshot(collection(db, 'goals'), snap => {
+    goalsData = {};
+    snap.forEach(d => { goalsData[d.id] = { id: d.id, ...d.data() }; });
+    renderGoals();
+    updateSyncStatus(true);
+  }, () => updateSyncStatus(false));
+}
+
+function updateSyncStatus(ok) {
+  document.getElementById('sync-dot').className = 'sync-dot' + (ok ? '' : ' offline');
+  document.getElementById('sync-label').textContent = ok ? 'Live' : 'Offline';
+}
+
+// ── Setup ──────────────────────────────────────────────
+window.saveSetup = () => {
+  const apiKey    = document.getElementById('fb-apiKey').value.trim();
+  const projectId = document.getElementById('fb-projectId').value.trim();
+  const appId     = document.getElementById('fb-appId').value.trim();
+  const name1     = document.getElementById('fb-name1').value.trim() || 'Partner 1';
+  const name2     = document.getElementById('fb-name2').value.trim() || 'Partner 2';
+  const pin1      = document.getElementById('fb-pin1').value.trim();
+  const pin2      = document.getElementById('fb-pin2').value.trim();
+
+  if (!apiKey || !projectId || !appId) { showToast('Fill all Firebase fields'); return; }
+  if (pin1.length !== 4 || pin2.length !== 4) { showToast('Both PINs must be 4 digits'); return; }
+
+  config = { apiKey, projectId, appId, name1, name2, pin1, pin2 };
+  saveConfig(config);
+  initFirebase(config);
+  updatePartnerNames();
+  showScreen('pin');
+  showToast('Setup saved! Log in to continue');
+};
+
+window.showPin = () => showScreen('pin');
+
+// ── PIN logic ──────────────────────────────────────────
+window.selectWho = (who) => {
+  whoForPin = who;
+  pinEntry = '';
+  renderPinDots();
+  document.getElementById('who-p1').className = 'pin-who-btn' + (who==='p1' ? ' active' : '');
+  document.getElementById('who-p2').className = 'pin-who-btn' + (who==='p2' ? ' active' : '');
+
+  if (!config) {
+    document.getElementById('pin-sub').textContent = 'No setup found — configure first';
+    document.getElementById('pin-setup-hint').textContent = '';
+    setTimeout(() => showScreen('setup'), 700);
+    return;
+  }
+  document.getElementById('pin-sub').textContent = `Enter PIN for ${who==='p1' ? config.name1 : config.name2}`;
+  document.getElementById('pin-error').textContent = '';
+};
+
+window.pinKey = (k) => {
+  if (!whoForPin) { showToast('Select a partner first'); return; }
+  if (pinEntry.length >= 4) return;
+  pinEntry += k;
+  renderPinDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 150);
+};
+
+window.pinDel = () => {
+  pinEntry = pinEntry.slice(0, -1);
+  renderPinDots();
+};
+
+function renderPinDots(state='') {
+  for (let i=0; i<4; i++) {
+    const d = document.getElementById('d'+i);
+    d.className = 'pin-dot' + (i < pinEntry.length ? (' '+( state || 'filled')) : '');
+  }
+}
+
+function checkPin() {
+  if (!config) return;
+  const correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
+  if (pinEntry === correct) {
+    currentWho = whoForPin;
+    updateWhoUI();
+    showScreen('app');
+    showToast(`Welcome, ${whoForPin==='p1' ? config.name1 : config.name2}!`);
+  } else {
+    renderPinDots('error');
+    const card = document.querySelector('.pin-card');
+    card.classList.add('shake');
+    setTimeout(() => card.classList.remove('shake'), 400);
+    document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
+    setTimeout(() => { pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
+  }
+}
+
+// ── App UI ─────────────────────────────────────────────
+function updatePartnerNames() {
+  if (!config) return;
+  document.getElementById('tab-p1').textContent = config.name1;
+  document.getElementById('tab-p2').textContent = config.name2;
+  document.getElementById('s-name1').textContent = config.name1;
+  document.getElementById('s-name2').textContent = config.name2;
+}
+
+function updateWhoUI() {
+  if (!config) return;
+  updatePartnerNames();
+  document.getElementById('tab-p1').className = 'who-tab' + (currentWho==='p1' ? ' active' : '');
+  document.getElementById('tab-p2').className = 'who-tab' + (currentWho==='p2' ? ' active' : '');
+  document.querySelector('#tab-p1').setAttribute('data-who','p1');
+  document.querySelector('#tab-p2').setAttribute('data-who','p2');
+}
+
+window.switchWho = (who) => {
+  currentWho = who;
+  updateWhoUI();
+  renderGoals();
+};
+
+window.logout = () => {
+  currentWho = null;
+  whoForPin = null;
+  pinEntry = '';
+  renderPinDots();
+  document.getElementById('pin-sub').textContent = 'Select who you are';
+  document.getElementById('who-p1').className = 'pin-who-btn';
+  document.getElementById('who-p2').className = 'pin-who-btn';
+  showScreen('pin');
+};
+
+// ── Goals rendering ────────────────────────────────────
+function renderGoals() {
+  const goals = Object.values(goalsData);
+  const list = document.getElementById('goals-list');
+  const strip = document.getElementById('summary-strip');
+
+  const total = goals.length;
+  const completed = goals.filter(g => (g.p1||0)+(g.p2||0) >= g.target).length;
+  const avgPct = total ? Math.round(goals.reduce((a,g) => a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100), 0)/total) : 0;
+
+  strip.innerHTML = `
+    <div class="summary-card"><div class="summary-val">${total}</div><div class="summary-lbl">Goals</div></div>
+    <div class="summary-card"><div class="summary-val">${completed}</div><div class="summary-lbl">Done</div></div>
+    <div class="summary-card"><div class="summary-val">${avgPct}%</div><div class="summary-lbl">Avg progress</div></div>
+  `;
+
+  if (!goals.length) {
+    list.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>`;
+    return;
+  }
+
+  const n1 = config ? config.name1 : 'Partner 1';
+  const n2 = config ? config.name2 : 'Partner 2';
+
+  list.innerHTML = goals.map(g => {
+    const v1 = g.p1 || 0, v2 = g.p2 || 0;
+    const total = v1 + v2;
+    const pct1 = Math.min(100, Math.round(v1/g.target*100));
+    const pct2 = Math.min(100, Math.round(v2/g.target*100));
+    const pctCombined = Math.min(100, Math.round(total/g.target*100));
+    const isMe1 = currentWho === 'p1', isMe2 = currentWho === 'p2';
+    return `
+    <div class="goal-card" id="gc-${g.id}">
+      <div class="goal-header">
+        <div class="goal-icon">${g.icon||'🎯'}</div>
+        <div class="goal-meta">
+          <div class="goal-name">${g.name}</div>
+          <div class="goal-target">Target: ${g.target.toLocaleString()} ${g.unit} · ${pctCombined}% combined</div>
+        </div>
+        <button class="goal-menu" onclick="deleteGoal('${g.id}')">×</button>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-p1" style="width:${pct1}%"></div>
+        <div class="prog-p2" style="width:${pct2}%"></div>
+      </div>
+      <div class="prog-labels"><span style="color:var(--p1)">${n1}: ${pct1}%</span><span style="color:var(--p2)">${n2}: ${pct2}%</span></div>
+      <div class="partner-rows">
+        <div class="partner-row">
+          <div class="p-avatar p1">${n1.slice(0,2).toUpperCase()}</div>
+          <div class="p-name">${n1}${isMe1?' <span class="p-you-badge">you</span>':''}</div>
+          <div class="p-val">${v1.toLocaleString()} ${g.unit}</div>
+          <div class="p-pct">&nbsp;${pct1}%</div>
+        </div>
+        <div class="partner-row">
+          <div class="p-avatar p2">${n2.slice(0,2).toUpperCase()}</div>
+          <div class="p-name">${n2}${isMe2?' <span class="p-you-badge">you</span>':''}</div>
+          <div class="p-val">${v2.toLocaleString()} ${g.unit}</div>
+          <div class="p-pct">&nbsp;${pct2}%</div>
+        </div>
+      </div>
+      <div class="update-row">
+        <input class="update-input" id="inp-${g.id}" type="number" placeholder="My new total (${g.unit})"/>
+        <button class="update-btn" onclick="updateGoal('${g.id}')">Update</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.updateGoal = async (id) => {
+  const inp = document.getElementById('inp-'+id);
+  const val = parseFloat(inp.value);
+  if (isNaN(val) || val < 0) { inp.style.borderColor = '#E74C3C'; return; }
+  inp.style.borderColor = '';
+  const g = goalsData[id];
+  if (!g) return;
+  const update = { ...g };
+  update[currentWho] = val;
+  await setDoc(doc(db,'goals',id), update);
+  inp.value = '';
+  showToast('Progress updated!');
+};
+
+window.deleteGoal = async (id) => {
+  if (!confirm('Delete this goal?')) return;
+  await deleteDoc(doc(db,'goals',id));
+  showToast('Goal deleted');
+};
+
+// ── Add Goal Modal ─────────────────────────────────────
+window.openAddGoal = () => document.getElementById('add-modal').classList.add('open');
+window.closeAddGoal = (e) => {
+  if (!e || e.target === document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
+};
+
+let selectedIcon = '📚';
+window.selectIcon = (el) => {
+  document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedIcon = el.getAttribute('data-icon');
+};
+
+window.saveGoal = async () => {
+  const name   = document.getElementById('m-name').value.trim();
+  const target = parseFloat(document.getElementById('m-target').value);
+  const unit   = document.getElementById('m-unit').value.trim() || 'units';
+  if (!name || isNaN(target) || target <= 0) { showToast('Fill all fields'); return; }
+  const id = 'g_' + Date.now();
+  await setDoc(doc(db,'goals',id), { name, target, unit, icon: selectedIcon, p1:0, p2:0 });
+  document.getElementById('m-name').value = '';
+  document.getElementById('m-target').value = '';
+  document.getElementById('m-unit').value = '';
+  closeAddGoal();
+  showToast('Goal added!');
+};
+
+// ── Settings ───────────────────────────────────────────
+window.openSettings  = () => document.getElementById('settings-panel').classList.add('open');
+window.closeSettings = () => document.getElementById('settings-panel').classList.remove('open');
+
+window.savePins = () => {
+  const p1 = document.getElementById('s-pin1').value.trim();
+  const p2 = document.getElementById('s-pin2').value.trim();
+  if ((p1 && p1.length!==4) || (p2 && p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
+  if (p1) config.pin1 = p1;
+  if (p2) config.pin2 = p2;
+  saveConfig(config);
+  document.getElementById('s-pin1').value = '';
+  document.getElementById('s-pin2').value = '';
+  showToast('PINs updated');
+};
+
+window.resetApp = () => {
+  if (!confirm('This will delete all goals and config. Are you sure?')) return;
+  localStorage.removeItem('og_config');
+  location.reload();
+};
+
+// ── Boot ───────────────────────────────────────────────
+config = loadConfig();
+if (config) {
+  initFirebase(config);
+  updatePartnerNames();
+} else {
+  // Show setup on first open
+  document.getElementById('pin-setup-hint').textContent = 'First time? → Setup Firebase above';
+  // We can stay on pin screen — selectWho will redirect to setup
+}
+</script>
+</body>
+</html>
