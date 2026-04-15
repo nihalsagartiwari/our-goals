@@ -6,103 +6,68 @@
 <title>Our Goals</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #F7F4EF;
-  --surface: #FFFFFF;
-  --surface2: #F0EDE8;
-  --text: #1A1714;
-  --text2: #6B6560;
-  --text3: #A09A94;
-  --accent: #C4522A;
-  --accent2: #E8D5C8;
-  --p1: #3B6FAA;
-  --p1bg: #E8F0F9;
-  --p2: #7B5EA7;
-  --p2bg: #F0EBF8;
-  --border: rgba(26,23,20,0.1);
-  --border2: rgba(26,23,20,0.06);
-  --r: 14px;
-  --rs: 8px;
-  --shadow: 0 2px 16px rgba(26,23,20,0.08);
-}
+:root{--bg:#F7F4EF;--surface:#FFFFFF;--surface2:#F0EDE8;--text:#1A1714;--text2:#6B6560;--text3:#A09A94;--accent:#C4522A;--accent2:#E8D5C8;--p1:#3B6FAA;--p1bg:#E8F0F9;--p2:#7B5EA7;--p2bg:#F0EBF8;--border:rgba(26,23,20,0.1);--border2:rgba(26,23,20,0.06);--r:14px;--rs:8px;--shadow:0 2px 16px rgba(26,23,20,0.08)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
-/* ── Screen system ── */
-.screen{display:none;min-height:100vh;padding:0}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.screen{display:none;min-height:100vh}
 .screen.active{display:flex;flex-direction:column}
 
-/* ══════════════════════════════
-   APP LOCK SCREEN
-══════════════════════════════ */
+/* LOCK */
 #screen-lock{align-items:center;justify-content:center;background:var(--bg)}
 .lock-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
-.lock-logo{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
-.lock-logo span{color:var(--accent)}
-.lock-icon{font-size:36px;margin-bottom:0.75rem}
+.app-logo-big{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
+.app-logo-big span{color:var(--accent)}
+.lock-icon{font-size:36px;margin-bottom:.75rem}
 .lock-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
 .lock-input-wrap{position:relative;margin-bottom:10px}
-.lock-input{width:100%;padding:11px 40px 11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);letter-spacing:0.1em;text-align:center}
+.lock-input{width:100%;padding:11px 40px 11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);letter-spacing:.1em;text-align:center}
 .lock-input:focus{outline:none;border-color:var(--accent)}
 .lock-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3)}
 .lock-btn{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
 .lock-error{font-size:12px;color:#C0392B;margin-top:8px;min-height:18px}
 .lock-attempts{font-size:11px;color:var(--text3);margin-top:6px}
 
-/* ══════════════════════════════
-   PIN SCREEN
-══════════════════════════════ */
+/* PIN */
 #screen-pin{align-items:center;justify-content:center;background:var(--bg)}
 .pin-card{background:var(--surface);border-radius:24px;padding:2.5rem 2rem;width:min(340px,92vw);box-shadow:var(--shadow);text-align:center}
-.pin-logo{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
-.pin-logo span{color:var(--accent)}
 .pin-sub{font-size:13px;color:var(--text2);margin-bottom:2rem}
 .pin-who{display:flex;gap:8px;margin-bottom:1.75rem}
-.pin-who-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s}
+.pin-who-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:1.5px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s}
 .pin-who-btn.active[data-who="p1"]{background:var(--p1bg);border-color:var(--p1);color:var(--p1)}
 .pin-who-btn.active[data-who="p2"]{background:var(--p2bg);border-color:var(--p2);color:var(--p2)}
 .pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:1.75rem;height:14px}
-.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all 0.15s}
+.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all .15s}
 .pin-dot.filled{border-color:var(--accent);background:var(--accent)}
 .pin-dot.error{border-color:#C0392B;background:#C0392B}
 .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.pin-key{aspect-ratio:1;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);font-family:'DM Sans',sans-serif;font-size:20px;font-weight:400;cursor:pointer;color:var(--text);transition:all 0.1s;display:flex;align-items:center;justify-content:center}
-.pin-key:active{transform:scale(0.93);background:var(--border)}
+.pin-key{aspect-ratio:1;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);font-family:'DM Sans',sans-serif;font-size:20px;cursor:pointer;color:var(--text);transition:all .1s;display:flex;align-items:center;justify-content:center}
+.pin-key:active{transform:scale(.93);background:var(--border)}
 .pin-key.del{font-size:15px;color:var(--text2)}
 .pin-key.empty{background:transparent;border:none;cursor:default}
-.pin-error{font-size:12px;color:#C0392B;margin-top:1rem;min-height:18px;transition:opacity 0.2s}
-.pin-setup-hint{font-size:11px;color:var(--text3);margin-top:0.75rem}
+.pin-error{font-size:12px;color:#C0392B;margin-top:1rem;min-height:18px}
+.pin-setup-hint{font-size:11px;color:var(--text3);margin-top:.75rem}
 
-/* ══════════════════════════════
-   SETUP FIREBASE SCREEN
-══════════════════════════════ */
-#screen-setup{align-items:center;justify-content:center;padding:1.5rem}
+/* SETUP */
+#screen-setup{align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
 .setup-card{background:var(--surface);border-radius:24px;padding:2rem 1.75rem;width:min(480px,100%);box-shadow:var(--shadow)}
 .setup-card h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px}
 .setup-card .desc{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
 .step-block{background:var(--surface2);border-radius:var(--rs);padding:1rem 1.25rem;margin-bottom:1rem;font-size:13px;line-height:1.7}
-.step-block strong{font-weight:500;color:var(--text)}
 .step-block code{background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:12px}
 .form-group{margin-bottom:12px}
 .form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
 .form-group input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text)}
 .form-group input:focus{outline:none;border-color:var(--accent)}
 .names-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-primary{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity 0.15s}
-.btn-primary:hover{opacity:0.9}
+.btn-primary{width:100%;padding:11px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
 .setup-toggle{text-align:center;margin-top:1rem;font-size:12px;color:var(--text2)}
-.setup-toggle a{color:var(--accent);cursor:pointer;text-decoration:none}
+.setup-toggle a{color:var(--accent);cursor:pointer}
 
-/* ══════════════════════════════
-   MAIN APP SCREEN
-══════════════════════════════ */
+/* APP */
 #screen-app{background:var(--bg)}
-.app-header{background:var(--surface);padding:1rem 1.25rem 0.75rem;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
-.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+.app-header{background:var(--surface);padding:1rem 1.25rem .5rem;border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
+.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .app-logo{font-family:'DM Serif Display',serif;font-size:20px}
 .app-logo span{color:var(--accent)}
 .header-actions{display:flex;gap:8px;align-items:center}
@@ -110,35 +75,52 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 .sync-dot.offline{background:#E74C3C}
 .sync-label{font-size:11px;color:var(--text3)}
 .icon-btn{width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
-.who-tabs{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border)}
-.who-tab{flex:1;padding:6px 10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s}
+
+/* Tab bar */
+.tab-bar{display:flex;border-bottom:1px solid var(--border2);margin-top:.25rem}
+.tab-item{flex:1;padding:8px 4px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all .15s}
+.tab-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* Who toggle */
+.who-tabs{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:.75rem}
+.who-tab{flex:1;padding:6px 10px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s}
 .who-tab.active[data-who="p1"]{background:var(--p1bg);color:var(--p1)}
 .who-tab.active[data-who="p2"]{background:var(--p2bg);color:var(--p2)}
 
 .app-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:5rem}
+.tab-content{display:none}
+.tab-content.active{display:block}
 
-/* summary strip */
+/* Summary strip */
 .summary-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.25rem}
-.summary-card{background:var(--surface);border-radius:var(--rs);padding:0.75rem;text-align:center;border:1px solid var(--border2)}
+.summary-card{background:var(--surface);border-radius:var(--rs);padding:.75rem;text-align:center;border:1px solid var(--border2)}
 .summary-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)}
 .summary-lbl{font-size:10px;color:var(--text3);margin-top:1px}
 
-/* goal cards */
+/* Section headers */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:4px}
+.section-hdr h3{font-size:13px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.section-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.badge-shared{background:var(--accent2);color:var(--accent)}
+.badge-mine{background:var(--p1bg);color:var(--p1)}
+.badge-hers{background:var(--p2bg);color:var(--p2)}
+
+/* Goal cards */
 .goal-card{background:var(--surface);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;border:1px solid var(--border2)}
+.goal-card.individual{border-left:3px solid var(--p1)}
+.goal-card.individual.p2-goal{border-left-color:var(--p2)}
 .goal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
-.goal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.goal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--surface2)}
 .goal-meta{flex:1;padding:0 10px}
 .goal-name{font-size:15px;font-weight:500;color:var(--text)}
 .goal-target{font-size:11px;color:var(--text3);margin-top:1px}
+.goal-owner-badge{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500;margin-top:3px}
 .goal-menu{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px}
-
-/* progress bar */
 .prog-wrap{height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;margin-bottom:8px;display:flex;gap:1px}
-.prog-p1{height:100%;background:var(--p1);border-radius:5px 0 0 5px;transition:width 0.5s ease}
-.prog-p2{height:100%;background:var(--p2);border-radius:0 5px 5px 0;transition:width 0.5s ease}
+.prog-p1{height:100%;background:var(--p1);border-radius:5px 0 0 5px;transition:width .5s ease}
+.prog-p2{height:100%;background:var(--p2);border-radius:0 5px 5px 0;transition:width .5s ease}
+.prog-single{height:100%;border-radius:5px;transition:width .5s ease}
 .prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:12px}
-
-/* partner rows */
 .partner-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .partner-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rs);background:var(--surface2)}
 .p-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
@@ -148,70 +130,98 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 .p-val{font-size:13px;font-weight:500;color:var(--text)}
 .p-pct{font-size:11px;color:var(--text3)}
 .p-you-badge{font-size:9px;background:var(--accent2);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:500}
-
-/* update row */
 .update-row{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border2)}
 .update-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
 .update-input:focus{outline:none;border-color:var(--accent)}
-.update-btn{padding:8px 16px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity 0.15s}
-.update-btn:hover{opacity:0.85}
+.update-btn{padding:8px 16px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+
+/* History chart area */
+.history-toggle{display:flex;align-items:center;gap:6px;padding-top:10px;border-top:1px solid var(--border2);cursor:pointer;font-size:12px;color:var(--text2)}
+.history-toggle span{margin-left:auto;font-size:11px;color:var(--text3)}
+.history-area{display:none;padding-top:12px}
+.history-area.open{display:block}
+.month-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:6px}
+.month-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.month-bar-bg{width:100%;background:var(--surface2);border-radius:3px;position:relative;flex:1;display:flex;align-items:flex-end}
+.month-bar-fill{width:100%;border-radius:3px;transition:height .4s ease}
+.month-label{font-size:9px;color:var(--text3);text-align:center}
+.month-val{font-size:9px;color:var(--text2);font-weight:500}
+.history-legend{display:flex;gap:12px;font-size:10px;color:var(--text3)}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+.no-history{font-size:12px;color:var(--text3);text-align:center;padding:.75rem 0}
 
 /* FAB */
-.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(196,82,42,0.4);z-index:20;display:flex;align-items:center;justify-content:center;transition:transform 0.15s}
-.fab:active{transform:scale(0.93)}
+.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(196,82,42,0.4);z-index:20;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.fab:active{transform:scale(.93)}
 
-/* ── Add Goal Modal ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.4);z-index:30;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.4);z-index:30;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;transform:translateY(40px);transition:transform 0.25s ease}
+.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.25rem 2rem;width:100%;max-width:480px;transform:translateY(40px);transition:transform .25s ease;max-height:90vh;overflow-y:auto}
 .modal-overlay.open .modal-sheet{transform:translateY(0)}
 .modal-drag{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem}
 .modal-sheet h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:1.25rem}
 .mfield{margin-bottom:12px}
-.mfield label{display:block;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px}
+.mfield label{display:block;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
 .mfield input,.mfield select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
 .mfield input:focus,.mfield select:focus{outline:none;border-color:var(--accent)}
 .mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .icon-grid{display:flex;gap:8px;flex-wrap:wrap}
-.icon-opt{width:38px;height:38px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.12s}
+.icon-opt{width:38px;height:38px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .icon-opt.selected{border-color:var(--accent);background:var(--accent2)}
+.goal-type-toggle{display:flex;gap:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-bottom:12px}
+.gtype-btn{flex:1;padding:9px 6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s;text-align:center}
+.gtype-btn.active{background:var(--accent);color:#fff}
 .modal-btns{display:flex;gap:8px;margin-top:1.25rem}
 .btn-cancel{flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--rs);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;color:var(--text2)}
 .btn-save{flex:2;padding:10px;border:none;border-radius:var(--rs);background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
 
-/* ── Toast ── */
-.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:50;opacity:0;pointer-events:none;transition:all 0.25s}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* History screen */
+#screen-history{background:var(--bg)}
+.history-screen-header{display:flex;align-items:center;gap:10px;padding:1rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10}
+.back-btn{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
+.history-screen-header h2{font-family:'DM Serif Display',serif;font-size:18px}
+.history-body{padding:1rem;flex:1;overflow-y:auto;padding-bottom:2rem}
+.month-record-card{background:var(--surface);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:10px;border:1px solid var(--border2)}
+.month-record-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.month-record-title{font-size:14px;font-weight:500;color:var(--text)}
+.month-record-pct{font-size:13px;color:var(--text3)}
+.month-bars{display:flex;gap:3px;height:120px;align-items:flex-end;margin-bottom:6px}
+.mbar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.mbar-bg{width:100%;background:var(--surface2);border-radius:3px 3px 0 0;position:relative;flex:1;display:flex;align-items:flex-end;overflow:hidden}
+.mbar-inner{width:100%;border-radius:2px}
+.mbar-lbl{font-size:8px;color:var(--text3);text-align:center;line-height:1.2}
 
-/* Settings panel */
-.settings-panel{position:fixed;inset:0;background:var(--bg);z-index:40;transform:translateX(100%);transition:transform 0.25s ease;overflow-y:auto}
+/* Settings */
+.settings-panel{position:fixed;inset:0;background:var(--bg);z-index:40;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto}
 .settings-panel.open{transform:translateX(0)}
 .settings-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-bottom:1px solid var(--border2)}
 .settings-back{background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--text2)}
 .settings-header h2{font-family:'DM Serif Display',serif;font-size:20px}
 .settings-body{padding:1rem 1.25rem}
 .settings-section{margin-bottom:1.5rem}
-.settings-section h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.settings-section h3{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2);font-size:14px}
 .settings-row:last-child{border:none}
 .settings-row span{color:var(--text2);font-size:13px}
 .danger-btn{padding:10px;width:100%;border:1px solid #C0392B;border-radius:var(--rs);background:transparent;color:#C0392B;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px}
 
-/* Animations */
+/* Toast */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:50;opacity:0;pointer-events:none;transition:all .25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.shake{animation:shake 0.3s ease}
-@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
-.goal-card{animation:pop 0.2s ease}
+.shake{animation:shake .3s ease}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ APP LOCK SCREEN ═══════════════ -->
+<!-- LOCK -->
 <div class="screen active" id="screen-lock">
   <div class="lock-card">
-    <div class="lock-logo">Our<span>Goals</span></div>
+    <div class="app-logo-big">Our<span>Goals</span></div>
     <div class="lock-icon">🔒</div>
-    <div class="lock-sub" id="lock-sub">Enter the app passphrase to continue</div>
+    <div class="lock-sub">Enter the app passphrase to continue</div>
     <div class="lock-input-wrap">
       <input class="lock-input" type="password" id="lock-input" placeholder="passphrase" onkeydown="if(event.key==='Enter')checkPassphrase()"/>
       <button class="lock-eye" onclick="toggleLockVis()" id="lock-eye">👁</button>
@@ -222,132 +232,114 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   </div>
 </div>
 
-<!-- ═══════════════ PIN SCREEN ═══════════════ -->
-<div class="screen active" id="screen-pin">
+<!-- PIN -->
+<div class="screen" id="screen-pin">
   <div class="pin-card">
-    <div class="pin-logo">Our<span>Goals</span></div>
+    <div class="app-logo-big">Our<span>Goals</span></div>
     <div class="pin-sub" id="pin-sub">Select who you are</div>
-
     <div class="pin-who">
       <button class="pin-who-btn" data-who="p1" onclick="selectWho('p1')" id="who-p1">Partner 1</button>
       <button class="pin-who-btn" data-who="p2" onclick="selectWho('p2')" id="who-p2">Partner 2</button>
     </div>
-
     <div class="pin-dots" id="pin-dots">
-      <div class="pin-dot" id="d0"></div>
-      <div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div>
-      <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
     </div>
-
     <div class="pin-pad">
-      <button class="pin-key" onclick="pinKey('1')">1</button>
-      <button class="pin-key" onclick="pinKey('2')">2</button>
-      <button class="pin-key" onclick="pinKey('3')">3</button>
-      <button class="pin-key" onclick="pinKey('4')">4</button>
-      <button class="pin-key" onclick="pinKey('5')">5</button>
-      <button class="pin-key" onclick="pinKey('6')">6</button>
-      <button class="pin-key" onclick="pinKey('7')">7</button>
-      <button class="pin-key" onclick="pinKey('8')">8</button>
-      <button class="pin-key" onclick="pinKey('9')">9</button>
-      <button class="pin-key empty"></button>
-      <button class="pin-key" onclick="pinKey('0')">0</button>
-      <button class="pin-key del" onclick="pinDel()">⌫</button>
+      <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key empty"></button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key del" onclick="pinDel()">⌫</button>
     </div>
     <div class="pin-error" id="pin-error"></div>
     <div class="pin-setup-hint" id="pin-setup-hint"></div>
   </div>
 </div>
 
-<!-- ═══════════════ FIREBASE SETUP SCREEN ═══════════════ -->
+<!-- SETUP -->
 <div class="screen" id="screen-setup">
   <div class="setup-card">
     <h2>Connect Firebase</h2>
-    <p class="desc">You need a free Firebase project so both of you can sync goals in real time. Takes ~5 minutes.</p>
-
-    <div class="step-block">
-      <strong>Step 1:</strong> Go to <code>console.firebase.google.com</code> → Create project → Give it any name<br/>
-      <strong>Step 2:</strong> Click <code>Firestore Database</code> → Create → Start in <code>test mode</code><br/>
-      <strong>Step 3:</strong> Go to <code>Project Settings</code> → Your apps → Add Web app → Copy the config below
-    </div>
-
-    <div class="form-group">
-      <label>API Key</label>
-      <input id="fb-apiKey" placeholder="AIzaSy..."/>
-    </div>
-    <div class="form-group">
-      <label>Project ID</label>
-      <input id="fb-projectId" placeholder="my-goals-app"/>
-    </div>
-    <div class="form-group">
-      <label>App ID</label>
-      <input id="fb-appId" placeholder="1:123456:web:abc..."/>
-    </div>
-
-    <div class="form-group">
-      <label>App Passphrase <span style="font-size:11px;color:var(--text3)">(shared secret — both partners need this to open the app)</span></label>
-      <input id="fb-passphrase" type="password" placeholder="e.g. sunshine2024"/>
-    </div>
-
+    <p class="desc">One-time setup to sync goals between both of you in real time.</p>
+    <div class="step-block">Go to <code>console.firebase.google.com</code> → Create project → Firestore Database → Start in test mode → Project Settings → Your apps → Web app → copy the config values below.</div>
+    <div class="form-group"><label>API Key</label><input id="fb-apiKey" placeholder="AIzaSy..."/></div>
+    <div class="form-group"><label>Project ID</label><input id="fb-projectId" placeholder="my-goals-app"/></div>
+    <div class="form-group"><label>App ID</label><input id="fb-appId" placeholder="1:123456:web:abc..."/></div>
+    <div class="form-group"><label>App Passphrase <small style="color:var(--text3)">(shared secret — both need this)</small></label><input id="fb-passphrase" type="password" placeholder="e.g. sunshine2024"/></div>
     <div class="names-row form-group">
-      <div>
-        <label>Your name (Partner 1)</label>
-        <input id="fb-name1" placeholder="e.g. Rahul"/>
-      </div>
-      <div>
-        <label>Wife's name (Partner 2)</label>
-        <input id="fb-name2" placeholder="e.g. Priya"/>
-      </div>
+      <div><label>Your name (Partner 1)</label><input id="fb-name1" placeholder="e.g. Rahul"/></div>
+      <div><label>Wife's name (Partner 2)</label><input id="fb-name2" placeholder="e.g. Priya"/></div>
     </div>
-
     <div class="form-group names-row">
-      <div>
-        <label>Your PIN (4 digits)</label>
-        <input id="fb-pin1" type="password" maxlength="4" placeholder="••••"/>
-      </div>
-      <div>
-        <label>Wife's PIN (4 digits)</label>
-        <input id="fb-pin2" type="password" maxlength="4" placeholder="••••"/>
-      </div>
+      <div><label>Your PIN (4 digits)</label><input id="fb-pin1" type="password" maxlength="4" placeholder="••••"/></div>
+      <div><label>Wife's PIN (4 digits)</label><input id="fb-pin2" type="password" maxlength="4" placeholder="••••"/></div>
     </div>
-
     <button class="btn-primary" onclick="saveSetup()">Save & Continue</button>
     <div class="setup-toggle">Already set up? <a onclick="showPin()">Back to login</a></div>
   </div>
 </div>
 
-<!-- ═══════════════ MAIN APP ═══════════════ -->
+<!-- MAIN APP -->
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-top">
       <div class="app-logo">Our<span>Goals</span></div>
       <div class="header-actions">
         <span><span class="sync-dot" id="sync-dot"></span><span class="sync-label" id="sync-label">Live</span></span>
-        <button class="icon-btn" onclick="openSettings()" title="Settings">⚙</button>
-        <button class="icon-btn" onclick="logout()" title="Switch user">👤</button>
+        <button class="icon-btn" onclick="openSettings()">⚙</button>
+        <button class="icon-btn" onclick="logout()">👤</button>
       </div>
     </div>
     <div class="who-tabs">
-      <button class="who-tab active" data-who="p1" id="tab-p1" onclick="switchWho('p1')">— Partner 1</button>
-      <button class="who-tab" data-who="p2" id="tab-p2" onclick="switchWho('p2')">— Partner 2</button>
+      <button class="who-tab active" data-who="p1" id="tab-p1" onclick="switchWho('p1')">Partner 1</button>
+      <button class="who-tab" data-who="p2" id="tab-p2" onclick="switchWho('p2')">Partner 2</button>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-item active" onclick="switchTab('shared')" id="tabBtn-shared">Shared goals</button>
+      <button class="tab-item" onclick="switchTab('mine')" id="tabBtn-mine">My goals</button>
+      <button class="tab-item" onclick="switchTab('history')" id="tabBtn-history">Progress history</button>
     </div>
   </div>
 
-  <div class="app-body" id="app-body">
-    <div class="summary-strip" id="summary-strip"></div>
-    <div id="goals-list"></div>
-    <div style="height:1rem"></div>
+  <div class="app-body">
+    <!-- SHARED TAB -->
+    <div class="tab-content active" id="tab-shared">
+      <div class="summary-strip" id="summary-strip"></div>
+      <div class="section-hdr"><h3>Combined goals</h3><span class="section-badge badge-shared">both partners</span></div>
+      <div id="goals-list-shared"></div>
+    </div>
+
+    <!-- MY GOALS TAB -->
+    <div class="tab-content" id="tab-mine">
+      <div class="section-hdr"><h3 id="my-goals-title">My goals</h3><span class="section-badge badge-mine" id="my-goals-badge">just me</span></div>
+      <div id="goals-list-mine"></div>
+      <div style="height:.5rem"></div>
+      <div class="section-hdr"><h3 id="her-goals-title">Her goals</h3><span class="section-badge badge-hers" id="her-goals-badge">read only</span></div>
+      <div id="goals-list-hers"></div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="tab-content" id="tab-history">
+      <div class="section-hdr"><h3>Month-on-month progress</h3></div>
+      <div id="history-list"></div>
+    </div>
   </div>
 
   <button class="fab" onclick="openAddGoal()">+</button>
 </div>
 
-<!-- ═══════════════ ADD GOAL MODAL ═══════════════ -->
+<!-- ADD GOAL MODAL -->
 <div class="modal-overlay" id="add-modal" onclick="closeAddGoal(event)">
   <div class="modal-sheet">
     <div class="modal-drag"></div>
-    <h3>New shared goal</h3>
-
+    <h3>New goal</h3>
+    <div class="mfield">
+      <label>Goal type</label>
+      <div class="goal-type-toggle">
+        <button class="gtype-btn active" id="gtype-shared" onclick="setGoalType('shared')">🤝 Shared (combined)</button>
+        <button class="gtype-btn" id="gtype-individual" onclick="setGoalType('individual')">👤 Individual (just me)</button>
+      </div>
+    </div>
     <div class="mfield">
       <label>Icon</label>
       <div class="icon-grid" id="icon-grid">
@@ -361,25 +353,15 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
         <div class="icon-opt" data-icon="😴" onclick="selectIcon(this)">😴</div>
         <div class="icon-opt" data-icon="🎯" onclick="selectIcon(this)">🎯</div>
         <div class="icon-opt" data-icon="🌱" onclick="selectIcon(this)">🌱</div>
+        <div class="icon-opt" data-icon="💧" onclick="selectIcon(this)">💧</div>
+        <div class="icon-opt" data-icon="🎸" onclick="selectIcon(this)">🎸</div>
       </div>
     </div>
-
-    <div class="mfield">
-      <label>Goal name</label>
-      <input id="m-name" placeholder="e.g. Books read this year"/>
-    </div>
-
+    <div class="mfield"><label>Goal name</label><input id="m-name" placeholder="e.g. Books read this year"/></div>
     <div class="mrow">
-      <div class="mfield">
-        <label>Target number</label>
-        <input id="m-target" type="number" placeholder="24"/>
-      </div>
-      <div class="mfield">
-        <label>Unit</label>
-        <input id="m-unit" placeholder="books"/>
-      </div>
+      <div class="mfield"><label>Target</label><input id="m-target" type="number" placeholder="24"/></div>
+      <div class="mfield"><label>Unit</label><input id="m-unit" placeholder="books"/></div>
     </div>
-
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeAddGoal()">Cancel</button>
       <button class="btn-save" onclick="saveGoal()">Add goal →</button>
@@ -387,7 +369,7 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   </div>
 </div>
 
-<!-- ═══════════════ SETTINGS PANEL ═══════════════ -->
+<!-- SETTINGS -->
 <div class="settings-panel" id="settings-panel">
   <div class="settings-header">
     <button class="settings-back" onclick="closeSettings()">←</button>
@@ -396,13 +378,13 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   <div class="settings-body">
     <div class="settings-section">
       <h3>Partners</h3>
-      <div class="settings-row">Partner 1 name <span id="s-name1">—</span></div>
-      <div class="settings-row">Partner 2 name <span id="s-name2">—</span></div>
+      <div class="settings-row">Partner 1 <span id="s-name1">—</span></div>
+      <div class="settings-row">Partner 2 <span id="s-name2">—</span></div>
     </div>
     <div class="settings-section">
       <h3>App Passphrase</h3>
-      <div class="mfield"><label>New passphrase (shared with wife)</label><input id="s-passphrase" type="password" placeholder="Enter new passphrase"/></div>
-      <button class="btn-primary" onclick="savePassphrase()" style="width:auto;padding:9px 20px">Update Passphrase</button>
+      <div class="mfield"><label>New passphrase</label><input id="s-passphrase" type="password" placeholder="Enter new passphrase"/></div>
+      <button class="btn-primary" onclick="savePassphrase()" style="width:auto;padding:9px 20px">Update</button>
     </div>
     <div class="settings-section">
       <h3>Change PINs</h3>
@@ -417,49 +399,47 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   </div>
 </div>
 
-<!-- ═══════════════ TOAST ═══════════════ -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK (compat version - works on all mobile browsers) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-// ── State ──────────────────────────────────────────────
-let db = null;
-let currentWho = null;
-let goalsData = {};
-let config = null;
-let pinEntry = '';
-let whoForPin = null;
+var db = null;
+var currentWho = null;
+var goalsData = {};
+var historyData = {};
+var config = null;
+var pinEntry = '';
+var whoForPin = null;
+var currentTab = 'shared';
+var newGoalType = 'shared';
+var selectedIcon = '📚';
+var lockFailCount = parseInt(sessionStorage.getItem('og_fails') || '0');
+var lockUntil = parseInt(sessionStorage.getItem('og_lockuntil') || '0');
 
-// ── Lockout state ──
-let lockFailCount = parseInt(sessionStorage.getItem('og_fails') || '0');
-let lockUntil = parseInt(sessionStorage.getItem('og_lockuntil') || '0');
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-// ── Helpers ────────────────────────────────────────────
-window.showToast = function(msg, dur) {
+// ── Helpers ──
+function showToast(msg, dur) {
   dur = dur || 2000;
   var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, dur);
-};
+}
 
-window.showScreen = function(id) {
+function showScreen(id) {
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById('screen-'+id).classList.add('active');
-};
+}
 
 function loadConfig() {
   try { return JSON.parse(localStorage.getItem('og_config') || 'null'); }
   catch(e) { return null; }
 }
+function saveConfig(cfg) { localStorage.setItem('og_config', JSON.stringify(cfg)); }
 
-function saveConfig(cfg) {
-  localStorage.setItem('og_config', JSON.stringify(cfg));
-}
-
-// ── Passphrase / App Lock ──────────────────────────────
+// ── Lock ──
 window.toggleLockVis = function() {
   var inp = document.getElementById('lock-input');
   inp.type = inp.type === 'password' ? 'text' : 'password';
@@ -472,10 +452,7 @@ function getRemainingLock() {
 
 window.checkPassphrase = function() {
   var rem = getRemainingLock();
-  if (rem > 0) {
-    document.getElementById('lock-error').textContent = 'Too many attempts. Wait ' + rem + 's';
-    return;
-  }
+  if (rem > 0) { document.getElementById('lock-error').textContent = 'Too many attempts. Wait '+rem+'s'; return; }
   if (!config) { showScreen('setup'); return; }
   var entered = document.getElementById('lock-input').value;
   if (entered === config.passphrase) {
@@ -489,16 +466,15 @@ window.checkPassphrase = function() {
   } else {
     lockFailCount++;
     sessionStorage.setItem('og_fails', lockFailCount);
-    var maxAttempts = 5;
-    var left = maxAttempts - lockFailCount;
-    if (lockFailCount >= maxAttempts) {
-      var lockSecs = 30 * Math.pow(2, Math.floor(lockFailCount/maxAttempts) - 1);
-      lockUntil = Date.now() + lockSecs * 1000;
+    var maxA = 5, left = maxA - lockFailCount;
+    if (lockFailCount >= maxA) {
+      var secs = 30 * Math.pow(2, Math.floor(lockFailCount/maxA)-1);
+      lockUntil = Date.now() + secs*1000;
       sessionStorage.setItem('og_lockuntil', lockUntil);
-      document.getElementById('lock-error').textContent = 'Too many attempts — locked for ' + lockSecs + 's';
+      document.getElementById('lock-error').textContent = 'Locked for '+secs+'s';
       startLockCountdown();
     } else {
-      document.getElementById('lock-error').textContent = 'Wrong passphrase — ' + left + ' attempt' + (left===1?'':'s') + ' left';
+      document.getElementById('lock-error').textContent = 'Wrong passphrase — '+left+' attempt'+(left===1?'':'s')+' left';
     }
     var card = document.querySelector('.lock-card');
     card.classList.add('shake');
@@ -510,144 +486,154 @@ function startLockCountdown() {
   var el = document.getElementById('lock-attempts');
   function tick() {
     var rem = getRemainingLock();
-    if (rem <= 0) { el.textContent = ''; document.getElementById('lock-error').textContent=''; return; }
-    el.textContent = 'Unlocks in ' + rem + 's';
+    if (rem <= 0) { el.textContent=''; document.getElementById('lock-error').textContent=''; return; }
+    el.textContent = 'Unlocks in '+rem+'s';
     setTimeout(tick, 1000);
   }
   tick();
 }
 
-// ── Firebase init ──────────────────────────────────────
+// ── Firebase ──
 function initFirebase(cfg) {
   if (!firebase.apps.length) {
-    firebase.initializeApp({
-      apiKey: cfg.apiKey,
-      authDomain: cfg.projectId + '.firebaseapp.com',
-      projectId: cfg.projectId,
-      appId: cfg.appId
-    });
+    firebase.initializeApp({ apiKey:cfg.apiKey, authDomain:cfg.projectId+'.firebaseapp.com', projectId:cfg.projectId, appId:cfg.appId });
   }
   db = firebase.firestore();
   listenGoals();
+  listenHistory();
 }
 
 function listenGoals() {
   db.collection('goals').onSnapshot(function(snap) {
     goalsData = {};
-    snap.forEach(function(d){ goalsData[d.id] = Object.assign({id: d.id}, d.data()); });
-    renderGoals();
+    snap.forEach(function(d){ goalsData[d.id] = Object.assign({id:d.id}, d.data()); });
+    renderAll();
     updateSyncStatus(true);
   }, function(){ updateSyncStatus(false); });
 }
 
+function listenHistory() {
+  db.collection('history').onSnapshot(function(snap) {
+    historyData = {};
+    snap.forEach(function(d){ historyData[d.id] = Object.assign({id:d.id}, d.data()); });
+    renderHistory();
+  });
+}
+
 function updateSyncStatus(ok) {
-  document.getElementById('sync-dot').className = 'sync-dot' + (ok ? '' : ' offline');
+  document.getElementById('sync-dot').className = 'sync-dot'+(ok?'':' offline');
   document.getElementById('sync-label').textContent = ok ? 'Live' : 'Offline';
 }
 
-// ── Setup ──────────────────────────────────────────────
+// ── Setup ──
 window.saveSetup = function() {
-  var apiKey     = document.getElementById('fb-apiKey').value.trim();
-  var projectId  = document.getElementById('fb-projectId').value.trim();
-  var appId      = document.getElementById('fb-appId').value.trim();
+  var apiKey = document.getElementById('fb-apiKey').value.trim();
+  var projectId = document.getElementById('fb-projectId').value.trim();
+  var appId = document.getElementById('fb-appId').value.trim();
   var passphrase = document.getElementById('fb-passphrase').value.trim();
-  var name1      = document.getElementById('fb-name1').value.trim() || 'Partner 1';
-  var name2      = document.getElementById('fb-name2').value.trim() || 'Partner 2';
-  var pin1       = document.getElementById('fb-pin1').value.trim();
-  var pin2       = document.getElementById('fb-pin2').value.trim();
-
-  if (!apiKey || !projectId || !appId) { showToast('Fill all Firebase fields'); return; }
-  if (!passphrase || passphrase.length < 4) { showToast('Passphrase must be at least 4 characters'); return; }
-  if (pin1.length !== 4 || pin2.length !== 4) { showToast('Both PINs must be 4 digits'); return; }
-
-  config = { apiKey:apiKey, projectId:projectId, appId:appId, passphrase:passphrase, name1:name1, name2:name2, pin1:pin1, pin2:pin2 };
+  var name1 = document.getElementById('fb-name1').value.trim() || 'Partner 1';
+  var name2 = document.getElementById('fb-name2').value.trim() || 'Partner 2';
+  var pin1 = document.getElementById('fb-pin1').value.trim();
+  var pin2 = document.getElementById('fb-pin2').value.trim();
+  if (!apiKey||!projectId||!appId) { showToast('Fill all Firebase fields'); return; }
+  if (!passphrase||passphrase.length<4) { showToast('Passphrase must be 4+ characters'); return; }
+  if (pin1.length!==4||pin2.length!==4) { showToast('Both PINs must be 4 digits'); return; }
+  config = {apiKey:apiKey,projectId:projectId,appId:appId,passphrase:passphrase,name1:name1,name2:name2,pin1:pin1,pin2:pin2};
   saveConfig(config);
   initFirebase(config);
   updatePartnerNames();
   sessionStorage.setItem('og_unlocked','1');
   showScreen('pin');
-  showToast('Setup saved! Log in to continue');
+  showToast('Setup saved!');
 };
 
-window.showPin = function() { showScreen(config ? 'lock' : 'setup'); };
+window.showPin = function() { showScreen(config?'lock':'setup'); };
 
-// ── PIN logic ──────────────────────────────────────────
+// ── PIN ──
 window.selectWho = function(who) {
   whoForPin = who;
   pinEntry = '';
   renderPinDots();
-  document.getElementById('who-p1').className = 'pin-who-btn' + (who==='p1' ? ' active' : '');
-  document.getElementById('who-p2').className = 'pin-who-btn' + (who==='p2' ? ' active' : '');
+  document.getElementById('who-p1').className = 'pin-who-btn'+(who==='p1'?' active':'');
+  document.getElementById('who-p2').className = 'pin-who-btn'+(who==='p2'?' active':'');
   if (!config) { showScreen('setup'); return; }
-  document.getElementById('pin-sub').textContent = 'Enter PIN for ' + (who==='p1' ? config.name1 : config.name2);
+  document.getElementById('pin-sub').textContent = 'Enter PIN for '+(who==='p1'?config.name1:config.name2);
   document.getElementById('pin-error').textContent = '';
 };
 
 window.pinKey = function(k) {
   if (!whoForPin) { showToast('Select a partner first'); return; }
-  if (pinEntry.length >= 4) return;
+  if (pinEntry.length>=4) return;
   pinEntry += k;
   renderPinDots();
-  if (pinEntry.length === 4) setTimeout(checkPin, 150);
+  if (pinEntry.length===4) setTimeout(checkPin, 150);
 };
 
-window.pinDel = function() {
-  pinEntry = pinEntry.slice(0, -1);
-  renderPinDots();
-};
+window.pinDel = function() { pinEntry = pinEntry.slice(0,-1); renderPinDots(); };
 
 function renderPinDots(state) {
   state = state || '';
-  for (var i=0; i<4; i++) {
+  for (var i=0;i<4;i++) {
     var d = document.getElementById('d'+i);
-    d.className = 'pin-dot' + (i < pinEntry.length ? (' '+(state || 'filled')) : '');
+    d.className = 'pin-dot'+(i<pinEntry.length?(' '+(state||'filled')):'');
   }
 }
 
 function checkPin() {
   if (!config) return;
-  var correct = whoForPin === 'p1' ? config.pin1 : config.pin2;
-  if (pinEntry === correct) {
+  var correct = whoForPin==='p1' ? config.pin1 : config.pin2;
+  if (pinEntry===correct) {
     currentWho = whoForPin;
     updateWhoUI();
     showScreen('app');
-    showToast('Welcome, ' + (whoForPin==='p1' ? config.name1 : config.name2) + '!');
+    showToast('Welcome, '+(whoForPin==='p1'?config.name1:config.name2)+'!');
   } else {
     renderPinDots('error');
     var card = document.querySelector('.pin-card');
     card.classList.add('shake');
     setTimeout(function(){ card.classList.remove('shake'); }, 400);
     document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
-    setTimeout(function(){ pinEntry = ''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
+    setTimeout(function(){ pinEntry=''; renderPinDots(); document.getElementById('pin-error').textContent=''; }, 900);
   }
 }
 
-// ── App UI ─────────────────────────────────────────────
+// ── App UI ──
 function updatePartnerNames() {
   if (!config) return;
   document.getElementById('tab-p1').textContent = config.name1;
   document.getElementById('tab-p2').textContent = config.name2;
   document.getElementById('s-name1').textContent = config.name1;
   document.getElementById('s-name2').textContent = config.name2;
+  document.getElementById('who-p1').textContent = config.name1;
+  document.getElementById('who-p2').textContent = config.name2;
 }
 
 function updateWhoUI() {
   if (!config) return;
   updatePartnerNames();
-  document.getElementById('tab-p1').className = 'who-tab' + (currentWho==='p1' ? ' active' : '');
-  document.getElementById('tab-p2').className = 'who-tab' + (currentWho==='p2' ? ' active' : '');
+  document.getElementById('tab-p1').className = 'who-tab'+(currentWho==='p1'?' active':'');
+  document.getElementById('tab-p2').className = 'who-tab'+(currentWho==='p2'?' active':'');
+  document.getElementById('tab-p1').setAttribute('data-who','p1');
+  document.getElementById('tab-p2').setAttribute('data-who','p2');
+  // Update my goals section titles
+  var myName = currentWho==='p1' ? config.name1 : config.name2;
+  var herName = currentWho==='p1' ? config.name2 : config.name1;
+  document.getElementById('my-goals-title').textContent = myName+"'s goals";
+  document.getElementById('her-goals-title').textContent = herName+"'s goals";
+  document.getElementById('my-goals-badge').textContent = 'just '+myName;
+  document.getElementById('her-goals-badge').textContent = 'read only';
+  var myBadge = document.getElementById('my-goals-badge');
+  myBadge.className = 'section-badge '+(currentWho==='p1'?'badge-mine':'badge-hers');
 }
 
 window.switchWho = function(who) {
   currentWho = who;
   updateWhoUI();
-  renderGoals();
+  renderAll();
 };
 
 window.logout = function() {
-  currentWho = null;
-  whoForPin = null;
-  pinEntry = '';
+  currentWho = null; whoForPin = null; pinEntry = '';
   renderPinDots();
   sessionStorage.removeItem('og_unlocked');
   document.getElementById('pin-sub').textContent = 'Select who you are';
@@ -658,98 +644,279 @@ window.logout = function() {
   showScreen('lock');
 };
 
-// ── Goals rendering ────────────────────────────────────
-function renderGoals() {
-  var goals = Object.values(goalsData);
-  var list = document.getElementById('goals-list');
-  var strip = document.getElementById('summary-strip');
+// ── Tab switching ──
+window.switchTab = function(tab) {
+  currentTab = tab;
+  ['shared','mine','history'].forEach(function(t) {
+    document.getElementById('tab-'+t).className = 'tab-content'+(t===tab?' active':'');
+    document.getElementById('tabBtn-'+t).className = 'tab-item'+(t===tab?' active':'');
+  });
+  if (tab==='history') renderHistory();
+};
 
-  var total = goals.length;
-  var completed = goals.filter(function(g){ return (g.p1||0)+(g.p2||0) >= g.target; }).length;
-  var avgPct = total ? Math.round(goals.reduce(function(a,g){ return a + Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100); }, 0)/total) : 0;
-
-  strip.innerHTML =
-    '<div class="summary-card"><div class="summary-val">'+total+'</div><div class="summary-lbl">Goals</div></div>' +
-    '<div class="summary-card"><div class="summary-val">'+completed+'</div><div class="summary-lbl">Done</div></div>' +
-    '<div class="summary-card"><div class="summary-val">'+avgPct+'%</div><div class="summary-lbl">Avg progress</div></div>';
-
-  if (!goals.length) {
-    list.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px">No goals yet — tap <strong>+</strong> to add your first one</div>';
-    return;
-  }
-
-  var n1 = config ? config.name1 : 'Partner 1';
-  var n2 = config ? config.name2 : 'Partner 2';
-
-  list.innerHTML = goals.map(function(g) {
-    var v1 = g.p1||0, v2 = g.p2||0;
-    var tot = v1+v2;
-    var pct1 = Math.min(100, Math.round(v1/g.target*100));
-    var pct2 = Math.min(100, Math.round(v2/g.target*100));
-    var pctC = Math.min(100, Math.round(tot/g.target*100));
-    var isMe1 = currentWho==='p1', isMe2 = currentWho==='p2';
-    return '<div class="goal-card" id="gc-'+g.id+'">' +
-      '<div class="goal-header">' +
-        '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
-        '<div class="goal-meta">' +
-          '<div class="goal-name">'+g.name+'</div>' +
-          '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>' +
-        '</div>' +
-        '<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>' +
-      '</div>' +
-      '<div class="prog-wrap"><div class="prog-p1" style="width:'+pct1+'%"></div><div class="prog-p2" style="width:'+pct2+'%"></div></div>' +
-      '<div class="prog-labels"><span style="color:var(--p1)">'+n1+': '+pct1+'%</span><span style="color:var(--p2)">'+n2+': '+pct2+'%</span></div>' +
-      '<div class="partner-rows">' +
-        '<div class="partner-row">' +
-          '<div class="p-avatar p1">'+n1.slice(0,2).toUpperCase()+'</div>' +
-          '<div class="p-name">'+n1+(isMe1?' <span class="p-you-badge">you</span>':'')+'</div>' +
-          '<div class="p-val">'+v1.toLocaleString()+' '+g.unit+'</div>' +
-          '<div class="p-pct">&nbsp;'+pct1+'%</div>' +
-        '</div>' +
-        '<div class="partner-row">' +
-          '<div class="p-avatar p2">'+n2.slice(0,2).toUpperCase()+'</div>' +
-          '<div class="p-name">'+n2+(isMe2?' <span class="p-you-badge">you</span>':'')+'</div>' +
-          '<div class="p-val">'+v2.toLocaleString()+' '+g.unit+'</div>' +
-          '<div class="p-pct">&nbsp;'+pct2+'%</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="update-row">' +
-        '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
-        '<button class="update-btn" onclick="updateGoal(\''+g.id+'\')">Update</button>' +
-      '</div>' +
-    '</div>';
-  }).join('');
+// ── Render all ──
+function renderAll() {
+  renderSharedGoals();
+  renderIndividualGoals();
+  renderSummary();
 }
 
-window.updateGoal = function(id) {
+function renderSummary() {
+  var goals = Object.values(goalsData).filter(function(g){ return g.type==='shared'||!g.type; });
+  var total = goals.length;
+  var completed = goals.filter(function(g){ return (g.p1||0)+(g.p2||0)>=g.target; }).length;
+  var avgPct = total ? Math.round(goals.reduce(function(a,g){ return a+Math.min(100,((g.p1||0)+(g.p2||0))/g.target*100); },0)/total) : 0;
+  document.getElementById('summary-strip').innerHTML =
+    '<div class="summary-card"><div class="summary-val">'+total+'</div><div class="summary-lbl">Shared goals</div></div>'+
+    '<div class="summary-card"><div class="summary-val">'+completed+'</div><div class="summary-lbl">Completed</div></div>'+
+    '<div class="summary-card"><div class="summary-val">'+avgPct+'%</div><div class="summary-lbl">Avg progress</div></div>';
+}
+
+function renderSharedGoals() {
+  var goals = Object.values(goalsData).filter(function(g){ return g.type==='shared'||!g.type; });
+  var list = document.getElementById('goals-list-shared');
+  if (!goals.length) {
+    list.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No shared goals yet — tap + to add one</div>';
+    return;
+  }
+  var n1 = config?config.name1:'P1', n2 = config?config.name2:'P2';
+  list.innerHTML = goals.map(function(g){ return buildSharedCard(g, n1, n2); }).join('');
+}
+
+function buildSharedCard(g, n1, n2) {
+  var v1=g.p1||0, v2=g.p2||0;
+  var pct1=Math.min(100,Math.round(v1/g.target*100));
+  var pct2=Math.min(100,Math.round(v2/g.target*100));
+  var pctC=Math.min(100,Math.round((v1+v2)/g.target*100));
+  var isMe1=currentWho==='p1', isMe2=currentWho==='p2';
+  return '<div class="goal-card" id="gc-'+g.id+'">' +
+    '<div class="goal-header">' +
+      '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
+      '<div class="goal-meta">' +
+        '<div class="goal-name">'+g.name+'</div>' +
+        '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>' +
+      '</div>' +
+      '<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>' +
+    '</div>' +
+    '<div class="prog-wrap"><div class="prog-p1" style="width:'+pct1+'%"></div><div class="prog-p2" style="width:'+pct2+'%"></div></div>' +
+    '<div class="prog-labels"><span style="color:var(--p1)">'+n1+': '+pct1+'%</span><span style="color:var(--p2)">'+n2+': '+pct2+'%</span></div>' +
+    '<div class="partner-rows">' +
+      '<div class="partner-row">' +
+        '<div class="p-avatar p1">'+n1.slice(0,2).toUpperCase()+'</div>' +
+        '<div class="p-name">'+n1+(isMe1?' <span class="p-you-badge">you</span>':'')+'</div>' +
+        '<div class="p-val">'+v1.toLocaleString()+' '+g.unit+'</div><div class="p-pct">&nbsp;'+pct1+'%</div>' +
+      '</div>' +
+      '<div class="partner-row">' +
+        '<div class="p-avatar p2">'+n2.slice(0,2).toUpperCase()+'</div>' +
+        '<div class="p-name">'+n2+(isMe2?' <span class="p-you-badge">you</span>':'')+'</div>' +
+        '<div class="p-val">'+v2.toLocaleString()+' '+g.unit+'</div><div class="p-pct">&nbsp;'+pct2+'%</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="update-row">' +
+      '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
+      '<button class="update-btn" onclick="updateGoal(\''+g.id+'\',\'shared\')">Update</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderIndividualGoals() {
+  var all = Object.values(goalsData).filter(function(g){ return g.type==='individual'; });
+  var mine = all.filter(function(g){ return g.owner===currentWho; });
+  var hers = all.filter(function(g){ return g.owner!==currentWho; });
+  var n1=config?config.name1:'P1', n2=config?config.name2:'P2';
+
+  var mineList = document.getElementById('goals-list-mine');
+  var hersList = document.getElementById('goals-list-hers');
+
+  if (!mine.length) {
+    mineList.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No individual goals yet — tap + to add one</div>';
+  } else {
+    mineList.innerHTML = mine.map(function(g){ return buildIndividualCard(g, true, n1, n2); }).join('');
+  }
+
+  if (!hers.length) {
+    hersList.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px">No goals added yet</div>';
+  } else {
+    hersList.innerHTML = hers.map(function(g){ return buildIndividualCard(g, false, n1, n2); }).join('');
+  }
+}
+
+function buildIndividualCard(g, canEdit, n1, n2) {
+  var owner = g.owner;
+  var val = g[owner] || 0;
+  var pct = Math.min(100, Math.round(val/g.target*100));
+  var ownerName = owner==='p1' ? n1 : n2;
+  var isP2 = owner==='p2';
+  var color = isP2 ? 'var(--p2)' : 'var(--p1)';
+  var bgColor = isP2 ? 'var(--p2bg)' : 'var(--p1bg)';
+
+  return '<div class="goal-card individual'+(isP2?' p2-goal':'')+'" id="gc-'+g.id+'">' +
+    '<div class="goal-header">' +
+      '<div class="goal-icon">'+(g.icon||'🎯')+'</div>' +
+      '<div class="goal-meta">' +
+        '<div class="goal-name">'+g.name+'</div>' +
+        '<div class="goal-target">Target: '+g.target.toLocaleString()+' '+g.unit+'</div>' +
+        '<span class="goal-owner-badge" style="background:'+bgColor+';color:'+color+'">'+ownerName+'\'s goal</span>' +
+      '</div>' +
+      (canEdit?'<button class="goal-menu" onclick="deleteGoal(\''+g.id+'\')">×</button>':'') +
+    '</div>' +
+    '<div class="prog-wrap"><div class="prog-single" style="width:'+pct+'%;background:'+color+'"></div></div>' +
+    '<div class="prog-labels"><span style="color:'+color+'">'+pct+'% of target</span><span>'+val.toLocaleString()+' / '+g.target.toLocaleString()+' '+g.unit+'</span></div>' +
+    (canEdit ?
+      '<div class="update-row">' +
+        '<input class="update-input" id="inp-'+g.id+'" type="number" placeholder="My new total ('+g.unit+')"/>' +
+        '<button class="update-btn" onclick="updateGoal(\''+g.id+'\',\'individual\')">Update</button>' +
+      '</div>'
+    : '<div style="font-size:12px;color:var(--text3);padding-top:8px;border-top:1px solid var(--border2)">View only</div>') +
+  '</div>';
+}
+
+// ── Update goal ──
+window.updateGoal = function(id, type) {
   var inp = document.getElementById('inp-'+id);
   var val = parseFloat(inp.value);
-  if (isNaN(val) || val < 0) { inp.style.borderColor='#E74C3C'; return; }
+  if (isNaN(val)||val<0) { inp.style.borderColor='#E74C3C'; return; }
   inp.style.borderColor = '';
   var g = goalsData[id];
   if (!g) return;
   var update = Object.assign({}, g);
   update[currentWho] = val;
-  db.collection('goals').doc(id).set(update).then(function(){
-    inp.value = '';
-    showToast('Progress updated!');
-  });
+
+  // Save history snapshot
+  var now = new Date();
+  var monthKey = now.getFullYear()+'-'+(now.getMonth()+1);
+  var histId = id+'_'+monthKey;
+  var histDoc = historyData[histId] || {goalId:id, goalName:g.name, goalUnit:g.unit, goalIcon:g.icon||'🎯', type:type||'shared', month:monthKey, p1:g.p1||0, p2:g.p2||0};
+  histDoc[currentWho] = val;
+
+  db.collection('goals').doc(id).set(update);
+  db.collection('history').doc(histId).set(histDoc);
+  inp.value = '';
+  showToast('Progress updated!');
 };
 
 window.deleteGoal = function(id) {
   if (!confirm('Delete this goal?')) return;
-  db.collection('goals').doc(id).delete().then(function(){
-    showToast('Goal deleted');
-  });
+  db.collection('goals').doc(id).delete().then(function(){ showToast('Goal deleted'); });
 };
 
-// ── Add Goal Modal ─────────────────────────────────────
+// ── History render ──
+function renderHistory() {
+  var list = document.getElementById('history-list');
+  var goals = Object.values(goalsData);
+  if (!goals.length) {
+    list.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:13px">No goals yet</div>';
+    return;
+  }
+  var n1=config?config.name1:'P1', n2=config?config.name2:'P2';
+  var html = '';
+
+  goals.forEach(function(g) {
+    var gHistory = Object.values(historyData).filter(function(h){ return h.goalId===g.id; });
+    gHistory.sort(function(a,b){ return a.month.localeCompare(b.month); });
+
+    // Get last 6 months
+    var last6 = [];
+    var now = new Date();
+    for (var i=5;i>=0;i--) {
+      var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      var mk = d.getFullYear()+'-'+(d.getMonth()+1);
+      var rec = gHistory.find(function(h){ return h.month===mk; });
+      last6.push({month:mk, label:MONTHS[d.getMonth()], p1:rec?rec.p1:null, p2:rec?rec.p2:null});
+    }
+
+    var isShared = g.type==='shared'||!g.type;
+    var maxVal = g.target;
+    last6.forEach(function(m){
+      if (m.p1!==null && m.p1>maxVal) maxVal=m.p1;
+      if (m.p2!==null && m.p2>maxVal) maxVal=m.p2;
+    });
+
+    var hasData = last6.some(function(m){ return m.p1!==null||m.p2!==null; });
+
+    html += '<div class="month-record-card">' +
+      '<div class="month-record-hdr">' +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+          '<span style="font-size:18px">'+(g.icon||'🎯')+'</span>' +
+          '<span class="month-record-title">'+g.name+'</span>' +
+        '</div>' +
+        '<span class="month-record-pct">Target: '+g.target.toLocaleString()+' '+g.unit+'</span>' +
+      '</div>';
+
+    if (!hasData) {
+      html += '<div class="no-history">No updates yet this period</div>';
+    } else {
+      html += '<div class="month-bars">';
+      last6.forEach(function(m) {
+        var h1 = m.p1!==null ? Math.round((m.p1/maxVal)*100) : 0;
+        var h2 = m.p2!==null ? Math.round((m.p2/maxVal)*100) : 0;
+        var hasAny = m.p1!==null||m.p2!==null;
+        html += '<div class="mbar-col">' +
+          '<div class="mbar-bg">';
+        if (isShared && hasAny) {
+          html += '<div style="width:100%;height:100%;display:flex;align-items:flex-end;gap:1px">';
+          if (m.p1!==null) html += '<div style="flex:1;height:'+h1+'%;background:var(--p1);border-radius:2px 2px 0 0"></div>';
+          if (m.p2!==null) html += '<div style="flex:1;height:'+h2+'%;background:var(--p2);border-radius:2px 2px 0 0"></div>';
+          html += '</div>';
+        } else if (!isShared && hasAny) {
+          var ownVal = g.owner==='p1' ? m.p1 : m.p2;
+          var ownH = ownVal!==null ? Math.round((ownVal/maxVal)*100) : 0;
+          var ownColor = g.owner==='p1' ? 'var(--p1)' : 'var(--p2)';
+          html += '<div style="width:100%;height:'+ownH+'%;background:'+ownColor+';border-radius:2px 2px 0 0"></div>';
+        }
+        html += '</div>' +
+          '<div class="mbar-lbl">'+m.label+'</div>' +
+        '</div>';
+      });
+      html += '</div>';
+
+      // Legend
+      if (isShared) {
+        html += '<div class="history-legend">' +
+          '<span><span class="legend-dot" style="background:var(--p1)"></span>'+n1+'</span>' +
+          '<span><span class="legend-dot" style="background:var(--p2)"></span>'+n2+'</span>' +
+        '</div>';
+      }
+
+      // Latest values
+      var latest = last6.filter(function(m){ return m.p1!==null||m.p2!==null; });
+      if (latest.length) {
+        var last = latest[latest.length-1];
+        html += '<div style="display:flex;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">';
+        if (isShared) {
+          if (last.p1!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+n1+'</div><div style="font-size:15px;font-weight:500;color:var(--p1)">'+last.p1.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
+          if (last.p2!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+n2+'</div><div style="font-size:15px;font-weight:500;color:var(--p2)">'+last.p2.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
+          if (last.p1!==null&&last.p2!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">Combined</div><div style="font-size:15px;font-weight:500;color:var(--accent)">'+(last.p1+last.p2).toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
+        } else {
+          var ov = g.owner==='p1' ? last.p1 : last.p2;
+          var oc = g.owner==='p1' ? 'var(--p1)' : 'var(--p2)';
+          var on = g.owner==='p1' ? n1 : n2;
+          if (ov!==null) html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">'+on+' latest</div><div style="font-size:15px;font-weight:500;color:'+oc+'">'+ov.toLocaleString()+'</div><div style="font-size:10px;color:var(--text3)">'+g.unit+'</div></div>';
+          var pct = Math.min(100,Math.round((ov||0)/g.target*100));
+          html += '<div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--text3)">Progress</div><div style="font-size:15px;font-weight:500;color:var(--accent)">'+pct+'%</div><div style="font-size:10px;color:var(--text3)">of target</div></div>';
+        }
+        html += '</div>';
+      }
+    }
+
+    html += '</div>';
+  });
+
+  list.innerHTML = html;
+}
+
+// ── Add Goal Modal ──
 window.openAddGoal = function() { document.getElementById('add-modal').classList.add('open'); };
 window.closeAddGoal = function(e) {
-  if (!e || e.target===document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
+  if (!e||e.target===document.getElementById('add-modal')) document.getElementById('add-modal').classList.remove('open');
 };
 
-var selectedIcon = '📚';
+window.setGoalType = function(type) {
+  newGoalType = type;
+  document.getElementById('gtype-shared').className = 'gtype-btn'+(type==='shared'?' active':'');
+  document.getElementById('gtype-individual').className = 'gtype-btn'+(type==='individual'?' active':'');
+};
+
 window.selectIcon = function(el) {
   document.querySelectorAll('.icon-opt').forEach(function(e){ e.classList.remove('selected'); });
   el.classList.add('selected');
@@ -757,65 +924,65 @@ window.selectIcon = function(el) {
 };
 
 window.saveGoal = function() {
-  var name   = document.getElementById('m-name').value.trim();
+  var name = document.getElementById('m-name').value.trim();
   var target = parseFloat(document.getElementById('m-target').value);
-  var unit   = document.getElementById('m-unit').value.trim() || 'units';
-  if (!name || isNaN(target) || target<=0) { showToast('Fill all fields'); return; }
+  var unit = document.getElementById('m-unit').value.trim() || 'units';
+  if (!name||isNaN(target)||target<=0) { showToast('Fill all fields'); return; }
   var id = 'g_'+Date.now();
-  db.collection('goals').doc(id).set({ name:name, target:target, unit:unit, icon:selectedIcon, p1:0, p2:0 }).then(function(){
-    document.getElementById('m-name').value = '';
-    document.getElementById('m-target').value = '';
-    document.getElementById('m-unit').value = '';
+  var doc = {name:name, target:target, unit:unit, icon:selectedIcon, type:newGoalType, p1:0, p2:0};
+  if (newGoalType==='individual') doc.owner = currentWho;
+  db.collection('goals').doc(id).set(doc).then(function(){
+    document.getElementById('m-name').value='';
+    document.getElementById('m-target').value='';
+    document.getElementById('m-unit').value='';
     closeAddGoal();
     showToast('Goal added!');
+    if (newGoalType==='individual') switchTab('mine');
   });
 };
 
-// ── Settings ───────────────────────────────────────────
-window.openSettings  = function() { document.getElementById('settings-panel').classList.add('open'); };
+// ── Settings ──
+window.openSettings = function() { document.getElementById('settings-panel').classList.add('open'); };
 window.closeSettings = function() { document.getElementById('settings-panel').classList.remove('open'); };
 
 window.savePassphrase = function() {
   var p = document.getElementById('s-passphrase').value.trim();
-  if (!p || p.length < 4) { showToast('Passphrase must be 4+ characters'); return; }
+  if (!p||p.length<4) { showToast('4+ characters required'); return; }
   config.passphrase = p;
   saveConfig(config);
-  document.getElementById('s-passphrase').value = '';
-  showToast('Passphrase updated — share the new one with your wife');
+  document.getElementById('s-passphrase').value='';
+  showToast('Passphrase updated');
 };
 
 window.savePins = function() {
-  var p1 = document.getElementById('s-pin1').value.trim();
-  var p2 = document.getElementById('s-pin2').value.trim();
-  if ((p1 && p1.length!==4)||(p2 && p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
-  if (p1) config.pin1 = p1;
-  if (p2) config.pin2 = p2;
+  var p1=document.getElementById('s-pin1').value.trim();
+  var p2=document.getElementById('s-pin2').value.trim();
+  if ((p1&&p1.length!==4)||(p2&&p2.length!==4)) { showToast('PINs must be 4 digits'); return; }
+  if (p1) config.pin1=p1;
+  if (p2) config.pin2=p2;
   saveConfig(config);
-  document.getElementById('s-pin1').value = '';
-  document.getElementById('s-pin2').value = '';
+  document.getElementById('s-pin1').value='';
+  document.getElementById('s-pin2').value='';
   showToast('PINs updated');
 };
 
 window.resetApp = function() {
-  if (!confirm('This will delete all local config. Are you sure?')) return;
+  if (!confirm('Delete all local config?')) return;
   localStorage.removeItem('og_config');
   sessionStorage.clear();
   location.reload();
 };
 
-// ── Boot ───────────────────────────────────────────────
+// ── Boot ──
 config = loadConfig();
 if (!config) {
   showScreen('setup');
 } else {
   initFirebase(config);
   updatePartnerNames();
-  if (sessionStorage.getItem('og_unlocked') === '1') {
-    showScreen('pin');
-  } else {
-    showScreen('lock');
-  }
-  if (getRemainingLock() > 0) startLockCountdown();
+  if (sessionStorage.getItem('og_unlocked')==='1') showScreen('pin');
+  else showScreen('lock');
+  if (getRemainingLock()>0) startLockCountdown();
 }
 </script>
 </body>
