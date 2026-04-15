@@ -195,6 +195,21 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.8}
+/* Edit goal modal */
+.edit-btn{background:transparent;border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;color:var(--text3);font-size:11px;padding:3px 8px;font-family:'DM Sans',sans-serif}
+.edit-btn:hover{background:var(--surface2)}
+
+/* Notes field in update section */
+.note-inp{width:100%;padding:7px 12px;border:1px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text);resize:none;margin-top:6px}
+.note-inp:focus{outline:none;border-color:var(--accent)}
+
+/* Note display in history table */
+.note-pill{display:inline-block;background:var(--surface2);border-radius:4px;font-size:11px;color:var(--text2);padding:2px 7px;margin-top:3px;font-style:italic}
+
+/* Export button */
+.export-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--border);border-radius:var(--rs);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);margin-bottom:1rem}
+.export-btn:hover{background:var(--surface2)}
+
 </style>
 </head>
 <body>
@@ -277,12 +292,33 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <button class="who-tab" data-who="p2" id="wtab-p2" onclick="switchWho('p2')">Partner 2</button>
     </div>
     <div class="main-tabs">
+      <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
       <button class="main-tab active" id="mtab-goals" onclick="switchTab('goals')">Goals</button>
-      <button class="main-tab" id="mtab-history" onclick="switchTab('history')">Month-on-month</button>
+      <button class="main-tab" id="mtab-history" onclick="switchTab('history')">History</button>
     </div>
   </div>
 
   <div class="app-body">
+
+
+    <!-- REMINDER BANNER -->
+    <div id="reminder-banner" style="display:none" class="reminder-banner">
+      <span style="font-size:18px">🔔</span>
+      <span><strong>Time to update!</strong> It's your reminder day — log this month's progress</span>
+      <button class="reminder-dismiss" onclick="dismissReminder()">×</button>
+    </div>
+
+    <!-- HOME SCREEN BANNER -->
+    <div id="hs-banner" style="display:none" class="hs-banner">
+      <span class="hs-icon">📱</span>
+      <span class="hs-text"><strong>Add to Home Screen</strong><br>Tap your browser menu → "Add to Home Screen" for one-tap access like a real app</span>
+      <button class="hs-dismiss" onclick="dismissHsBanner()">×</button>
+    </div>
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-pane" id="pane-dashboard">
+      <div id="dash-content"></div>
+    </div>
 
     <!-- GOALS TAB -->
     <div class="tab-pane active" id="pane-goals">
@@ -305,6 +341,7 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
 
     <!-- HISTORY TAB -->
     <div class="tab-pane" id="pane-history">
+      <button class="export-btn" onclick="exportCSV()">⬇ Export history to CSV</button>
       <div id="list-history"></div>
     </div>
 
@@ -353,6 +390,25 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
   </div>
 </div>
 
+
+<!-- EDIT GOAL MODAL -->
+<div class="overlay" id="edit-modal" onclick="closeEditModal(event)">
+  <div class="sheet">
+    <div class="drag-bar"></div>
+    <h3>Edit goal</h3>
+    <input type="hidden" id="edit-goal-id"/>
+    <div class="mf"><label>Goal name</label><input id="edit-name" placeholder="Goal name"/></div>
+    <div class="mf-row">
+      <div class="mf"><label>Target</label><input id="edit-target" type="number" placeholder="24"/></div>
+      <div class="mf"><label>Unit</label><input id="edit-unit" placeholder="books"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEdit()">Save changes →</button>
+    </div>
+  </div>
+</div>
+
 <!-- SETTINGS -->
 <div class="settings-panel" id="settings-panel">
   <div class="sp-head">
@@ -377,6 +433,12 @@ html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;colo
       <button class="setup-submit" onclick="savePins()" style="width:auto;padding:9px 20px">Update PINs</button>
     </div>
     <div class="sp-section">
+      <h3>Monthly reminder</h3>
+      <div class="fg"><label>Reminder day of month (1–28)</label><input id="sp-reminder" type="number" min="1" max="28" placeholder="e.g. 25"/></div>
+      <button class="setup-submit" onclick="saveReminder()" style="width:auto;padding:9px 20px">Set reminder day</button>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">A banner will appear on this day each month reminding both of you to log progress.</div>
+    </div>
+    <div class="sp-section">
       <h3>Danger zone</h3>
       <button class="danger-btn" onclick="resetApp()">Reset app & clear all data</button>
     </div>
@@ -399,13 +461,18 @@ var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','D
 
 // ── Month helpers ──────────────────────────────────────────────────────
 function getMonthOptions() {
-  var opts=[], now=new Date();
-  for(var i=11;i>=0;i--){
-    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+  var opts=[];
+  var start=new Date(2025,3,1);
+  var end=new Date(2027,2,1);
+  var now=new Date();
+  var cur=new Date(now.getFullYear(),now.getMonth(),1);
+  var d=new Date(start);
+  while(d<=end){
     var key=d.getFullYear()+'-'+(d.getMonth()+1);
-    var label=MONTHS[d.getMonth()]+' '+d.getFullYear();
-    var isCurrent=(i===0);
-    opts.push({key:key,label:label+(isCurrent?' (current)':'')});
+    var isCurrent=(d.getFullYear()===cur.getFullYear()&&d.getMonth()===cur.getMonth());
+    var label=MONTHS[d.getMonth()]+' '+d.getFullYear()+(isCurrent?' (current)':'');
+    opts.push({key:key,label:label});
+    d=new Date(d.getFullYear(),d.getMonth()+1,1);
   }
   return opts;
 }
@@ -556,6 +623,7 @@ function checkPin(){
   if(pinEntry===correct){
     currentWho=whoForPin; applyWhoUI(); showScreen('app');
     toast('Welcome, '+(whoForPin==='p1'?config.name1:config.name2)+'!');
+    setTimeout(postLoginInit,300);
   } else {
     drawDots('error');
     var c=document.querySelector('.auth-card');
@@ -601,15 +669,16 @@ window.logout=function(){
 // ── Tab switching ──────────────────────────────────────────────────────
 window.switchTab=function(tab){
   currentTab=tab;
-  ['goals','history'].forEach(function(t){
+  ['dashboard','goals','history'].forEach(function(t){
     document.getElementById('pane-'+t).className='tab-pane'+(t===tab?' active':'');
     document.getElementById('mtab-'+t).className='main-tab'+(t===tab?' active':'');
   });
   if(tab==='history') renderHistory();
+  if(tab==='dashboard') renderDashboard();
 };
 
 // ── Render ─────────────────────────────────────────────────────────────
-function renderAll(){renderSummary();renderShared();renderIndividual();}
+function renderAll(){renderSummary();renderShared();renderIndividual();if(currentTab==='dashboard')renderDashboard();}
 
 function renderSummary(){
   var shared=Object.values(goalsData).filter(function(g){return g.type==='shared'||!g.type;});
@@ -636,17 +705,21 @@ function sharedCard(g){
   var pctC=Math.min(100,Math.round(combo/g.target*100));
   var n1=config.name1, n2=config.name2;
   var isMe1=currentWho==='p1', isMe2=currentWho==='p2';
+  var statusTag=getStatusTag(pctC);
+  var milestones=getMilestoneBadges(pctC);
   return '<div class="goal-card">'+
     '<div class="gc-head">'+
       '<div class="gc-icon">'+(g.icon||'🎯')+'</div>'+
       '<div class="gc-meta">'+
         '<div class="gc-name">'+g.name+'</div>'+
         '<div class="gc-sub">Target: '+g.target.toLocaleString()+' '+g.unit+' · '+pctC+'% combined</div>'+
+        statusTag+
       '</div>'+
       '<button class="gc-del" onclick="delGoal(\''+g.id+'\')">×</button>'+
     '</div>'+
     '<div class="bar-bg"><div class="bar-p1" style="width:'+pct1+'%"></div><div class="bar-p2" style="width:'+pct2+'%"></div></div>'+
     '<div class="bar-labels"><span style="color:var(--p1)">'+n1+' '+pct1+'%</span><span style="color:var(--p2)">'+n2+' '+pct2+'%</span></div>'+
+    (milestones?'<div class="milestone-row">'+milestones+'</div>':'')+
     '<div class="partner-grid">'+
       '<div class="partner-tile">'+
         '<div class="pt-name"><span style="width:8px;height:8px;border-radius:50%;background:var(--p1);display:inline-block"></span>'+n1+(isMe1?' <span class="you-tag">you</span>':'')+'</div>'+
@@ -671,7 +744,7 @@ function sharedCard(g){
       '<div class="val-row">'+
         '<input class="val-inp" id="vi-'+g.id+'" type="number" placeholder="My value for that month ('+g.unit+')"/>'+
         '<button class="upd-btn" onclick="updateGoal(\''+g.id+'\',\'shared\')">Save</button>'+
-      '</div>'+
+      '<textarea class="note-inp" id="ni-'+g.id+'" rows="2" placeholder="Optional note for this month"></textarea>'+
     '</div>'+
   '</div>';
 }
@@ -694,6 +767,8 @@ function indCard(g, n1, n2){
   var ownerColor=owner==='p1'?'var(--p1)':'var(--p2)';
   var ownerBg=owner==='p1'?'var(--p1bg)':'var(--p2bg)';
   var canEdit=currentWho===owner;
+  var statusTag=getStatusTag(pct);
+  var milestones=getMilestoneBadges(pct);
   return '<div class="goal-card" style="border-left:3px solid '+ownerColor+'">'+
     '<div class="gc-head">'+
       '<div class="gc-icon">'+(g.icon||'🎯')+'</div>'+
@@ -706,6 +781,7 @@ function indCard(g, n1, n2){
     '</div>'+
     '<div class="bar-bg"><div class="bar-solo" style="width:'+pct+'%;background:'+ownerColor+'"></div></div>'+
     '<div class="bar-labels"><span style="color:'+ownerColor+'">'+pct+'% of target</span><span>'+ownerVal.toLocaleString()+' / '+g.target.toLocaleString()+' '+g.unit+'</span></div>'+
+    (milestones?'<div class="milestone-row">'+milestones+'</div>':'')+statusTag+
     (canEdit?
       '<div class="update-section">'+
         '<div class="month-row">'+buildMonthSelect('ms-'+g.id)+'</div>'+
@@ -743,10 +819,19 @@ window.updateGoal=function(id, type){
     goalIcon:g.icon||'🎯', goalType:type||g.type||'shared',
     goalOwner:g.owner||null, month:monthKey, p1:null, p2:null
   };
+  var oldVal=g[currentWho]||0;
   existing[currentWho]=val;
+  checkMilestone(id,oldVal,val,g.target);
+  var noteEl=document.getElementById('ni-'+id);
+  var note=noteEl?noteEl.value.trim():'';
+  if(note){
+    if(!existing.notes) existing.notes={};
+    existing.notes[currentWho]=note;
+  }
   db.collection('history').doc(histId).set(existing);
 
   valEl.value='';
+  if(noteEl) noteEl.value='';
   var d=new Date(monthKey.split('-')[0], parseInt(monthKey.split('-')[1])-1, 1);
   toast('Saved for '+MONTHS[d.getMonth()]+' '+d.getFullYear()+'!');
 };
@@ -769,17 +854,19 @@ function renderHistory(){
     var owner=g.owner;
 
     // Build 12-month window
-    var now=new Date();
     var months=[];
-    for(var i=11;i>=0;i--){
-      var d=new Date(now.getFullYear(),now.getMonth()-i,1);
-      var mk=d.getFullYear()+'-'+(d.getMonth()+1);
+    var mStart=new Date(2025,3,1);
+    var mEnd=new Date(2027,2,1);
+    var mCur=new Date(mStart);
+    while(mCur<=mEnd){
+      var mk=mCur.getFullYear()+'-'+(mCur.getMonth()+1);
       var rec=historyData[g.id+'_'+mk];
       months.push({
-        key:mk, label:MONTHS[d.getMonth()].slice(0,3),
+        key:mk, label:MONTHS[mCur.getMonth()].slice(0,3)+"'"+(mCur.getFullYear()%100),
         p1:rec&&rec.p1!==null&&rec.p1!==undefined?rec.p1:null,
         p2:rec&&rec.p2!==null&&rec.p2!==undefined?rec.p2:null
       });
+      mCur=new Date(mCur.getFullYear(),mCur.getMonth()+1,1);
     }
 
     var hasData=months.some(function(m){return m.p1!==null||m.p2!==null;});
@@ -803,27 +890,34 @@ function renderHistory(){
     if(!hasData){
       html+='<div class="no-data">No data entered yet.<br>Update progress on the Goals tab — choose a month when saving.</div>';
     } else {
-      // Show last 6 months in chart (more readable)
-      var show=months.slice(-6);
-      html+='<div class="chart-wrap">';
-      show.forEach(function(m){
+      html+='<div class="chart-wrap" style="overflow-x:auto"><div style="display:flex;align-items:flex-end;gap:3px;height:100px;min-width:'+(months.length*22)+'px">';
+      months.forEach(function(m){
         html+='<div class="ch-col"><div class="ch-bars">';
+        // Find best month for highlighting
+        var bestP1=null,bestP2=null,bestSolo=null;
+        months.forEach(function(mx){
+          if(isShared){if(mx.p1!==null&&(bestP1===null||mx.p1>bestP1))bestP1=mx.p1;if(mx.p2!==null&&(bestP2===null||mx.p2>bestP2))bestP2=mx.p2;}
+          else{var oxv=owner==='p1'?mx.p1:mx.p2;if(oxv!==null&&(bestSolo===null||oxv>bestSolo))bestSolo=oxv;}
+        });
         if(isShared){
           var h1=m.p1!==null?Math.max(4,Math.round((m.p1/maxVal)*90)):0;
           var h2=m.p2!==null?Math.max(4,Math.round((m.p2/maxVal)*90)):0;
-          if(m.p1!==null) html+='<div class="ch-bar" style="height:'+h1+'%;background:var(--p1)" title="'+n1+': '+m.p1+'"></div>';
+          var isBest1=m.p1!==null&&m.p1===bestP1;
+          var isBest2=m.p2!==null&&m.p2===bestP2;
+          if(m.p1!==null) html+='<div class="ch-bar'+(isBest1?' best-bar':'')+'" style="height:'+h1+'%;background:var(--p1)" title="'+n1+': '+m.p1+(isBest1?' ⭐ best':'')+'"></div>';
           else html+='<div class="ch-bar" style="height:4%;background:var(--border)"></div>';
-          if(m.p2!==null) html+='<div class="ch-bar" style="height:'+h2+'%;background:var(--p2)" title="'+n2+': '+m.p2+'"></div>';
+          if(m.p2!==null) html+='<div class="ch-bar'+(isBest2?' best-bar':'')+'" style="height:'+h2+'%;background:var(--p2)" title="'+n2+': '+m.p2+(isBest2?' ⭐ best':'')+'"></div>';
           else html+='<div class="ch-bar" style="height:4%;background:var(--border)"></div>';
         } else {
           var ov=owner==='p1'?m.p1:m.p2;
           var oh=ov!==null?Math.max(4,Math.round((ov/maxVal)*90)):0;
           var oc=owner==='p1'?'var(--p1)':'var(--p2)';
-          html+='<div class="ch-bar" style="height:'+oh+'%;background:'+(ov!==null?oc:'var(--border)')+'" title="'+ov+'"></div>';
+          var isBestSolo=ov!==null&&ov===bestSolo;
+          html+='<div class="ch-bar'+(isBestSolo?' best-bar':'')+'" style="height:'+oh+'%;background:'+(ov!==null?oc:'var(--border)')+'" title="'+ov+(isBestSolo?' ⭐ best':'')+'"></div>';
         }
         html+='</div><div class="ch-lbl">'+m.label+'</div></div>';
       });
-      html+='</div>';
+      html+='</div></div>';
 
       // Legend
       if(isShared){
@@ -880,6 +974,19 @@ function renderHistory(){
             if(ov3!==null) html+='<span style="color:'+oc3+'"><strong>'+ov3.toLocaleString()+'</strong> '+g.unit+'</span>';
           }
           html+='</span></div>';
+          // Show notes if any
+          var rec2=historyData[g.id+'_'+m.key];
+          if(rec2&&rec2.notes){
+            var noteHtml='';
+            if(isShared){
+              if(rec2.notes.p1) noteHtml+='<span class="note-pill">'+n1+': '+rec2.notes.p1+'</span> ';
+              if(rec2.notes.p2) noteHtml+='<span class="note-pill">'+n2+': '+rec2.notes.p2+'</span>';
+            } else {
+              var ownerNote=rec2.notes[owner];
+              if(ownerNote) noteHtml='<span class="note-pill">'+ownerNote+'</span>';
+            }
+            if(noteHtml) html+='<div style="padding:2px 0 4px">'+noteHtml+'</div>';
+          }
         });
         html+='</div>';
       }
@@ -922,6 +1029,295 @@ window.saveGoal=function(){
   });
 };
 
+
+// ── Edit Goal ─────────────────────────────────────────────────────────
+window.openEditModal=function(id){
+  var g=goalsData[id];
+  if(!g) return;
+  document.getElementById('edit-goal-id').value=id;
+  document.getElementById('edit-name').value=g.name;
+  document.getElementById('edit-target').value=g.target;
+  document.getElementById('edit-unit').value=g.unit;
+  document.getElementById('edit-modal').classList.add('open');
+};
+window.closeEditModal=function(e){
+  if(!e||e.target===document.getElementById('edit-modal'))
+    document.getElementById('edit-modal').classList.remove('open');
+};
+window.saveEdit=function(){
+  var id=document.getElementById('edit-goal-id').value;
+  var name=document.getElementById('edit-name').value.trim();
+  var target=parseFloat(document.getElementById('edit-target').value);
+  var unit=document.getElementById('edit-unit').value.trim();
+  if(!name||isNaN(target)||target<=0||!unit){toast('Fill all fields');return;}
+  var g=goalsData[id];
+  if(!g) return;
+  var update=Object.assign({},g,{name:name,target:target,unit:unit});
+  db.collection('goals').doc(id).set(update).then(function(){
+    closeEditModal();
+    toast('Goal updated!');
+  });
+};
+
+// ── Export CSV ────────────────────────────────────────────────────────
+window.exportCSV=function(){
+  var n1=config.name1, n2=config.name2;
+  var rows=[['Goal','Type','Month',n1+' Value',n2+' Value','Combined','Unit','Target','Notes ('+n1+')','Notes ('+n2+')']];
+
+  var goals=Object.values(goalsData);
+  var allHistory=Object.values(historyData);
+
+  goals.forEach(function(g){
+    var isShared=g.type==='shared'||!g.type;
+    var owner=g.owner||null;
+    var gHist=allHistory.filter(function(h){return h.goalId===g.id;});
+    gHist.sort(function(a,b){return a.month.localeCompare(b.month);});
+    if(!gHist.length){
+      rows.push([g.name, isShared?'Shared':(owner==='p1'?n1:n2)+"'s", '—', '', '', '', g.unit, g.target, '', '']);
+    } else {
+      gHist.forEach(function(h){
+        var parts=h.month.split('-');
+        var d=new Date(parts[0],parseInt(parts[1])-1,1);
+        var monthLabel=MONTHS[d.getMonth()]+' '+d.getFullYear();
+        var v1=h.p1!==null&&h.p1!==undefined?h.p1:'';
+        var v2=h.p2!==null&&h.p2!==undefined?h.p2:'';
+        var combo=(v1!==''&&v2!=='')?v1+v2:(v1!==''?v1:(v2!==''?v2:''));
+        var note1=h.notes&&h.notes.p1?h.notes.p1:'';
+        var note2=h.notes&&h.notes.p2?h.notes.p2:'';
+        rows.push([
+          g.name,
+          isShared?'Shared':(owner==='p1'?n1:n2)+"'s",
+          monthLabel, v1, v2, combo, g.unit, g.target,
+          note1, note2
+        ]);
+      });
+    }
+  });
+
+  var csv=rows.map(function(r){
+    return r.map(function(c){
+      var s=String(c).replace(/"/g,'""');
+      return (s.indexOf(',')>=0||s.indexOf('"')>=0||s.indexOf('\n')>=0)?'"'+s+'"':s;
+    }).join(',');
+  }).join('\n');
+
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='our-goals-history.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('CSV downloaded!');
+};
+
+
+// ── Status tag ────────────────────────────────────────────────────────
+function getStatusTag(pct){
+  if(pct>=100) return '<span class="status-tag status-completed">✓ Completed</span>';
+  var now=new Date();
+  var start=new Date(2025,3,1), end=new Date(2027,2,1);
+  var totalMs=end-start, elapsedMs=now-start;
+  var timePct=Math.min(100,Math.max(0,Math.round(elapsedMs/totalMs*100)));
+  if(pct===0) return '<span class="status-tag status-notstarted">Not started</span>';
+  if(pct>=timePct-5) return '<span class="status-tag status-ontrack">On track</span>';
+  return '<span class="status-tag status-behind">Behind</span>';
+}
+
+// ── Milestone badges ──────────────────────────────────────────────────
+function getMilestoneBadges(pct){
+  var html='';
+  if(pct>=25) html+='<span class="mbadge mbadge-25">🏅 25%</span>';
+  if(pct>=50) html+='<span class="mbadge mbadge-50">🥈 50%</span>';
+  if(pct>=75) html+='<span class="mbadge mbadge-75">🥇 75%</span>';
+  if(pct>=100) html+='<span class="mbadge mbadge-100">🏆 100%</span>';
+  return html;
+}
+
+// ── Quick increment buttons ───────────────────────────────────────────
+function buildIncButtons(goalId, currentVal, unit){
+  var steps=[1,5,10];
+  var html='<span style="font-size:11px;color:var(--text3);align-self:center">Quick add:</span>';
+  steps.forEach(function(s){
+    html+='<button class="inc-btn" onclick="quickAdd(''+goalId+'','+s+')">+'+s+' '+unit+'</button>';
+  });
+  return html;
+}
+
+window.quickAdd=function(id,step){
+  var g=goalsData[id];
+  if(!g) return;
+  var cur=g[currentWho]||0;
+  var newVal=cur+step;
+  // Set the input value and show it
+  var inp=document.getElementById('vi-'+id);
+  if(inp){ inp.value=newVal; inp.style.borderColor='var(--accent)'; setTimeout(function(){inp.style.borderColor='';},800); }
+  // Auto-save immediately
+  var monthEl=document.getElementById('ms-'+id);
+  var monthKey=monthEl?monthEl.value:getCurrentMonthKey();
+  var update=Object.assign({},g);
+  update[currentWho]=newVal;
+  db.collection('goals').doc(id).set(update);
+  var histId=id+'_'+monthKey;
+  var existing=historyData[histId]||{goalId:id,goalName:g.name,goalUnit:g.unit,goalIcon:g.icon||'🎯',goalType:g.type||'shared',goalOwner:g.owner||null,month:monthKey,p1:null,p2:null};
+  existing[currentWho]=newVal;
+  db.collection('history').doc(histId).set(existing);
+  toast('+'+step+' '+g.unit+' added!',1500);
+  checkMilestone(id, g[currentWho]||0, newVal, g.target);
+};
+
+// ── Milestone confetti ────────────────────────────────────────────────
+function checkMilestone(id, oldVal, newVal, target){
+  var milestones=[25,50,75,100];
+  var oldPct=Math.round(oldVal/target*100);
+  var newPct=Math.round(newVal/target*100);
+  milestones.forEach(function(m){
+    if(oldPct<m&&newPct>=m){
+      launchConfetti();
+      toast('🎉 '+m+'% milestone reached!',3000);
+    }
+  });
+}
+
+function launchConfetti(){
+  var wrap=document.createElement('div');
+  wrap.className='confetti-wrap';
+  document.body.appendChild(wrap);
+  var colors=['#C4522A','#3B6FAA','#7B5EA7','#27AE60','#F0C060','#E74C3C'];
+  for(var i=0;i<60;i++){
+    var p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(1.5+Math.random()*2)+'s';
+    p.style.animationDelay=(Math.random()*0.5)+'s';
+    p.style.width=(6+Math.random()*8)+'px';
+    p.style.height=(6+Math.random()*8)+'px';
+    wrap.appendChild(p);
+  }
+  setTimeout(function(){document.body.removeChild(wrap);},4000);
+}
+
+// ── Reminder banner ───────────────────────────────────────────────────
+function checkReminderBanner(){
+  if(!config||!config.reminderDay) return;
+  var today=new Date().getDate();
+  var key='og_reminder_dismissed_'+(new Date().getFullYear())+'-'+(new Date().getMonth()+1);
+  if(today===parseInt(config.reminderDay)&&!sessionStorage.getItem(key)){
+    document.getElementById('reminder-banner').style.display='flex';
+  }
+}
+window.dismissReminder=function(){
+  document.getElementById('reminder-banner').style.display='none';
+  var key='og_reminder_dismissed_'+(new Date().getFullYear())+'-'+(new Date().getMonth()+1);
+  sessionStorage.setItem(key,'1');
+};
+
+window.saveReminder=function(){
+  var day=parseInt(document.getElementById('sp-reminder').value);
+  if(isNaN(day)||day<1||day>28){toast('Enter a day between 1 and 28');return;}
+  config.reminderDay=day;
+  saveConfig(config);
+  toast('Reminder set for day '+day+' each month');
+};
+
+// ── Home Screen banner ────────────────────────────────────────────────
+function checkHsBanner(){
+  if(sessionStorage.getItem('og_hs_dismissed')) return;
+  var isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(!isStandalone){
+    setTimeout(function(){
+      var b=document.getElementById('hs-banner');
+      if(b) b.style.display='flex';
+    },3000);
+  }
+}
+window.dismissHsBanner=function(){
+  document.getElementById('hs-banner').style.display='none';
+  sessionStorage.setItem('og_hs_dismissed','1');
+};
+
+// ── Dashboard render ──────────────────────────────────────────────────
+function renderDashboard(){
+  var el=document.getElementById('dash-content');
+  var goals=Object.values(goalsData);
+  var n1=config.name1, n2=config.name2;
+  if(!goals.length){el.innerHTML='<div class="empty-state">No goals yet.<br>Add your first goal on the Goals tab.</div>';return;}
+
+  var shared=goals.filter(function(g){return g.type==='shared'||!g.type;});
+  var ind=goals.filter(function(g){return g.type==='individual';});
+
+  var html='';
+
+  // Progress rings grid
+  if(shared.length){
+    html+='<div class="dash-section-hdr">Shared goals</div><div class="dash-grid">';
+    shared.forEach(function(g){
+      var v1=g.p1||0,v2=g.p2||0,combo=v1+v2;
+      var pct=Math.min(100,Math.round(combo/g.target*100));
+      var pct1=Math.min(100,Math.round(v1/g.target*100));
+      var pct2=Math.min(100,Math.round(v2/g.target*100));
+      var r=34, circ=2*Math.PI*r;
+      var dash1=circ*pct1/100, dash2=circ*pct2/100;
+      html+='<div class="dash-ring-card">'+
+        '<div class="ring-wrap">'+
+          '<svg width="80" height="80" viewBox="0 0 80 80">'+
+            '<circle cx="40" cy="40" r="'+r+'" fill="none" stroke="var(--surface2)" stroke-width="8"/>'+
+            '<circle cx="40" cy="40" r="'+r+'" fill="none" stroke="var(--p1)" stroke-width="8" stroke-dasharray="'+dash1+' '+circ+'" stroke-linecap="round"/>'+
+            '<circle cx="40" cy="40" r="'+r+'" fill="none" stroke="var(--p2)" stroke-width="4" stroke-dasharray="'+dash2+' '+circ+'" stroke-dashoffset="-'+dash1+'" stroke-linecap="round"/>'+
+          '</svg>'+
+          '<div class="ring-label"><span class="ring-pct">'+pct+'%</span></div>'+
+        '</div>'+
+        '<div class="ring-name">'+(g.icon||'')+'  '+g.name+'</div>'+
+        '<div class="ring-sub" style="color:var(--p1)">'+n1+': '+v1.toLocaleString()+'</div>'+
+        '<div class="ring-sub" style="color:var(--p2)">'+n2+': '+v2.toLocaleString()+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+  }
+
+  if(ind.length){
+    html+='<div class="dash-section-hdr">Individual goals</div><div class="dash-grid">';
+    ind.forEach(function(g){
+      var owner=g.owner;
+      var val=g[owner]||0;
+      var pct=Math.min(100,Math.round(val/g.target*100));
+      var oc=owner==='p1'?'var(--p1)':'var(--p2)';
+      var oName=owner==='p1'?n1:n2;
+      var r=34, circ=2*Math.PI*r, dash=circ*pct/100;
+      html+='<div class="dash-ring-card">'+
+        '<div class="ring-wrap">'+
+          '<svg width="80" height="80" viewBox="0 0 80 80">'+
+            '<circle cx="40" cy="40" r="'+r+'" fill="none" stroke="var(--surface2)" stroke-width="8"/>'+
+            '<circle cx="40" cy="40" r="'+r+'" fill="none" stroke="'+oc+'" stroke-width="8" stroke-dasharray="'+dash+' '+circ+'" stroke-linecap="round"/>'+
+          '</svg>'+
+          '<div class="ring-label"><span class="ring-pct">'+pct+'%</span></div>'+
+        '</div>'+
+        '<div class="ring-name">'+(g.icon||'')+'  '+g.name+'</div>'+
+        '<div class="ring-sub" style="color:'+oc+'">'+oName+': '+val.toLocaleString()+' '+g.unit+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+  }
+
+  // Who's leading in shared goals
+  html+='<div class="dash-section-hdr">Leaderboard</div>';
+  var p1Total=0,p2Total=0,p1Goals=0,p2Goals=0;
+  shared.forEach(function(g){p1Total+=(g.p1||0);p2Total+=(g.p2||0);});
+  ind.forEach(function(g){if(g.owner==='p1')p1Goals++;else p2Goals++;});
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n1+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p1)">'+p1Total.toLocaleString()+'</span></div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n2+' total across shared goals</span><span class="dash-stat-val" style="color:var(--p2)">'+p2Total.toLocaleString()+'</span></div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n1+' individual goals</span><span class="dash-stat-val">'+p1Goals+'</span></div>';
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">'+n2+' individual goals</span><span class="dash-stat-val">'+p2Goals+'</span></div>';
+
+  var completedShared=shared.filter(function(g){return (g.p1||0)+(g.p2||0)>=g.target;}).length;
+  html+='<div class="dash-stat-row"><span class="dash-stat-label">Shared goals completed</span><span class="dash-stat-val" style="color:var(--green)">'+completedShared+' / '+shared.length+'</span></div>';
+
+  el.innerHTML=html;
+}
+
 // ── Settings ───────────────────────────────────────────────────────────
 window.openSettings=function(){document.getElementById('settings-panel').classList.add('open');};
 window.closeSettings=function(){document.getElementById('settings-panel').classList.remove('open');};
@@ -960,6 +1356,12 @@ if(!config){
   if(sessionStorage.getItem('og_unlocked')==='1') showScreen('pin');
   else showScreen('lock');
   if(getRemLock()>0) lockTick();
+}
+
+function postLoginInit(){
+  checkReminderBanner();
+  checkHsBanner();
+  switchTab('dashboard');
 }
 </script>
 </body>
